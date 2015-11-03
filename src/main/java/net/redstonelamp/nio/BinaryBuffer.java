@@ -140,8 +140,8 @@ public class BinaryBuffer{
      *
      * @return A single unsigned short
      */
-    public int getUnsignedShort(){
-        return bb.getShort() & 0xFFFF;
+    public short getUnsignedShort(){
+        return (short) (bb.getShort() & 0xFFFF);
     }
 
     /**

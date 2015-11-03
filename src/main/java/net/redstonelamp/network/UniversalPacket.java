@@ -27,7 +27,7 @@ import java.nio.ByteOrder;
  * @author RedstoneLamp Team
  */
 public class UniversalPacket{
-    private byte[] buffer;
+    protected byte[] buffer;
     private SocketAddress address;
     private BinaryBuffer bb;
 
