@@ -17,6 +17,7 @@
 package net.redstonelamp.block;
 
 import net.redstonelamp.item.Item;
+import net.redstonelamp.level.position.BlockPosition;
 
 /**
  * Base class for all blocks
@@ -27,5 +28,10 @@ public class Block extends Item{
 
     public Block(int id, short meta, int count){
         super(id, meta, count);
+    }
+
+    public void update(BlockPosition position) {
+        //Do something if we should be.
+        //For most this is nothing, so just override where necessary.
     }
 }

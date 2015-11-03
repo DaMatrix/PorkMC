@@ -16,6 +16,8 @@
  */
 package net.redstonelamp.block;
 
+import net.redstonelamp.level.position.BlockPosition;
+
 /**
  * Abstract class for transparent blocks such as tall-grass.
  *
@@ -25,5 +27,10 @@ public abstract class Transparent extends Block {
 
     public Transparent(int id, short meta, int count) {
         super(id, meta, count);
+    }
+
+    @Override
+    public void update(BlockPosition position) {
+        
     }
 }
