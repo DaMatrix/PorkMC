@@ -50,11 +50,11 @@ public abstract class Protocol{
         try{
             manager.getActionPool().execute(() -> {
                 UniversalPacket packet;
-                try {
-                    while((packet = _interface.readPacket()) != null){
-                        if(packet.getAddress() == null) continue;
                 try{
                     while((packet = _interface.readPacket()) != null){
+                        if(packet.getAddress() == null){
+                            continue;
+                        }
                         Request[] requests = handlePacket(packet);
                         for(Request r : requests){
                             r.from = packet.getAddress();

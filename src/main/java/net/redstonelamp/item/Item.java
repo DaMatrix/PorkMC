@@ -105,8 +105,6 @@ public class Item implements Items{
         items.put(WATER, Water.class);
         items.put(WOODEN_PLANKS, WoodPlanks.class);
         items.put(WOOL, Wool.class);
-        
-        
     }
 
     private static void initCreativeItems(){

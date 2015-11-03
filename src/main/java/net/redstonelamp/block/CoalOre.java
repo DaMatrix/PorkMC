@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class CoalOre extends Block {
+public class CoalOre extends Block{
     public static final int ID = Items.COAL_ORE;
 
-    public CoalOre(int id, short meta, int count) {
+    public CoalOre(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public CoalOre(int count) {
+    public CoalOre(int count){
         super(ID, (short) 0, count);
     }
 }

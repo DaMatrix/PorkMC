@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class MossyStone extends Block {
+public class MossyStone extends Block{
     public static final int ID = Items.MOSSY_STONE;
 
-    public MossyStone(int id, short meta, int count) {
+    public MossyStone(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public MossyStone(int count) {
+    public MossyStone(int count){
         super(ID, (short) 0, count);
     }
 }

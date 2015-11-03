@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class Rose extends Transparent {
+public class Rose extends Transparent{
     public static final int ID = Items.ROSE;
 
-    public Rose(int id, short meta, int count) {
+    public Rose(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public Rose(int count) {
+    public Rose(int count){
         super(ID, (short) 0, count);
     }
 }

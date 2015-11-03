@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class Sponge extends Block {
+public class Sponge extends Block{
     public static final int ID = Items.SPONGE;
 
-    public Sponge(int id, short meta, int count) {
+    public Sponge(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public Sponge(int count) {
+    public Sponge(int count){
         super(ID, (short) 0, count);
     }
 }

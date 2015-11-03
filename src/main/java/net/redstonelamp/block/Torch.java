@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class Torch extends Transparent {
+public class Torch extends Transparent{
     public static final int ID = Items.TORCH;
 
-    public Torch(int id, short meta, int count) {
+    public Torch(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public Torch(int count) {
+    public Torch(int count){
         super(ID, (short) 0, count);
     }
 }

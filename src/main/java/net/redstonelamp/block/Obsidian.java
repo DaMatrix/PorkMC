@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class Obsidian extends Block {
+public class Obsidian extends Block{
     public static final int ID = Items.OBSIDIAN;
 
-    public Obsidian(int id, short meta, int count) {
+    public Obsidian(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public Obsidian(int count) {
+    public Obsidian(int count){
         super(ID, (short) 0, count);
     }
 }

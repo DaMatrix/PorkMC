@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class SnowBlock extends Block {
+public class SnowBlock extends Block{
     public static final int ID = Items.SNOW_BLOCK;
 
-    public SnowBlock(int id, short meta, int count) {
+    public SnowBlock(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public SnowBlock(int count) {
+    public SnowBlock(int count){
         super(ID, (short) 0, count);
     }
 }

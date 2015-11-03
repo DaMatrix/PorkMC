@@ -24,20 +24,20 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class Wool extends Block {
+public class Wool extends Block{
     public static final int ID = Items.WOOL;
     @Getter private Color type;
 
-    public Wool(int id, short meta, int count) {
+    public Wool(int id, short meta, int count){
         super(id, meta, count);
-        this.type = Color.WHITE;
+        type = Color.WHITE;
     }
 
-    public Wool(Color type, int count) {
+    public Wool(Color type, int count){
         super(ID, (short) type.getMetaId(), count);
     }
 
-    public static enum Color {
+    public enum Color{
         WHITE(0),
         ORANGE(1),
         MAGENTA(2),
@@ -57,7 +57,7 @@ public class Wool extends Block {
 
         @Getter private int metaId;
 
-        Color(int metaId) {
+        Color(int metaId){
             this.metaId = metaId;
         }
     }

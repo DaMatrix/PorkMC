@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class LapisBlock extends Block {
+public class LapisBlock extends Block{
     public static final int ID = Items.LAPIS_BLOCK;
 
-    public LapisBlock(int id, short meta, int count) {
+    public LapisBlock(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public LapisBlock(int count) {
+    public LapisBlock(int count){
         super(ID, (short) 0, count);
     }
 }

@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class Ice extends Block {
+public class Ice extends Block{
     public static final int ID = Items.ICE;
 
-    public Ice(int id, short meta, int count) {
+    public Ice(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public Ice(int count) {
+    public Ice(int count){
         super(ID, (short) 0, count);
     }
 }

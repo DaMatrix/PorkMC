@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class IronOre extends Block {
+public class IronOre extends Block{
     public static final int ID = Items.IRON_ORE;
 
-    public IronOre(int id, short meta, int count) {
+    public IronOre(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public IronOre(int count) {
+    public IronOre(int count){
         super(ID, (short) 0, count);
     }
 }

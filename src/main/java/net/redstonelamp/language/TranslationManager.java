@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.Pattern;
 
 /**
  * Manager for translations.
@@ -87,7 +86,7 @@ public class TranslationManager{
         }
     }
 
-    public void registerTranslator(Class<? extends Protocol> protocol, MessageTranslator translator) {
+    public void registerTranslator(Class<? extends Protocol> protocol, MessageTranslator translator){
         translators.put(protocol.getName(), translator);
     }
 
@@ -108,31 +107,34 @@ public class TranslationManager{
         }
         if(translators.containsKey(protocol.getClass().getName())){
             MessageTranslator translator = translators.get(protocol.getClass().getName());
-            for(int i = 0; i < translation.params.length; i++) {
+            for(int i = 0; i < translation.params.length; i++){
                 TextFormat color;
-                if(translation.params[i].startsWith(String.valueOf(TextFormat.ESCAPE))) {
+                if(translation.params[i].startsWith(String.valueOf(TextFormat.ESCAPE))){
                     char colorChar = translation.message.toCharArray()[1];
                     color = TextFormat.getByChar(colorChar);
-                } else {
+                }else{
                     color = TextFormat.WHITE;
                 }
                 String param = TextFormat.stripColors(translation.params[i]);
-                if(param.startsWith("!")) {
+                if(param.startsWith("!")){
                     param = param.replaceAll("!", "");
+                }else{
+                    continue;
                 }
-                else continue;
                 ChatResponse.ChatTranslation paramTranslation = new ChatResponse.ChatTranslation(param, new String[0]);
                 ChatResponse.ChatTranslation t2 = translators.get("server").translate(paramTranslation);
-                if(t2 == null) {
+                if(t2 == null){
                     t2 = translateServerSide(paramTranslation);
-                    if(t2 == null) continue;
+                    if(t2 == null){
+                        continue;
+                    }
                 }
                 translation.params[i] = color + TextFormat.stripColors(t2.message);
             }
             ChatResponse.ChatTranslation t = translator.translate(translation);
-            if(t != null) {
+            if(t != null){
                 return t;
-            } else {
+            }else{
                 return translateServerSide(translation);
             }
         }else{
@@ -146,31 +148,36 @@ public class TranslationManager{
      * @param translation The original RedstoneLamp constant translation.
      * @return A server-side translation for the constant.
      */
-    public ChatResponse.ChatTranslation translateServerSide(ChatResponse.ChatTranslation translation) {
-        for(int i = 0; i < translation.params.length; i++) {
+    public ChatResponse.ChatTranslation translateServerSide(ChatResponse.ChatTranslation translation){
+        for(int i = 0; i < translation.params.length; i++){
             TextFormat color;
-            if(translation.params[i].startsWith(String.valueOf(TextFormat.ESCAPE))) {
+            if(translation.params[i].startsWith(String.valueOf(TextFormat.ESCAPE))){
                 char colorChar = translation.message.toCharArray()[1];
                 color = TextFormat.getByChar(colorChar);
-            } else {
+            }else{
                 color = TextFormat.WHITE;
             }
             String param = TextFormat.stripColors(translation.params[i]);
-            if(param.startsWith("!")) {
+            if(param.startsWith("!")){
                 param = param.replaceAll("!", "");
+            }else{
+                continue;
             }
-            else continue;
             ChatResponse.ChatTranslation paramTranslation = new ChatResponse.ChatTranslation(param, new String[0]);
             ChatResponse.ChatTranslation t2 = translators.get("server").translate(paramTranslation);
-            if(t2 == null) {
+            if(t2 == null){
                 t2 = translateServerSide(paramTranslation);
-                if(t2 == null) continue;
+                if(t2 == null){
+                    continue;
+                }
             }
             translation.params[i] = color + TextFormat.stripColors(t2.message);
         }
         ChatResponse.ChatTranslation t = translators.get("server").translate(translation);
-        if(t != null) {
+        if(t != null){
             return t;
-        } else return translation;
+        }else{
+            return translation;
+        }
     }
 }

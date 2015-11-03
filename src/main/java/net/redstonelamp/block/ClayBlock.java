@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class ClayBlock extends Block {
+public class ClayBlock extends Block{
     public static final int ID = Items.CLAY_BLOCK;
 
-    public ClayBlock(int id, short meta, int count) {
+    public ClayBlock(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public ClayBlock(int count) {
+    public ClayBlock(int count){
         super(ID, (short) 0, count);
     }
 }

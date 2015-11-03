@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class Water extends Liquid {
+public class Water extends Liquid{
     public static final int ID = Items.WATER;
 
-    public Water(int id, short meta, int count) {
+    public Water(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public Water(int count) {
+    public Water(int count){
         super(ID, (short) 0, count);
     }
 }

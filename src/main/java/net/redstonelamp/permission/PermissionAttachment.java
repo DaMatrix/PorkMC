@@ -36,7 +36,6 @@ import lombok.Getter;
 import net.redstonelamp.Player;
 import net.redstonelamp.plugin.Plugin;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -72,7 +71,6 @@ public class PermissionAttachment{
     }
 
     public Permission[] getPermissions(){
-        ArrayList<Permission> perms = new ArrayList<>();
         return (Permission[]) permissions.keySet().toArray();
     }
 
