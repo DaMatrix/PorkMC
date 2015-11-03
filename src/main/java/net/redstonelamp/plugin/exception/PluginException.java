@@ -18,15 +18,14 @@ package net.redstonelamp.plugin.exception;
 
 /**
  * Main plugin exception, extended by exceptions that have to do with plugins
- * 
+ *
  * @author RedstoneLamp Team
  */
-public class PluginException extends Exception {
+public class PluginException extends Exception{
 
-	private static final long serialVersionUID = -6568964250418309645L;
+    private static final long serialVersionUID = -6568964250418309645L;
 
-	public PluginException(String ex) {
-		super(ex);
-	}
-
+    public PluginException(String ex){
+        super(ex);
+    }
 }

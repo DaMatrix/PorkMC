@@ -16,14 +16,6 @@
  */
 package net.redstonelamp.network.pe;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.nio.ByteOrder;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 import net.beaconpe.jraklib.JRakLib;
 import net.beaconpe.jraklib.protocol.EncapsulatedPacket;
 import net.beaconpe.jraklib.server.JRakLibServer;
@@ -39,12 +31,20 @@ import net.redstonelamp.network.UniversalPacket;
 import net.redstonelamp.ui.ConsoleOut;
 import net.redstonelamp.ui.Logger;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.nio.ByteOrder;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 /**
  * An AdvancedNetworkInterface implementation for the JRakLib library.
  *
  * @author RedstoneLamp Team
  */
-public class JRakLibInterface implements ServerInstance, PEInterface {
+public class JRakLibInterface implements ServerInstance, PEInterface{
     private final Server server;
     private final PEProtocol protocol;
     private final JRakLibServer rakLibServer;
@@ -54,7 +54,7 @@ public class JRakLibInterface implements ServerInstance, PEInterface {
 
     private Queue<UniversalPacket> packetQueue = new ConcurrentLinkedQueue<>();
 
-    public JRakLibInterface(Server server, PEProtocol protocol) {
+    public JRakLibInterface(Server server, PEProtocol protocol){
         this.server = server;
         this.protocol = protocol;
 
@@ -68,23 +68,23 @@ public class JRakLibInterface implements ServerInstance, PEInterface {
         packetHandler = new JRakLibPacketHandler(this);
         packetHandler.start();
 
-        logger.info("MCPE server started on "+ip+":"+port);
+        logger.info("MCPE server started on " + ip + ":" + port);
     }
 
-    private void setupLogger() {
+    private void setupLogger(){
         try{
             Constructor c = server.getLogger().getConsoleOutClass().getConstructor(String.class);
-            logger = new net.redstonelamp.ui.Logger((ConsoleOut) c.newInstance("JRakLibInterface"));
+            logger = new Logger((ConsoleOut) c.newInstance("JRakLibInterface"));
             logger.debug("Logger created.");
         }catch(NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e){
             e.printStackTrace();
         }
     }
 
-    private Logger setupLibraryLogger() {
+    private Logger setupLibraryLogger(){
         try{
             Constructor c = server.getLogger().getConsoleOutClass().getConstructor(String.class);
-            return new net.redstonelamp.ui.Logger((ConsoleOut) c.newInstance("JRakLib"));
+            return new Logger((ConsoleOut) c.newInstance("JRakLib"));
         }catch(NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e){
             e.printStackTrace();
         }
@@ -92,47 +92,48 @@ public class JRakLibInterface implements ServerInstance, PEInterface {
     }
 
     @Override
-    public void setName(String name) {
+    public void setName(String name){
         handler.sendOption("name", "MCPE;" + name.split("\n")[0] + ";" + PENetworkConst.MCPE_PROTOCOL + ";" + PENetworkConst.MCPE_VERSION + ";" + server.getPlayers().size() + ";" + server.getMaxPlayers());
     }
 
     @Override
-    public UniversalPacket readPacket() throws LowLevelNetworkException {
-        if(!packetQueue.isEmpty()) {
+    public UniversalPacket readPacket() throws LowLevelNetworkException{
+        if(!packetQueue.isEmpty()){
             return packetQueue.remove();
         }
         return null;
     }
 
     @Override
-    public void sendPacket(UniversalPacket packet, boolean immediate) throws LowLevelNetworkException {
+    public void sendPacket(UniversalPacket packet, boolean immediate) throws LowLevelNetworkException{
         EncapsulatedPacket pk = new EncapsulatedPacket();
         pk.messageIndex = 0;
         pk.reliability = 2;
         pk.buffer = packet.getBuffer();
         ServerSendPacketEvent event = new ServerSendPacketEvent(packet);
         server.callEvent(EventPlatform.POCKET, event);
-        if(!event.isCancelled()) {
-        	logger.buffer("(" + packet.getAddress().toString() + ") PACKET OUT: ", pk.buffer, "");
-        	handler.sendEncapsulated(packet.getAddress().toString(), pk, immediate ? JRakLib.PRIORITY_IMMEDIATE : JRakLib.PRIORITY_NORMAL);
+        if(!event.isCancelled()){
+            logger.buffer("(" + packet.getAddress().toString() + ") PACKET OUT: ", pk.buffer, "");
+            handler.sendEncapsulated(packet.getAddress().toString(), pk, immediate ? JRakLib.PRIORITY_IMMEDIATE : JRakLib.PRIORITY_NORMAL);
         }
     }
 
     @Override
-    public void shutdown() throws LowLevelNetworkException {
+    public void shutdown() throws LowLevelNetworkException{
         handler.shutdown();
         packetHandler.shutdown();
-        while(rakLibServer.getState() != Thread.State.TERMINATED);
+        while(rakLibServer.getState() != Thread.State.TERMINATED){
+        }
     }
 
     @Override
-    public void openSession(String identifier, String address, int port, long clientID) {
+    public void openSession(String identifier, String address, int port, long clientID){
         logger.debug("(" + identifier + ") openSession: {clientID: " + clientID + "}");
         protocol.openSession(identifier);
     }
 
     @Override
-    public void closeSession(String identifier, String reason) {
+    public void closeSession(String identifier, String reason){
         logger.debug("(" + identifier + ") closeSession: {reason: " + reason + "}");
         Player player = server.getPlayer(new JRakLibIdentifierAddress(identifier));
         if(player != null){
@@ -145,41 +146,40 @@ public class JRakLibInterface implements ServerInstance, PEInterface {
     }
 
     @Override
-    public void handleEncapsulated(String identifier, EncapsulatedPacket packet, int flags) {
+    public void handleEncapsulated(String identifier, EncapsulatedPacket packet, int flags){
         UniversalPacket pk = new UniversalPacket(packet.buffer, ByteOrder.BIG_ENDIAN, new JRakLibIdentifierAddress(identifier));
-    	ServerReceivePacketEvent event = new ServerReceivePacketEvent(pk);
+        ServerReceivePacketEvent event = new ServerReceivePacketEvent(pk);
         server.callEvent(EventPlatform.POCKET, event);
         logger.buffer("(" + identifier + ") PACKET IN: ", pk.getBuffer(), "");
-        if(!event.isCancelled()) {
-        	packetQueue.add(pk);
+        if(!event.isCancelled()){
+            packetQueue.add(pk);
         }
     }
 
     @Override
-    public void handleRaw(String address, int port, byte[] payload) {
+    public void handleRaw(String address, int port, byte[] payload){
         UniversalPacket packet = new UniversalPacket(payload, new InetSocketAddress(address, port));
-    	ServerReceivePacketEvent event = new ServerReceivePacketEvent(packet);
+        ServerReceivePacketEvent event = new ServerReceivePacketEvent(packet);
         server.callEvent(EventPlatform.POCKET, event);
-        if(!event.isCancelled()) {
-        	packetQueue.add(packet);
+        if(!event.isCancelled()){
+            packetQueue.add(packet);
         }
     }
 
     @Override
-    public void notifyACK(String identifier, int identifierACK) {
-    	// TODO: Create event
+    public void notifyACK(String identifier, int identifierACK){
+        // TODO: Create event
     }
 
     @Override
-    public void exceptionCaught(String clazz, String message) {
-        logger.error("JRakLib caught an exception! "+clazz+": "+message);
+    public void exceptionCaught(String clazz, String message){
+        logger.error("JRakLib caught an exception! " + clazz + ": " + message);
     }
 
     @Override
-    public void handleOption(String option, String value) {
-    	// TODO: Create event
+    public void handleOption(String option, String value){
+        // TODO: Create event
     }
-
 
     @Override
     public void _internalClose(SocketAddress address, String reason){
@@ -191,10 +191,10 @@ public class JRakLibInterface implements ServerInstance, PEInterface {
      *
      * @author RedstoneLamp Team
      */
-    public static class JRakLibLogger implements net.beaconpe.jraklib.Logger {
-        private final net.redstonelamp.ui.Logger logger;
+    public static class JRakLibLogger implements net.beaconpe.jraklib.Logger{
+        private final Logger logger;
 
-        public JRakLibLogger(net.redstonelamp.ui.Logger logger){
+        public JRakLibLogger(Logger logger){
             this.logger = logger;
         }
 
@@ -219,7 +219,7 @@ public class JRakLibInterface implements ServerInstance, PEInterface {
      *
      * @author RedstoneLamp Team
      */
-    public static class JRakLibIdentifierAddress extends SocketAddress {
+    public static class JRakLibIdentifierAddress extends SocketAddress{
         private final String identifier;
 
         public JRakLibIdentifierAddress(String identifier){
@@ -241,20 +241,20 @@ public class JRakLibInterface implements ServerInstance, PEInterface {
      *
      * @author RedstoneLamp Team
      */
-    public static class JRakLibPacketHandler extends Thread {
+    public static class JRakLibPacketHandler extends Thread{
         private boolean running = false;
         private JRakLibInterface jRakLibInterface;
 
-        public JRakLibPacketHandler(JRakLibInterface jRakLibInterface) {
+        public JRakLibPacketHandler(JRakLibInterface jRakLibInterface){
             this.jRakLibInterface = jRakLibInterface;
         }
 
         @Override
-        public void run() {
+        public void run(){
             setName("JRakLib-ServerHandler");
-            while(running) {
+            while(running){
                 jRakLibInterface.handler.handlePacket();
-                if(jRakLibInterface.rakLibServer.getState() == State.TERMINATED) {
+                if(jRakLibInterface.rakLibServer.getState() == State.TERMINATED){
                     jRakLibInterface.logger.fatal("JRakLib Server crashed!");
                     shutdown();
                 }
@@ -262,12 +262,12 @@ public class JRakLibInterface implements ServerInstance, PEInterface {
         }
 
         @Override
-        public void start() {
+        public void start(){
             running = true;
             super.start();
         }
 
-        public void shutdown() {
+        public void shutdown(){
             running = false;
         }
     }

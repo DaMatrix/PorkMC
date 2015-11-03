@@ -26,7 +26,7 @@ import java.util.Properties;
  *
  * @author RedstoneLamp Team
  */
-public class PropertiesConfig {
+public class PropertiesConfig{
     private Properties properties;
 
     /**

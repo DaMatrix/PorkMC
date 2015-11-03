@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class Sandstone extends Block {
+public class Sandstone extends Block{
     public static final int ID = Items.SANDSTONE;
 
-    public Sandstone(int id, short meta, int count) {
+    public Sandstone(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public Sandstone(int count) {
+    public Sandstone(int count){
         super(ID, (short) 0, count);
     }
 }

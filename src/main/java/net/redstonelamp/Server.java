@@ -16,28 +16,18 @@
  */
 package net.redstonelamp;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.SocketAddress;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.stream.Stream;
-
 import lombok.Getter;
 import net.redstonelamp.cmd.Command;
 import net.redstonelamp.cmd.CommandManager;
 import net.redstonelamp.cmd.CommandSender;
 import net.redstonelamp.config.PropertiesConfig;
 import net.redstonelamp.config.YamlConfig;
-import net.redstonelamp.entity.Cow;
 import net.redstonelamp.event.Event;
 import net.redstonelamp.event.EventPlatform;
 import net.redstonelamp.item.Item;
 import net.redstonelamp.language.TranslationManager;
 import net.redstonelamp.level.Level;
 import net.redstonelamp.level.LevelManager;
-import net.redstonelamp.level.position.Position;
 import net.redstonelamp.network.NetworkManager;
 import net.redstonelamp.network.Protocol;
 import net.redstonelamp.network.pc.PCProtocol;
@@ -54,6 +44,14 @@ import net.redstonelamp.ui.Logger;
 import net.redstonelamp.utils.ServerIcon;
 import net.redstonelamp.utils.TextFormat;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.SocketAddress;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Stream;
+
 /**
  * The base RedstoneLamp server, which handles the ticker.
  *
@@ -61,26 +59,26 @@ import net.redstonelamp.utils.TextFormat;
  */
 public class Server implements Runnable, CommandSender{
     private final List<Runnable> shutdownTasks = new ArrayList<>(); //List of tasks to be run on shutdown
-    private final Logger logger;
-    private final PropertiesConfig config;
-    private final YamlConfig yamlConfig;
-    private final ServerIcon serverIcon;
-    private final RedstoneTicker ticker;
+    @Getter private final Logger logger;
+    @Getter private final PropertiesConfig config;
+    @Getter private final YamlConfig yamlConfig;
+    @Getter private final ServerIcon serverIcon;
+    @Getter private final RedstoneTicker ticker;
     @Getter private final TranslationManager translationManager;
     private final NetworkManager network;
-    private final List<Player> players = new CopyOnWriteArrayList<>();
-    private final PluginSystem pluginSystem;
+    @Getter private final List<Player> players = new CopyOnWriteArrayList<>();
+    @Getter private final PluginSystem pluginSystem;
     @Getter private final JavaPluginManager pluginManager;
     @Getter private final ScriptManager scriptManager;
     @Getter private CommandManager commandManager;
-    private final PlayerDatabase playerDatabase;
-    
+    @Getter private final PlayerDatabase playerDatabase;
+
     private String motd;
-    private int maxPlayers;
-    private LevelManager levelManager;
+    @Getter private int maxPlayers;
+    @Getter private LevelManager levelManager;
     private int nextEntityID = 1;
 
-    private boolean stopped = false;
+    @Getter private boolean stopped = false;
 
     /**
      * Package-private constructor used by the RedstoneLamp run class
@@ -95,7 +93,7 @@ public class Server implements Runnable, CommandSender{
         this.config = config;
         yamlConfig = serverYamlConfig;
         File favicon = new File("./server-icon");
-        serverIcon = (favicon.exists() ? new ServerIcon(favicon) : null);
+        serverIcon = favicon.exists() ? new ServerIcon(favicon) : null;
         network = new NetworkManager(this);
         loadProperties(config);
         logger.info(RedstoneLamp.getSoftwareVersionString() + " is licensed under the Lesser GNU General Public License version 3");
@@ -110,7 +108,7 @@ public class Server implements Runnable, CommandSender{
         network.registerProtocol(new PCProtocol(network));
 
         addShutdownTask(network::shutdown);
-        
+
         commandManager = new CommandManager();
         scriptManager = new ScriptManager(this);
 
@@ -118,7 +116,7 @@ public class Server implements Runnable, CommandSender{
         pluginSystem.init();
         pluginManager = (JavaPluginManager) pluginSystem.getPluginManager("jar"); // Default PluginManager
         pluginSystem.loadPlugins(); // Load plugins so they can do internal java code, but they can't access the Redstone API yet
-        
+
         scriptManager.initScriptAPI();
         scriptManager.loadScripts();
 
@@ -165,7 +163,14 @@ public class Server implements Runnable, CommandSender{
 
         //Cow cow = new Cow(levelManager.getMainLevel().getEntityManager(), levelManager.getMainLevel().getSpawnPosition());
 
-        Runtime.getRuntime().addShutdownHook(new ShutdownTaskExecuter(this));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if(!isStopped()){
+                getLogger().warning("Server is not shut-down, did the server crash!?");
+            }
+            System.out.println("Running shutdown tasks.");
+            shutdownTasks.forEach(Runnable::run);
+            System.out.println("Halting...");
+        }));
     }
 
     private void loadProperties(PropertiesConfig config){
@@ -276,14 +281,24 @@ public class Server implements Runnable, CommandSender{
     }
 
     @Override
-    public void sendMessage(String message) {
-        this.getLogger().info(TextFormat.stripColors(message));
+    public void sendMessage(String message){
+        getLogger().info(TextFormat.stripColors(message));
     }
 
     @Override
-    public void sendMessage(ChatResponse.ChatTranslation translation) {
+    public void sendMessage(ChatResponse.ChatTranslation translation){
         ChatResponse.ChatTranslation ct = translationManager.translateServerSide(translation);
         logger.info(TextFormat.stripColors(ct.message));
+    }
+
+    public void callEvent(EventPlatform platform, Event event){
+        for(PluginManager manager : pluginSystem.getPluginManagers()){
+            manager.callEvent(platform, event);
+        }
+    }
+
+    public void callEvent(Event event){
+        callEvent(EventPlatform.BOTH, event);
     }
 
     //All Setter/Getter methods BELOW here.
@@ -303,114 +318,37 @@ public class Server implements Runnable, CommandSender{
         }
         return null;
     }
-    
+
     public Player getPlayer(String name){
-    	for(Player player : players){
-    		if(player.getName().equals(name)) {
-    			return player;
-    		}
-    	}
-    	return null;
-    }
-
-    /**
-     * Retrieve the server's logger.
-     *
-     * @return The <code>Logger</code> instance the server uses.
-     */
-    public Logger getLogger(){
-        return logger;
-    }
-
-    public RedstoneTicker getTicker(){
-        return ticker;
-    }
-
-    public List<Player> getPlayers(){
-        return players;
-    }
-
-    public int getMaxPlayers(){
-        return maxPlayers;
-    }
-
-    public PropertiesConfig getConfig(){
-        return config;
-    }
-
-    public LevelManager getLevelManager(){
-        return levelManager;
-    }
-
-    public PluginSystem getPluginSystem(){
-        return pluginSystem;
-    }
-    
-    public void callEvent(EventPlatform platform, Event event) {
-    	for(PluginManager manager : pluginSystem.getPluginManagers())
-    		manager.callEvent(platform, event);
-    }
-    
-    public void callEvent(Event event) {
-    	this.callEvent(EventPlatform.BOTH, event);
+        for(Player player : players){
+            if(player.getName().equals(name)){
+                return player;
+            }
+        }
+        return null;
     }
 
     protected int getNextEntityID(){
         return nextEntityID++;
     }
 
-    public YamlConfig getYamlConfig(){
-        return yamlConfig;
-    }
-    
-    public ServerIcon getServerIcon(){
-    	return serverIcon;
-    }
-
-    public boolean isStopped(){
-        return stopped;
-    }
-
-    public PlayerDatabase getPlayerDatabase(){
-        return playerDatabase;
-    }
-
-    private static class ShutdownTaskExecuter extends Thread{
-        private final Server server;
-
-        public ShutdownTaskExecuter(Server server){
-            this.server = server;
-        }
-
-        @Override
-        public void run(){
-            if(!server.isStopped()){
-                server.getLogger().warning("Server is not shut-down, did the server crash!?");
-            }
-            System.out.println("Running shutdown tasks.");
-            server.shutdownTasks.forEach(Runnable::run);
-            System.out.println("Halting...");
-        }
-    }
-    
     @Override
-	public String getName() {
-		return "Server";
-	}
-    
-    @Override
-    public boolean hasOp() {
-    	return true;
+    public String getName(){
+        return "Server";
     }
 
-    public void stop() {
+    @Override
+    public boolean hasOp(){
+        return true;
+    }
+
+    public void stop(){
         ticker.stop();
         stopped = true;
         logger.info("Shutting down server...");
-        for(Player player : players) {
+        for(Player player : players){
             player.close("redstonelamp.translation.player.left", "Server stopped!", true); //TODO: player.kick
         }
         System.exit(0);
     }
-    
 }

@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class DiamondBlock extends Block {
+public class DiamondBlock extends Block{
     public static final int ID = Items.DIAMOND_BLOCK;
 
-    public DiamondBlock(int id, short meta, int count) {
+    public DiamondBlock(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public DiamondBlock(int count) {
+    public DiamondBlock(int count){
         super(ID, (short) 0, count);
     }
 }

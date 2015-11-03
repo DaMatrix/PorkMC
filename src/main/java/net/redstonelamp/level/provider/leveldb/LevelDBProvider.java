@@ -35,7 +35,10 @@ import org.spout.nbt.Tag;
 import org.spout.nbt.stream.NBTInputStream;
 import org.spout.nbt.stream.NBTOutputStream;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
@@ -66,7 +69,7 @@ public class LevelDBProvider implements LevelProvider{
         Options options = new Options();
         options.createIfMissing(true);
         options.compressionType(CompressionType.ZLIB);
-        
+
         File databaseDir = new File(levelDir + File.separator + "db");
         try{
             database = Iq80DBFactory.factory.open(databaseDir, options);
@@ -169,7 +172,6 @@ public class LevelDBProvider implements LevelProvider{
             System.out.println(i+" "+t.getName()+", "+t.getValue());
         }
         */
-
 
         int x = (int) getTag("SpawnX").getValue();
         int y = (int) getTag("SpawnY").getValue();

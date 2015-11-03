@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class Mycelium extends Block {
+public class Mycelium extends Block{
     public static final int ID = Items.MYCELIUM;
 
-    public Mycelium(int id, short meta, int count) {
+    public Mycelium(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public Mycelium(int count) {
+    public Mycelium(int count){
         super(ID, (short) 0, count);
     }
 }

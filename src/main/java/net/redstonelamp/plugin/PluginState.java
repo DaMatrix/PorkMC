@@ -18,14 +18,14 @@ package net.redstonelamp.plugin;
 
 import lombok.Getter;
 
-public enum PluginState {
-	
-	LOADED(0), INITIALIZED(1), ENABLED(2), DISABLED(3), UNLOADED(4);
-	
-	@Getter
-	private final int stage;
-	private PluginState(int stage) {
-		this.stage = stage;
-	}
-	
+public enum PluginState{
+    LOADED(0), INITIALIZED(1), ENABLED(2), DISABLED(3), UNLOADED(4);
+
+    @Getter
+    private final int stage;
+
+    PluginState(int stage){
+        this.stage = stage;
+    }
+
 }

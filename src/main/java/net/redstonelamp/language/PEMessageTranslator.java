@@ -16,7 +16,6 @@
  */
 package net.redstonelamp.language;
 
-
 import net.redstonelamp.response.ChatResponse;
 import net.redstonelamp.utils.TextFormat;
 
@@ -25,19 +24,19 @@ import net.redstonelamp.utils.TextFormat;
  *
  * @author RedstoneLamp Team
  */
-public class PEMessageTranslator implements MessageTranslator {
+public class PEMessageTranslator implements MessageTranslator{
 
     @Override
-    public ChatResponse.ChatTranslation translate(ChatResponse.ChatTranslation translation) {
+    public ChatResponse.ChatTranslation translate(ChatResponse.ChatTranslation translation){
         ChatResponse.ChatTranslation cr = new ChatResponse.ChatTranslation(translation.message, translation.params);
         TextFormat color;
-        if(cr.message.startsWith(String.valueOf(TextFormat.ESCAPE))) {
+        if(cr.message.startsWith(String.valueOf(TextFormat.ESCAPE))){
             char colorChar = cr.message.toCharArray()[1];
             color = TextFormat.getByChar(colorChar);
-        } else {
+        }else{
             color = TextFormat.WHITE;
         }
-        switch (TextFormat.stripColors(cr.message)) {
+        switch(TextFormat.stripColors(cr.message)){
             case "redstonelamp.translation.player.joined":
                 cr.message = color + "%multiplayer.player.joined";
                 break;
@@ -51,7 +50,7 @@ public class PEMessageTranslator implements MessageTranslator {
                 cr.message = color + "%commands.help.header";
                 break;
             case "redstonelamp.translation.command.help.listEntry":
-                cr.message = color + "/"+cr.params[0]+" - "+cr.params[1];
+                cr.message = color + "/" + cr.params[0] + " - " + cr.params[1];
                 break;
             default:
                 return null; //Signal manager to use server-side translation.

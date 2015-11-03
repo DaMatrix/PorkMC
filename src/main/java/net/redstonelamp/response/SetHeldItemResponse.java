@@ -23,17 +23,16 @@ import net.redstonelamp.item.Item;
  *
  * @author RedstoneLamp Team
  */
-public class SetHeldItemResponse extends Response {
+public class SetHeldItemResponse extends Response{
     public long entityID;
     public Item item;
     public int inventorySlot;
     public int hotbarSlot;
 
-    public SetHeldItemResponse(long entityID, Item item, int inventorySlot, int hotbarSlot) {
+    public SetHeldItemResponse(long entityID, Item item, int inventorySlot, int hotbarSlot){
         this.entityID = entityID;
         this.item = item;
         this.inventorySlot = inventorySlot;
         this.hotbarSlot = hotbarSlot;
     }
-
 }

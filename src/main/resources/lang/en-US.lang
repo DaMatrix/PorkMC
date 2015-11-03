@@ -1,18 +1,156 @@
 ;Language implementation for English, United States
 [Translations]
-redstonelamp.translation.player.joined=%param-0 joined the game.
+;Generic messages
+redstonelamp.translation.generic.playerNotFound=Player %param-0 not found.
+redstonelamp.translation.generic.commandAsPlayer=You can only perform this command as a player!
+redstonelamp.translation.generic.chat.action=* %param-0 %param-1
+redstonelamp.translation.generic.chat.announcement=[%param-0] %param-1
+redstonelamp.translation.generic.chat.privateMessage=[%param-0 -> %param-1] %param-2
+
+;Player related messages
+redstonelamp.translation.player.joined=%param-0 =joined the game.
 redstonelamp.translation.player.left=%param-0 left the game.
 redstonelamp.translation.player.loggedInFromOtherLocation=Another user has logged in with your name!
+redstonelamp.translation.player.banned.noReason=You are banned from this server!
+redstonelamp.translation.player.banned.reason=You are banned: %param-0
+redstonelamp.translation.player.ipBanned.noReason=This IP address is banned
+redstonelamp.translation.player.ipBanned.reason=This IP address is banned: %param-0
+redstonelamp.translation.player.notWhitelisted=You are not whitelisted on this server!
 
+;Command Descriptions
+redstonelamp.translation.command.ban.description=Prevents a player from logging into this server by banning them.
+redstonelamp.translation.command.banIp.description=Prevents any player from an IP address from logging into this server.
+redstonelamp.translation.command.banList.description=Lists players and IP addresses banned from this server.
+redstonelamp.translation.command.defaultGamemode.description=Set the default gamemode of the server.
+redstonelamp.translation.command.deop.description=Removes operator privileges from a player.
+redstonelamp.translation.command.difficulty.description=Set and get the difficulty of the server.
+redstonelamp.translation.command.memory.description=Get memory usage.
+redstonelamp.translation.command.effect.description=Give a player an effect such as a potion.
+redstonelamp.translation.command.enchant.description=Enchants an item in your hand.
+redstonelamp.translation.command.gamemode.description=Change you or another player's gamemode.
+redstonelamp.translation.command.give.description=Spawn an item/block to you or another player.
+redstonelamp.translation.command.help.description=List commands avaliable and their descriptions.
+redstonelamp.translation.command.kick.description=Disconnects a player from this server with a reason.
+redstonelamp.translation.command.kill.description=Kill a player.
+redstonelamp.translation.command.list.description=List the players on the server.
+redstonelamp.translation.command.me.description=Say an action in chat.
+redstonelamp.translation.command.op.description=Give operator privileges to a player.
+redstonelamp.translation.command.pardon.description=Removes a ban on a player.
+redstonelamp.translation.command.pardonIp.description=Removes an IP ban on an address.
+redstonelamp.translation.command.particle.description=Spawn a particle at a position.
+redstonelamp.translation.command.permission.description=Check if a player has a certain permission.
+redstonelamp.translation.command.plugins.description=List the plugins running on the server.
+redstonelamp.translation.command.reload.description=Reloads the plugins on the server.
+redstonelamp.translation.command.save.description=Save the world and player data.
+redstonelamp.translation.command.saveOff.description=Disable world autosaving.
+redstonelamp.translation.command.saveOn.description=Enable world autosaving.
+redstonelamp.translation.command.say.description=Broadcast a message in chat.
+redstonelamp.translation.command.seed.description=Get the world's seed.
+redstonelamp.translation.command.setWorldSpawn.description=Set the world's spawnpoint.
+redstonelamp.translation.command.spawnpoint.description=Set the spawnpoint of a player.
+redstonelamp.translation.command.stop.description=Stop the server.
+redstonelamp.translation.command.teleport.description=Teleport you or a player to a position.
+redstonelamp.translation.command.tell.description=Send a private message to a player.
+redstonelamp.translation.command.time.description=Set or get the world's time
+redstonelamp.translation.command.version.description=Get the version that this server is running.
+redstonelamp.translation.command.whitelist.description=Manage the server's whitelist.
+
+;Command messages
 redstonelamp.translation.command.usage=Usage: %param-0.
+
+redstonelamp.translation.command.ban.success=%param-0 has been banned.
+redstonelamp.translation.command.banIp.success=The IP %param-0 has been banned.
+
+redstonelamp.translation.command.banList.players=The following players are banned:
+redstonelamp.translation.command.banList.ips=The following IP addresses are banned:
+
+redstonelamp.translation.command.defaultGamemode.success=Server gamemode set to %param-0
+redstonelamp.translation.command.defaultGamemode.unknownGamemode=Unknown gamemode: %param-0
+
+redstonelamp.translation.command.deop.success=Player %param-0 is no longer op.
+
+redstonelamp.translation.command.difficulty.success=Server difficulty set to %param-0
+redstonelamp.translation.command.difficulty.unknownDifficulty=Unknown difficulty %param-0
+
+redstonelamp.translation.command.memory.line1=Allocated Memory: %param-0
+redstonelamp.translation.command.memory.line2=Maximum Memory: %param-0
+redstonelamp.translation.command.memory.line3=Total Free Memory: %param-0
+
+redstonelamp.translation.command.effect.success.clearedAll=%param-0 was cleared of all effects.
+redstonelamp.translation.command.effect.success.added=%param-0 was given %param-1 for %param-2 seconds.
+redstonelamp.translation.command.effect.unknownEffect=Unknown effect %param-0
+
+redstonelamp.translation.command.enchant.success=Enchanted %param-0 with %param-1, level %param-2
+redstonelamp.translation.command.enchant.unknownEnchantId=Unknown enchantment id: %param-0
+redstonelamp.translation.command.enchant.noItem=You are not holding an item!
+
+redstonelamp.translation.command.gamemode.success=%param-0's gamemode set to %param-1
+redstonelamp.translation.command.gamemode.success.self=Your gamemode has been set to %param-0
+redstonelamp.translation.command.gamemode.invalidGamemode=Invalid gamemode: %param-0
+
+redstonelamp.translation.command.give.success=%param-0 given %param-1 %param-2
+redstonelamp.translation.command.give.success.self=You were given %param-0 %param-1
+redstonelamp.translation.command.give.itemNotFound=Item %param-0 not found.
+redstonelamp.translation.command.give.tagError=NBT JSON parse failed (invalid tag?)
 
 redstonelamp.translation.command.help.header=-- Command Help (Page %param-0/%param-1) --
 redstonelamp.translation.command.help.listEntry=/%param-0 - %param-1
 redstonelamp.translation.command.help.invalidPage=Page %param-0 does not exist!
 
-redstonelamp.translation.command.version.line1=This server is running %param-0 %param-1 %param-2.
-redstonelamp.translation.command.version.line2=Implementing MCPE: %param-0, MCPC: %param-1.
+redstonelamp.translation.command.kick.success=Player %param-0 was kicked: %param-1
+redstonelamp.translation.command.kick.success.noReason=Player %param-0 was kicked with no reason.
+
+redstonelamp.translation.command.kill.success=Player %param-0 was killed.
 
 redstonelamp.translation.command.list.noPlayers=There are no players online.
 redstonelamp.translation.command.list.onePlayer=There is 1 player online: %param-0
 redstonelamp.translation.command.list.multiple=There are %param-0 players online:
+
+redstonelamp.translation.command.op.success=%param-0 is now op.
+redstonelamp.translation.command.op.success.msg=You are now op!
+
+redstonelamp.translation.command.pardon.success=%param-0 has been unbanned.
+
+redstonelamp.translation.command.pardonIp.success=The IP address %param-0 has been unbanned.
+redstonelamp.translation.command.pardonIp.invalidIp=The IP address %param-0 is invalid!
+
+;Displayed to sender, param-0: amount of particles, param-1: particle type, param-2: particle position
+redstonelamp.translation.command.particle.success=%param-0 %param-1 particles spawned at %param-2
+redstonelamp.translation.command.particle.notFound=Particle %param-0 not found.
+
+redstonelamp.translation.command.plugins=There are %param-0 plugins running on the server:
+
+redstonelamp.translation.command.reload.reloading=Reloading plugins...
+redstonelamp.translation.command.reload.complete=Reload complete!
+
+redstonelamp.translation.command.save.saving=Saving world...
+redstonelamp.translation.command.save.complete=World saved!
+
+redstonelamp.translation.command.saveOff=Automatic level saving disabled.
+
+redstonelamp.translation.command.saveOn=Automatic level saving enabled.
+
+redstonelamp.translation.command.seed=This world's seed is %param-0
+
+redstonelamp.translation.command.setWorldSpawn.success=Set world spawnpoint to: %param-0
+
+redstonelamp.translation.command.spawnpoint.success=Set %param-0's spawnpoint to %param-1
+
+redstonelamp.translation.command.stop.stopping=Stopping server...
+
+redstonelamp.translation.command.teleport.success=%param-0 teleported to %param-1
+
+redstonelamp.translation.command.tell.sameTarget=You can't send a message to yourself!
+
+redstonelamp.translation.command.time.get=The world time is at %param-0 ticks.
+redstonelamp.translation.command.time.set=World time set to %param-0 ticks.
+redstonelamp.translation.command.time.start=World time resumed.
+redstonelamp.translation.command.time.stop=World time stopped!
+
+redstonelamp.translation.command.version.line1=This server is running %param-0 %param-1 %param-2.
+redstonelamp.translation.command.version.line2=Implementing MCPE: %param-0, MCPC: %param-1.
+
+redstonelamp.translation.command.whitelist.success.added=Added %param-0 onto the whitelist.
+redstonelamp.translation.command.whitelist.success.removed=Removed %param-0 from the whitelist.
+redstonelamp.translation.command.whitelist.success.enable=Whitelist enabled.
+redstonelamp.translation.command.whitelist.success.disabled=Whitelist disabled.

@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class StillLava extends Liquid {
+public class StillLava extends Liquid{
     public static final int ID = Items.STILL_LAVA;
 
-    public StillLava(int id, short meta, int count) {
+    public StillLava(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public StillLava(int count) {
+    public StillLava(int count){
         super(ID, (short) 0, count);
     }
 }

@@ -25,7 +25,7 @@ package net.redstonelamp.item;
  *
  * @author RedstoneLamp Team and PocketMine Team
  */
-public interface Items {
+public interface Items{
     public static final int AIR = 0;
     public static final int STONE = 1;
     public static final int GRASS = 2;

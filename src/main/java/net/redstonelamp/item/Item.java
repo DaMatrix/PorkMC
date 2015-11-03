@@ -16,6 +16,8 @@
  */
 package net.redstonelamp.item;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.redstonelamp.block.*;
 import org.spout.nbt.CompoundTag;
 
@@ -31,13 +33,14 @@ import java.util.Map;
  *
  * @author RedstoneLamp Team
  */
-public class Item implements Items {
+public class Item implements Items{
     private static final Map<Integer, Class<? extends Item>> items = new HashMap<>();
-    private static final List<Item> creativeItems = new ArrayList<>();
-    private final int id;
-    private final short meta;
-    private final int count;
-    private CompoundTag compoundTag;
+    @Getter private static final List<Item> creativeItems = new ArrayList<>();
+
+    @Getter private final int id;
+    @Getter private final short meta;
+    @Getter private final int count;
+    @Getter @Setter private CompoundTag compoundTag;
 
     public Item(int id, short meta, int count){
         this.id = id;
@@ -52,7 +55,7 @@ public class Item implements Items {
         initCreativeItems();
     }
 
-    private static void initItems() {
+    private static void initItems(){
         items.put(BED_BLOCK, BedBlock.class);
         items.put(BEDROCK, Bedrock.class);
         items.put(BOOKSHELF, Bookshelf.class);
@@ -105,11 +108,9 @@ public class Item implements Items {
         items.put(WATER, Water.class);
         items.put(WOODEN_PLANKS, WoodPlanks.class);
         items.put(WOOL, Wool.class);
-        
-        
     }
 
-    private static void initCreativeItems() {
+    private static void initCreativeItems(){
         addCreativeItem(get(BED_BLOCK, (short) 0));
         addCreativeItem(get(BEDROCK, (short) 0));
         addCreativeItem(get(BOOKSHELF, (short) 0));
@@ -124,7 +125,7 @@ public class Item implements Items {
         addCreativeItem(get(DIAMOND_BLOCK, (short) 0));
         addCreativeItem(get(DIAMOND_ORE, (short) 0));
         addCreativeItem(get(DIRT, (short) 0));
-        addCreativeItem(get(FIRE, (short) 0));
+        //addCreativeItem(get(FIRE, (short) 0));
         addCreativeItem(get(GLASS, (short) 0));
         addCreativeItem(get(GLOWING_REDSTONE_ORE, (short) 0));
         addCreativeItem(get(GOLD_BLOCK, (short) 0));
@@ -136,7 +137,7 @@ public class Item implements Items {
         addCreativeItem(get(IRON_ORE, (short) 0));
         addCreativeItem(get(LAPIS_BLOCK, (short) 0));
         addCreativeItem(get(LAPIS_ORE, (short) 0));
-        addCreativeItem(get(LAVA, (short) 0));
+        //addCreativeItem(get(LAVA, (short) 0));
         addCreativeItem(get(LEAVES, (short) 0));
         addCreativeItem(get(LOG, (short) 0));
         addCreativeItem(get(MOSSY_STONE, (short) 0));
@@ -152,14 +153,14 @@ public class Item implements Items {
         addCreativeItem(get(SNOW_BLOCK, (short) 0));
         addCreativeItem(get(MONSTER_SPAWNER, (short) 0));
         addCreativeItem(get(SPONGE, (short) 0));
-        addCreativeItem(get(STILL_LAVA, (short) 0));
-        addCreativeItem(get(STILL_WATER, (short) 0));
+        //addCreativeItem(get(STILL_LAVA, (short) 0));
+        //addCreativeItem(get(STILL_WATER, (short) 0));
         addCreativeItem(get(STONE, (short) 0));
         addCreativeItem(get(STONE_BRICKS, (short) 0));
         addCreativeItem(get(TALL_GRASS, (short) 0));
         addCreativeItem(get(TNT, (short) 0));
         addCreativeItem(get(TORCH, (short) 0));
-        addCreativeItem(get(WATER, (short) 0));
+        //addCreativeItem(get(WATER, (short) 0));
         addCreativeItem(get(WOODEN_PLANKS, (short) WoodPlanks.PlankType.OAK.getMetaId()));
         addCreativeItem(get(WOODEN_PLANKS, (short) WoodPlanks.PlankType.SPRUCE.getMetaId()));
         addCreativeItem(get(WOODEN_PLANKS, (short) WoodPlanks.PlankType.ACACIA.getMetaId()));
@@ -184,55 +185,31 @@ public class Item implements Items {
         addCreativeItem(get(WOOL, (short) Wool.Color.BLACK.getMetaId()));
     }
 
-    public static synchronized void addCreativeItem(Item item) {
+    public static synchronized void addCreativeItem(Item item){
         creativeItems.add(get(item.getId(), item.getMeta()));
     }
 
-    public static Item get(int id) {
+    public static Item get(int id){
         return get(id, (short) 0, 1);
     }
 
-    public static Item get(int id, short meta) {
+    public static Item get(int id, short meta){
         return get(id, meta, 1);
     }
 
-    public static Item get(int id, short meta, int count) {
-        if(items.containsKey(id)) {
-            try {
+    public static Item get(int id, short meta, int count){
+        if(items.containsKey(id)){
+            try{
                 Constructor c = items.get(id).getConstructor(int.class, short.class, int.class);
                 return (Item) c.newInstance(id, meta, count);
-            } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            }catch(NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e){
                 e.printStackTrace();
                 return null;
             }
-        } else if(id < 256) {
+        }else if(id < 256){
             return new Block(id, meta, count);
-        } else {
+        }else{
             return new Item(id, meta, count);
         }
-    }
-    
-    public static List<Item> getCreativeItems() {
-        return creativeItems;
-    }
-
-    public int getId(){
-        return id;
-    }
-
-    public short getMeta(){
-        return meta;
-    }
-
-    public int getCount(){
-        return count;
-    }
-
-    public CompoundTag getCompoundTag() {
-        return compoundTag;
-    }
-
-    public void setCompoundTag(CompoundTag compoundTag) {
-        this.compoundTag = compoundTag;
     }
 }

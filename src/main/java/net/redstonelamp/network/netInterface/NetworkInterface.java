@@ -42,6 +42,7 @@ public interface NetworkInterface{
 
     /**
      * Shutdown's the interface. Sessions will be closed when the server stops.
+     *
      * @throws LowLevelNetworkException
      */
     void shutdown() throws LowLevelNetworkException;

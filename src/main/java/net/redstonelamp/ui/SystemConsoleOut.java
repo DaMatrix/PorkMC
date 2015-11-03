@@ -23,113 +23,112 @@ import java.util.Locale;
 /**
  * Used by the server at startup to allow the informal use of
  * System.out.printXXX(); with the output as if it was the logger printing it
- * 
+ *
  * @author RedstoneLamp Team
  */
-public class SystemConsoleOut extends PrintStream {
+public class SystemConsoleOut extends PrintStream{
 
-	private final Logger logger;
+    private final Logger logger;
 
-	public SystemConsoleOut(Logger logger) {
-		super(new ByteArrayOutputStream());
-		this.logger = logger;
-	}
+    public SystemConsoleOut(Logger logger){
+        super(new ByteArrayOutputStream());
+        this.logger = logger;
+    }
 
-	@Override
-	public void print(boolean b) {
-		logger.info(Boolean.toString(b));
-	}
+    @Override
+    public void print(boolean b){
+        logger.info(Boolean.toString(b));
+    }
 
-	@Override
-	public void print(char c) {
-		logger.info(Character.toString(c));
-	}
+    @Override
+    public void print(char c){
+        logger.info(Character.toString(c));
+    }
 
-	@Override
-	public void print(char[] c) {
-		logger.info(new String(c));
-	}
+    @Override
+    public void print(char[] c){
+        logger.info(new String(c));
+    }
 
-	@Override
-	public void print(double d) {
-		logger.info(Double.toString(d));
-	}
+    @Override
+    public void print(double d){
+        logger.info(Double.toString(d));
+    }
 
-	@Override
-	public void print(float f) {
-		logger.info(Float.toString(f));
-	}
+    @Override
+    public void print(float f){
+        logger.info(Float.toString(f));
+    }
 
-	@Override
-	public void print(int i) {
-		logger.info(Integer.toString(i));
-	}
+    @Override
+    public void print(int i){
+        logger.info(Integer.toString(i));
+    }
 
-	@Override
-	public void print(Object o) {
-		logger.info(o.toString());
-	}
+    @Override
+    public void print(Object o){
+        logger.info(o.toString());
+    }
 
-	@Override
-	public void print(String s) {
-		logger.info(s);
-	}
+    @Override
+    public void print(String s){
+        logger.info(s);
+    }
 
-	@Override
-	public PrintStream printf(String s, Object... args) {
-		logger.info(s, args);
-		return null;
-	}
+    @Override
+    public PrintStream printf(String s, Object... args){
+        logger.info(s, args);
+        return null;
+    }
 
-	@Override
-	public PrintStream printf(Locale l, String s, Object... args) {
-		logger.info(s, args);
-		return null;
-	}
+    @Override
+    public PrintStream printf(Locale l, String s, Object... args){
+        logger.info(s, args);
+        return null;
+    }
 
-	@Override
-	public void println() {
-		logger.info("");
-	}
+    @Override
+    public void println(){
+        logger.info("");
+    }
 
-	@Override
-	public void println(boolean b) {
-		logger.info(Boolean.toString(b));
-	}
+    @Override
+    public void println(boolean b){
+        logger.info(Boolean.toString(b));
+    }
 
-	@Override
-	public void println(char c) {
-		logger.info(Character.toString(c));
-	}
+    @Override
+    public void println(char c){
+        logger.info(Character.toString(c));
+    }
 
-	@Override
-	public void println(char[] c) {
-		logger.info(new String(c));
-	}
+    @Override
+    public void println(char[] c){
+        logger.info(new String(c));
+    }
 
-	@Override
-	public void println(double d) {
-		logger.info(Double.toString(d));
-	}
+    @Override
+    public void println(double d){
+        logger.info(Double.toString(d));
+    }
 
-	@Override
-	public void println(float f) {
-		logger.info(Float.toString(f));
-	}
+    @Override
+    public void println(float f){
+        logger.info(Float.toString(f));
+    }
 
-	@Override
-	public void println(int i) {
-		logger.info(Integer.toString(i));
-	}
+    @Override
+    public void println(int i){
+        logger.info(Integer.toString(i));
+    }
 
-	@Override
-	public void println(Object o) {
-		logger.info(o.toString());
-	}
+    @Override
+    public void println(Object o){
+        logger.info(o.toString());
+    }
 
-	@Override
-	public void println(String s) {
-		logger.info(s);
-	}
-
+    @Override
+    public void println(String s){
+        logger.info(s);
+    }
 }

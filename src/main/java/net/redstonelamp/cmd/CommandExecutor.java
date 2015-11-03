@@ -16,6 +16,6 @@
  */
 package net.redstonelamp.cmd;
 
-public interface CommandExecutor {
+public interface CommandExecutor{
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args);
 }

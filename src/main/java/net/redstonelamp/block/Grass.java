@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class Grass extends Block {
+public class Grass extends Block{
     public static final int ID = Items.GRASS;
 
-    public Grass(int id, short meta, int count) {
+    public Grass(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public Grass(int count) {
+    public Grass(int count){
         super(ID, (short) 0, count);
     }
 }

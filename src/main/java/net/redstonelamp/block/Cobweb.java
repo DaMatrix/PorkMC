@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class Cobweb extends Transparent {
+public class Cobweb extends Transparent{
     public static final int ID = Items.COBWEB;
 
-    public Cobweb(int id, short meta, int count) {
+    public Cobweb(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public Cobweb(int count) {
+    public Cobweb(int count){
         super(ID, (short) 0, count);
     }
 }

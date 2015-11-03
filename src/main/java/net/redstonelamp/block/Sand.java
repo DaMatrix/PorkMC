@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class Sand extends Falling {
+public class Sand extends Falling{
     public static final int ID = Items.SAND;
 
-    public Sand(int id, short meta, int count) {
+    public Sand(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public Sand(int count) {
+    public Sand(int count){
         super(ID, (short) 0, count);
     }
 }

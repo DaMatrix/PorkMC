@@ -16,10 +16,9 @@
  */
 package net.redstonelamp.event;
 
-public class EventExecutor {
-	
-    public static void throwEvent(Event e) {
-        
+public class EventExecutor{
+
+    public static void throwEvent(Event e){
+
     }
-    
 }

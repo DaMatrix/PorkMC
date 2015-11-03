@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class GoldBlock extends Block {
+public class GoldBlock extends Block{
     public static final int ID = Items.GOLD_BLOCK;
 
-    public GoldBlock(int id, short meta, int count) {
+    public GoldBlock(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public GoldBlock(int count) {
+    public GoldBlock(int count){
         super(ID, (short) 0, count);
     }
 }

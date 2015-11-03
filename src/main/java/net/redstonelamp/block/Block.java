@@ -24,7 +24,6 @@ import net.redstonelamp.item.Item;
  * @author RedstoneLamp Team
  */
 public class Block extends Item{
-
     public Block(int id, short meta, int count){
         super(id, meta, count);
     }

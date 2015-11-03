@@ -16,11 +16,8 @@
  */
 package net.redstonelamp;
 
-import java.net.SocketAddress;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.UUID;
-
+import lombok.Getter;
+import lombok.Setter;
 import net.redstonelamp.block.Block;
 import net.redstonelamp.cmd.CommandSender;
 import net.redstonelamp.cmd.exception.CommandException;
@@ -29,12 +26,7 @@ import net.redstonelamp.event.EventExecutor;
 import net.redstonelamp.event.block.BlockBreakEvent;
 import net.redstonelamp.event.block.BlockPlaceEvent;
 import net.redstonelamp.event.chunk.ChunkRequestEvent;
-import net.redstonelamp.event.player.PlayerAnimateEvent;
-import net.redstonelamp.event.player.PlayerChatEvent;
-import net.redstonelamp.event.player.PlayerEquipmentChangeEvent;
-import net.redstonelamp.event.player.PlayerLoginEvent;
-import net.redstonelamp.event.player.PlayerMoveEvent;
-import net.redstonelamp.event.player.PlayerSpawnEvent;
+import net.redstonelamp.event.player.*;
 import net.redstonelamp.inventory.NBTPlayerInventory;
 import net.redstonelamp.inventory.PlayerInventory;
 import net.redstonelamp.item.Item;
@@ -49,35 +41,40 @@ import net.redstonelamp.request.*;
 import net.redstonelamp.response.*;
 import net.redstonelamp.utils.TextFormat;
 
+import java.net.SocketAddress;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
+
 /**
  * <strong>Protocol-independent</strong> Player class. Represents a Player on the server
  *
  * @author RedstoneLamp Team
  */
 public class Player extends PlayerEntity implements CommandSender{
-    private final Protocol protocol;
-    private final String userAgent;
+    @Getter private final Protocol protocol;
+    @Getter private final String userAgent;
     private final Server server;
-    private final SocketAddress address;
-    private final String identifier;
+    @Getter private final SocketAddress address;
+    @Getter(onMethod = @__({@Deprecated})) private final String identifier;
 
     private long startLogin;
 
-    private String username;
-    private String displayName;
-    private UUID uuid;
+    @Getter private String username;
+    @Getter @Setter private String displayName;
+    @Getter private UUID uuid;
     private int clientID;
-    private byte[] skin;
-    private boolean slim;
+    @Getter private byte[] skin;
+    @Getter private boolean slim;
 
-    private boolean connected = true;
-    private boolean spawned = false;
-    private boolean sprinting = false;
-    private boolean sneaking = false;
+    @Getter private boolean connected = true;
+    @Getter private boolean spawned = false;
+    @Getter private boolean sprinting = false;
+    @Getter private boolean sneaking = false;
 
-    private int gamemode;
-    private PlayerInventory inventory;
-    
+    @Getter private int gamemode;
+    @Getter private PlayerInventory inventory;
+
     private HashMap<Plugin, PermissionAttachment> permissionAttachments = new HashMap<>();
 
     /**
@@ -92,19 +89,19 @@ public class Player extends PlayerEntity implements CommandSender{
         super(protocol.getServer().getLevelManager().getMainLevel().getEntityManager(), null);
         this.protocol = protocol;
         this.identifier = identifier;
-        this.userAgent = "unknown";
+        userAgent = "unknown";
         address = null;
 
         server = protocol.getManager().getServer();
     }
-    
+
     /**
      * Construct a new Player instance belonging to the specified <code>Protocol</code> connecting from
      * <code>address</code>
      *
-     * @param protocol The protocol this player belongs to
+     * @param protocol  The protocol this player belongs to
      * @param userAgent The user-agent, or platform this player is connecting from.
-     * @param address  The SocketAddress this player is connecting from
+     * @param address   The SocketAddress this player is connecting from
      */
     public Player(Protocol protocol, String userAgent, SocketAddress address){
         super(protocol.getServer().getLevelManager().getMainLevel().getEntityManager(), null);
@@ -130,8 +127,9 @@ public class Player extends PlayerEntity implements CommandSender{
             data.setInventory(inv);
             server.getPlayerDatabase().updateData(data);
         }
-        if(!data.getUuid().toString().equals(uuid.toString()))
+        if(!data.getUuid().toString().equals(uuid.toString())){
             server.getLogger().warning("[Loading data] UUID does not match: " + data.getUuid() + ", " + uuid);
+        }
         setPosition(data.getPosition());
         setHealth(data.getHealth());
         gamemode = data.getGamemode();
@@ -146,18 +144,18 @@ public class Player extends PlayerEntity implements CommandSender{
     public void sendResponse(Response r){
         protocol.sendResponse(r, this);
     }
-    
+
     @Override
     public void sendMessage(String s){
         protocol.sendImmediateResponse(new ChatResponse(s), this);
     }
-    
+
     @Override
-    public void sendMessage(ChatResponse.ChatTranslation translation) {
-		ChatResponse r = new ChatResponse("");
-		r.translation = translation;
-		protocol.sendImmediateResponse(r, this);
-	}
+    public void sendMessage(ChatResponse.ChatTranslation translation){
+        ChatResponse r = new ChatResponse("");
+        r.translation = translation;
+        protocol.sendImmediateResponse(r, this);
+    }
 
     public void sendPopup(String s){
         protocol.sendImmediateResponse(new PopupResponse(s), this);
@@ -186,7 +184,7 @@ public class Player extends PlayerEntity implements CommandSender{
             LoginResponse response = new LoginResponse(true, gamemode, getHealth(), getPosition().getX(), getPosition().getY(), getPosition().getZ());
             PlayerLoginEvent ple = new PlayerLoginEvent(this);
             EventExecutor.throwEvent(ple);
-            if(!ple.isCancelled()) {
+            if(!ple.isCancelled()){
                 if(server.getPlayers().size() > server.getMaxPlayers()){
                     response.loginAllowed = false;
                     response.loginNotAllowedReason = "redstonelamp.loginFailed.serverFull";
@@ -203,8 +201,9 @@ public class Player extends PlayerEntity implements CommandSender{
                 server.getLogger().info(username + "[" + address + "] logged in with entity ID " + getEntityID() + " in level \"" + getPosition().getLevel().getName() + "\""
                                 + " at position [x: " + getPosition().getX() + ", y: " + getPosition().getY() + ", z: " + getPosition().getZ() + "]"
                 );
-            } else
+            }else{
                 close("", "Disconnected from server", false);
+            }
         }else if(request instanceof ChunkRequest){
             ChunkRequestEvent cre = new ChunkRequestEvent(this);
             EventExecutor.throwEvent(cre);
@@ -226,26 +225,27 @@ public class Player extends PlayerEntity implements CommandSender{
 
             server.getLogger().debug("Player " + username + " spawned (took " + (System.currentTimeMillis() - startLogin) + " ms)");
             spawned = true;
-            server.broadcastMessage(new ChatResponse.ChatTranslation(TextFormat.YELLOW+"redstonelamp.translation.player.joined", new String[]{username}));
+            server.broadcastMessage(new ChatResponse.ChatTranslation(TextFormat.YELLOW + "redstonelamp.translation.player.joined", new String[]{username}));
         }else if(request instanceof ChatRequest){
             ChatRequest cr = (ChatRequest) request;
-            if(cr.message.startsWith("/")) {
-                try {
+            if(cr.message.startsWith("/")){
+                try{
                     server.getCommandManager().executeCommand(cr.message, this);
-                } catch (CommandException e) {
+                }catch(CommandException e){
                     e.printStackTrace();
                 }
-            } else {
+            }else{
                 PlayerChatEvent pce = new PlayerChatEvent(this, cr.message);
                 EventExecutor.throwEvent(pce);
-                if(!pce.isCancelled())
+                if(!pce.isCancelled()){
                     server.broadcastMessage("<" + username + "> " + cr.message);
+                }
             }
         }else if(request instanceof PlayerMoveRequest){
             PlayerMoveEvent pme = new PlayerMoveEvent(this);
             PlayerMoveRequest pmr = (PlayerMoveRequest) request;
             EventExecutor.throwEvent(pme);
-            if(!pme.isCancelled()) {
+            if(!pme.isCancelled()){
                 if(gamemode == 1){
                     PlayerMoveResponse response = new PlayerMoveResponse(getEntityID(), pmr.position, pmr.onGround);
                     setPosition(pmr.position);
@@ -256,7 +256,7 @@ public class Player extends PlayerEntity implements CommandSender{
             PlayerEquipmentChangeEvent pece = new PlayerEquipmentChangeEvent(this);
             PlayerEquipmentRequest er = (PlayerEquipmentRequest) request;
             EventExecutor.throwEvent(pece);
-            if(!pece.isCancelled()) {
+            if(!pece.isCancelled()){
                 PlayerEquipmentResponse response = new PlayerEquipmentResponse(er.item);
                 server.broadcastResponse(server.getPlayers().stream().filter(player -> player != this), response);
             }
@@ -264,7 +264,7 @@ public class Player extends PlayerEntity implements CommandSender{
             PlayerAnimateEvent pae = new PlayerAnimateEvent(this);
             AnimateRequest ar = (AnimateRequest) request;
             EventExecutor.throwEvent(pae);
-            if(!pae.isCancelled()) {
+            if(!pae.isCancelled()){
                 AnimateResponse response = new AnimateResponse(ar.actionType, getEntityID());
                 server.broadcastResponse(server.getPlayers().stream().filter(player -> player != this), response);
             }
@@ -272,7 +272,7 @@ public class Player extends PlayerEntity implements CommandSender{
             BlockPlaceEvent bpe = new BlockPlaceEvent();
             BlockPlaceRequest bpr = (BlockPlaceRequest) request;
             EventExecutor.throwEvent(bpe);
-            if(!bpe.isCancelled()) {
+            if(!bpe.isCancelled()){
                 //System.out.println("Request to place at: " + bpr.blockPosition);
                 BlockPlaceResponse response = new BlockPlaceResponse(bpr.block, BlockPosition.fromVector3(bpr.blockPosition, getPosition().getLevel()));
                 if(!getPosition().getLevel().isChunkLoaded(new ChunkPosition(bpr.blockPosition.getX() / 16, bpr.blockPosition.getZ() / 16))){
@@ -290,7 +290,7 @@ public class Player extends PlayerEntity implements CommandSender{
             BlockBreakEvent bbe = new BlockBreakEvent();
             RemoveBlockRequest rbr = (RemoveBlockRequest) request;
             EventExecutor.throwEvent(bbe);
-            if(!bbe.isCancelled()) {
+            if(!bbe.isCancelled()){
                 //System.out.println("Request to remove at: " + rbr.position);
                 RemoveBlockResponse response = new RemoveBlockResponse(rbr.position);
                 if(!getPosition().getLevel().isChunkLoaded(new ChunkPosition(rbr.position.getX() / 16, rbr.position.getZ() / 16))){
@@ -303,30 +303,30 @@ public class Player extends PlayerEntity implements CommandSender{
                 //getPosition().getLevel().removeBlock(rbr.position);
                 getPosition().getLevel().setBlock(rbr.position, new Block(0, (short) 0, 1));
             }
-        } else if(request instanceof SetHeldItemRequest) {
+        }else if(request instanceof SetHeldItemRequest){
             SetHeldItemRequest shir = (SetHeldItemRequest) request;
             inventory.setItemInHand(shir.item);
             inventory.setSelectedSlot(shir.inventorySlot);
             inventory.setItemInHandSlot(shir.hotbarSlot);
             server.broadcastResponse(server.getPlayers().stream().filter(player -> player != this), new SetHeldItemResponse(getEntityID(), inventory.getItemInHand(), inventory.getSelectedSlot(), inventory.getItemInHandSlot()));
-        } else if(request instanceof SprintRequest) {
+        }else if(request instanceof SprintRequest){
             boolean starting = ((SprintRequest) request).starting;
-            synchronized (this) {
-                if (!isSprinting() && starting) {
+            synchronized(this){
+                if(!isSprinting() && starting){
                     sprinting = true;
                 }
-                if (isSprinting() && !starting) {
+                if(isSprinting() && !starting){
                     sprinting = false;
                 }
             }
             server.broadcastResponse(new SprintResponse(starting, this));
-        } else if(request instanceof SneakRequest) {
+        }else if(request instanceof SneakRequest){
             boolean starting = ((SneakRequest) request).starting;
-            synchronized (this) {
-                if (!isSneaking() && starting) {
+            synchronized(this){
+                if(!isSneaking() && starting){
                     sneaking = true;
                 }
-                if (isSneaking() && !starting) {
+                if(isSneaking() && !starting){
                     sneaking = false;
                 }
             }
@@ -343,8 +343,9 @@ public class Player extends PlayerEntity implements CommandSender{
      * Notice to plugin developers: use Player.kick() instead.
      * <br>
      * Closes the connection to the player.
+     *
      * @param leaveMessage Leave message to be broadcasted in chat.
-     * @param reason Reason displayed to the client. If sending a translation constant, first character must be "!"
+     * @param reason       Reason displayed to the client. If sending a translation constant, first character must be "!"
      * @param notifyClient If the client should be sent a disconnect notification with the reason or not.
      */
     //TODO: Better solution for translated reasons
@@ -359,9 +360,9 @@ public class Player extends PlayerEntity implements CommandSender{
         destroyEntity();
 
         server.closeSession(this);
-        if(reason.startsWith("!")) { // Check if reason is a translation constant
+        if(reason.startsWith("!")){ // Check if reason is a translation constant
             server.getLogger().info(username + "[" + identifier + "] logged out with reason: " + server.getTranslationManager().translateServerSide(new ChatResponse.ChatTranslation(reason.replaceAll("!", ""), new String[0])));
-        } else {
+        }else{
             server.getLogger().info(username + "[" + identifier + "] logged out with reason: " + reason);
         }
         connected = false;
@@ -377,9 +378,9 @@ public class Player extends PlayerEntity implements CommandSender{
         server.savePlayerData();
 
         if(!leaveMessage.isEmpty()){
-            switch (leaveMessage) {
+            switch(leaveMessage){
                 case "redstonelamp.translation.player.left":
-            	    server.broadcastMessage(new ChatResponse.ChatTranslation(TextFormat.YELLOW+"redstonelamp.translation.player.left", new String[] {username}));
+                    server.broadcastMessage(new ChatResponse.ChatTranslation(TextFormat.YELLOW + "redstonelamp.translation.player.left", new String[]{username}));
                     break;
                 default:
                     server.broadcastMessage(username + leaveMessage);
@@ -387,101 +388,39 @@ public class Player extends PlayerEntity implements CommandSender{
             }
         }
     }
-    
+
     @Override
-    public boolean hasOp() {
-    	return true; // TODO: Get operators working
-    }
-    
-    public String getDisplayName() {
-    	return displayName;
-    }
-    
-    public void setDisplayName(String displayName) {
-    	this.displayName = displayName;
+    public boolean hasOp(){
+        return true; // TODO: Get operators working
     }
 
-    public String getUsername() {
-        return username;
+    public void addAttachment(Plugin plugin){
+        permissionAttachments.put(plugin, new PermissionAttachment(this, plugin));
     }
 
-    public Protocol getProtocol(){
-        return protocol;
+    public PermissionAttachment getAttachment(Plugin plugin){
+        return permissionAttachments.get(plugin);
     }
 
-    @Deprecated
-    public String getIdentifier(){
-        return identifier;
+    public PermissionAttachment[] getAttachments(){
+        return permissionAttachments.values().toArray(new PermissionAttachment[permissionAttachments.size()]);
     }
 
-    public SocketAddress getAddress(){
-        return address;
-    }
-
-    public boolean isSpawned(){
-        return spawned;
-    }
-
-    public int getGamemode(){
-        return gamemode;
-    }
-
-    public byte[] getSkin(){
-        return skin;
-    }
-
-    public boolean isSlim(){
-        return slim;
-    }
-
-    public UUID getUuid(){
-        return uuid;
-    }
-
-    public boolean isConnected(){
-        return connected;
-    }
-
-    public PlayerInventory getInventory() {
-        return inventory;
-    }
-    
-    public void addAttachment(Plugin plugin) {
-    	permissionAttachments.put(plugin, new PermissionAttachment(this, plugin));
-    }
-    
-    public PermissionAttachment getAttachment(Plugin plugin) {
-    	return permissionAttachments.get(plugin);
-    }
-    
-    public PermissionAttachment[] getAttachments() {
-    	return permissionAttachments.values().toArray(new PermissionAttachment[permissionAttachments.size()]);
-    }
-    
     @Override
-    public boolean hasPermission(String permission) {
-    	ArrayList<String> permissions = new ArrayList<String>();
-    	for(PermissionAttachment attachment : getAttachments()) {
-    		for(Permission perm : attachment.getPermissions()) {
-    			if(!permissions.contains(perm.toString()))
-    				permissions.add(perm.toString());
-    		}
-    	}
-    	if(hasOp())
-    		for(Permission perm : OperatorPermissions.getPermissions(RedstoneLamp.SERVER.getConfig().getInt("op-permission-level")-1))
-    			permissions.add(perm.toString());
-    	return permissions.contains(permission);
-    }
-
-    public boolean isSprinting() {
-        return sprinting;
-    }
-
-    public boolean isSneaking() {
-        return sneaking;
-    }
-
-    public String getUserAgent() {
-        return userAgent;
+    public boolean hasPermission(String permission){
+        ArrayList<String> permissions = new ArrayList<>();
+        for(PermissionAttachment attachment : getAttachments()){
+            for(Permission perm : attachment.getPermissions()){
+                if(!permissions.contains(perm.toString())){
+                    permissions.add(perm.toString());
+                }
+            }
+        }
+        if(hasOp()){
+            for(Permission perm : OperatorPermissions.getPermissions(RedstoneLamp.SERVER.getConfig().getInt("op-permission-level") - 1)){
+                permissions.add(perm.toString());
+            }
+        }
+        return permissions.contains(permission);
     }
 }

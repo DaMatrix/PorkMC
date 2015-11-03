@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class Spawner extends Block {
+public class Spawner extends Block{
     public static final int ID = Items.MONSTER_SPAWNER;
 
-    public Spawner(int id, short meta, int count) {
+    public Spawner(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public Spawner(int count) {
+    public Spawner(int count){
         super(ID, (short) 0, count);
     }
 }

@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class Fire extends Transparent {
+public class Fire extends Transparent{
     public static final int ID = Items.FIRE;
 
-    public Fire(int id, short meta, int count) {
+    public Fire(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public Fire(int count) {
+    public Fire(int count){
         super(ID, (short) 0, count);
     }
 }

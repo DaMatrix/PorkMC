@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class Bookshelf extends Block {
+public class Bookshelf extends Block{
     public static final int ID = Items.BOOKSHELF;
 
-    public Bookshelf(int id, short meta, int count) {
+    public Bookshelf(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public Bookshelf(int count) {
+    public Bookshelf(int count){
         super(ID, (short) 0, count);
     }
 }

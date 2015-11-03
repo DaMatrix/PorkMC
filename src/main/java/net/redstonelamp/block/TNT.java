@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class TNT extends Block {
+public class TNT extends Block{
     public static final int ID = Items.TNT;
 
-    public TNT(int id, short meta, int count) {
+    public TNT(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public TNT(int count) {
+    public TNT(int count){
         super(ID, (short) 0, count);
     }
 }

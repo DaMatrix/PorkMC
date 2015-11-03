@@ -16,74 +16,76 @@
  */
 package net.redstonelamp.plugin;
 
-import java.io.IOException;
-
 import net.redstonelamp.event.Event;
 import net.redstonelamp.event.EventPlatform;
 import net.redstonelamp.plugin.exception.AsyncAPICallException;
 import net.redstonelamp.plugin.exception.PluginException;
 
-public abstract class PluginManager {
-	
-	private static long THREAD_ID;
-	public PluginManager() {
-		THREAD_ID = Thread.currentThread().getId();
-	}
-	
-	/**
-	 * Gets type of file that the plugin managers work with
-	 */
-	public abstract String getFileType();
-	
-	/**
-	 * Loads all plugins managed by this plugin manager
-	 */
-	public abstract void loadPlugins() throws PluginException, IOException;
-	
-	/**
-	 * Unloads all plugins managed by this plugin manager
-	 */
-	public abstract void unloadPlugins();
-	
-	/**
-	 * Get all plugins being managed by this plugin manager
-	 */
-	public abstract Plugin[] getPlugins();
-	
-	/**
-	 * Call event for the specified platforms
-	 * @param platform
-	 * @param event
-	 */
-	public abstract void callEvent(EventPlatform platform, Event event);
-	
-	/**
-	 * Call event for both platforms
-	 * @param event
-	 */
-	public final void callEvent(Event event) {
-		this.callEvent(EventPlatform.BOTH, event);
-	}
-	
-	public final Plugin getPlugin(String name) {
-		for(Plugin plugin : getPlugins()) {
-			if(plugin.getName().equals(name))
-				return plugin;
-		}
-		return null;
-	}
+import java.io.IOException;
 
-	/**
-	 * Checks if a task is running async. Throws an AsyncAPICallException when
-	 * the task is async.
-	 *
-	 * @param msg
-	 *            The message to use in the AsyncAPICallException
-	 * @throws AsyncAPICallException
-	 */
-	public static void checkAsync(String msg) throws AsyncAPICallException {
-		if (Thread.currentThread().getId() != THREAD_ID) {
-			throw new AsyncAPICallException(msg);
-		}
-	}
+public abstract class PluginManager{
+
+    private static long THREAD_ID;
+    public PluginManager(){
+        THREAD_ID = Thread.currentThread().getId();
+    }
+
+    /**
+     * Gets type of file that the plugin managers work with
+     */
+    public abstract String getFileType();
+
+    /**
+     * Loads all plugins managed by this plugin manager
+     */
+    public abstract void loadPlugins() throws PluginException, IOException;
+
+    /**
+     * Unloads all plugins managed by this plugin manager
+     */
+    public abstract void unloadPlugins();
+
+    /**
+     * Get all plugins being managed by this plugin manager
+     */
+    public abstract Plugin[] getPlugins();
+
+    /**
+     * Call event for the specified platforms
+     *
+     * @param platform
+     * @param event
+     */
+    public abstract void callEvent(EventPlatform platform, Event event);
+
+    /**
+     * Call event for both platforms
+     *
+     * @param event
+     */
+    public final void callEvent(Event event){
+        callEvent(EventPlatform.BOTH, event);
+    }
+
+    public final Plugin getPlugin(String name){
+        for(Plugin plugin : getPlugins()){
+            if(plugin.getName().equals(name)){
+                return plugin;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Checks if a task is running async. Throws an AsyncAPICallException when
+     * the task is async.
+     *
+     * @param msg The message to use in the AsyncAPICallException
+     * @throws AsyncAPICallException
+     */
+    public static void checkAsync(String msg) throws AsyncAPICallException{
+        if(Thread.currentThread().getId() != THREAD_ID){
+            throw new AsyncAPICallException(msg);
+        }
+    }
 }

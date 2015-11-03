@@ -16,6 +16,7 @@
  */
 package net.redstonelamp.network;
 
+import lombok.Getter;
 import net.redstonelamp.Player;
 import net.redstonelamp.Server;
 import net.redstonelamp.network.netInterface.NetworkInterface;
@@ -25,7 +26,6 @@ import net.redstonelamp.response.Response;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Base class for a Protocol.
@@ -33,7 +33,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @author RedstoneLamp Team
  */
 public abstract class Protocol{
-    private NetworkManager manager;
+    @Getter private NetworkManager manager;
     private final Queue<Request> requestQueue = new ArrayDeque<>();
     private final Map<String, Player> players = new ConcurrentHashMap<>();
     protected NetworkInterface _interface;
@@ -47,25 +47,28 @@ public abstract class Protocol{
         this.manager = manager;
     }
 
-    protected final void tick() {
+    protected final void tick(){
         try{
             manager.getActionPool().execute(() -> {
                 UniversalPacket packet;
-                try {
-                    while ((packet = _interface.readPacket()) != null) {
+                try{
+                    while((packet = _interface.readPacket()) != null){
+                        if(packet.getAddress() == null){
+                            continue;
+                        }
                         Request[] requests = handlePacket(packet);
-                        for (Request r : requests) {
+                        for(Request r : requests){
                             r.from = packet.getAddress();
                         }
                         Collections.addAll(requestQueue, requests);
                     }
-                } catch (LowLevelNetworkException e) {
+                }catch(LowLevelNetworkException e){
                     e.printStackTrace();
                 }
             });
             int max = 25;
-            if(!requestQueue.isEmpty()) {
-                while(max > 0 && !requestQueue.isEmpty()) {
+            if(!requestQueue.isEmpty()){
+                while(max > 0 && !requestQueue.isEmpty()){
                     max = max - 1;
                     Request r = requestQueue.remove();
                     if(players.containsKey(r.from.toString())){
@@ -119,17 +122,17 @@ public abstract class Protocol{
      */
     public void sendResponse(Response response, Player player){
         manager.getActionPool().execute(() -> {
-            try {
+            try{
                 UniversalPacket[] packets = _sendResponse(response, player);
-                for (UniversalPacket packet : packets) {
-                    try {
+                for(UniversalPacket packet : packets){
+                    try{
                         _interface.sendPacket(packet, false);
-                    } catch (LowLevelNetworkException e) {
+                    }catch(LowLevelNetworkException e){
                         manager.getServer().getLogger().error(e.getClass().getName() + " while sending response " + response.getClass().getName() + ": " + e.getMessage());
                         manager.getServer().getLogger().trace(e);
                     }
                 }
-            } catch (IllegalArgumentException e) {
+            }catch(IllegalArgumentException e){
                 e.printStackTrace();
                 //TODO
             }
@@ -147,30 +150,30 @@ public abstract class Protocol{
             List<Response> typeResponses = new ArrayList<>();
             List<Response> rest = new ArrayList<>();
             typeResponses.add(responses[0]);
-            for (Response r : responses) {
-                if (r.getClass().getName().equals(typeResponses.get(0).getClass().getName()) && r != typeResponses.get(0)) {
+            for(Response r : responses){
+                if(r.getClass().getName().equals(typeResponses.get(0).getClass().getName()) && r != typeResponses.get(0)){
                     typeResponses.add(r);
-                } else if (r != typeResponses.get(0)) {
+                }else if(r != typeResponses.get(0)){
                     rest.add(r);
                 }
             }
             UniversalPacket[] packets = _sendQueuedResponses(typeResponses.toArray(new Response[typeResponses.size()]), player);
-            if (packets == null) { //Check if protocol supports
+            if(packets == null){ //Check if protocol supports
                 //protocol doesn't support
-                for (Response r : responses) {
+                for(Response r : responses){
                     sendResponse(r, player);
                 }
                 return;
             }
-            for (UniversalPacket packet : packets) {
-                try {
+            for(UniversalPacket packet : packets){
+                try{
                     _interface.sendPacket(packet, false);
-                } catch (LowLevelNetworkException e) {
+                }catch(LowLevelNetworkException e){
                     manager.getServer().getLogger().error(e.getClass().getName() + " while sending queued responses of type " + responses[0].getClass().getName() + ": " + e.getMessage());
                     manager.getServer().getLogger().trace(e);
                 }
             }
-            if (!rest.isEmpty()) {
+            if(!rest.isEmpty()){
                 sendQueuedResponses(rest.toArray(new Response[rest.size()]), player);
             }
         });
@@ -186,10 +189,10 @@ public abstract class Protocol{
      */
     public void sendImmediateResponse(Response response, Player player){
         UniversalPacket[] packets = _sendResponse(response, player);
-        for (UniversalPacket packet : packets) {
-            try {
+        for(UniversalPacket packet : packets){
+            try{
                 _interface.sendPacket(packet, true);
-            } catch (LowLevelNetworkException e) {
+            }catch(LowLevelNetworkException e){
                 manager.getServer().getLogger().error(e.getClass().getName() + " while sending response " + response.getClass().getName() + ": " + e.getMessage());
                 manager.getServer().getLogger().trace(e);
             }
@@ -255,15 +258,6 @@ public abstract class Protocol{
     }
 
     /**
-     * Get the <code>NetworkManager</code> that this protocol belongs to.
-     *
-     * @return The <code>NetworkManager</code> the protocol belongs to.
-     */
-    public NetworkManager getManager(){
-        return manager;
-    }
-
-    /**
      * Get the <code>Server</code> that belongs to the <code>NetworkManager</code>
      *
      * @return The <code>Server</code> belonging to the <code>NetworkManager</code>
@@ -274,18 +268,19 @@ public abstract class Protocol{
 
     /**
      * Get the NetworkInterface this protocol uses to read and write packets.
+     *
      * @return The NetworkInterface used by this protocol.
      */
-    public NetworkInterface getInterface() {
+    public NetworkInterface getInterface(){
         return _interface;
     }
 
-    protected final void onShutdown() {
-        try {
+    protected final void onShutdown(){
+        try{
             _interface.shutdown();
-        } catch (LowLevelNetworkException e) {
+        }catch(LowLevelNetworkException e){
             e.printStackTrace();
-        } finally {
+        }finally{
             _shutdown();
         }
     }
@@ -293,7 +288,7 @@ public abstract class Protocol{
     /**
      * Method overridden in subclasses for extra cleanup when shutting down.
      */
-    protected void _shutdown() {
+    protected void _shutdown(){
 
     }
 

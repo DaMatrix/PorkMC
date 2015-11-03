@@ -23,20 +23,18 @@ import net.redstonelamp.level.position.Position;
  *
  * @author RedstoneLamp Team
  */
-public class Cow extends Animal {
+public class Cow extends Animal{
     public float width = 1.6f;
     public float height = 1.12f;
 
-    public Cow(EntityManager manager, Position position) {
+    public Cow(EntityManager manager, Position position){
         super(manager, position);
     }
 
     @Override
-    protected void initEntity() {
+    protected void initEntity(){
         setMaxHealth(10);
         setHealth(10);
         super.initEntity();
     }
-
-
 }

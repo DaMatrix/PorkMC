@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class Dandelion extends Block {
+public class Dandelion extends Block{
     public static final int ID = Items.DANDELION;
 
-    public Dandelion(int id, short meta, int count) {
+    public Dandelion(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public Dandelion(int count) {
+    public Dandelion(int count){
         super(ID, (short) 0, count);
     }
 }

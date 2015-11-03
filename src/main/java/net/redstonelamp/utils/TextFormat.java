@@ -24,7 +24,7 @@ import java.util.Map;
  *
  * @author RedstoneLamp Team
  */
-public enum TextFormat {
+public enum TextFormat{
     BLACK('0', false),
     DARK_BLUE('1', false),
     DARK_GREEN('2', false),
@@ -56,14 +56,14 @@ public enum TextFormat {
     private final boolean format;
     private final String asString;
 
-    private TextFormat(char colorCode, boolean format){
+    TextFormat(char colorCode, boolean format){
         this.colorCode = colorCode;
         this.format = format;
-        asString = new String(new char[] {ESCAPE, colorCode});
+        asString = new String(new char[]{ESCAPE, colorCode});
     }
 
     @Override
-    public String toString() {
+    public String toString(){
         return asString;
     }
 
@@ -71,22 +71,23 @@ public enum TextFormat {
         return mapByChar.get(c);
     }
 
-    static {
+    static{
         for(TextFormat format : values()){
             mapByChar.put(format.colorCode, format);
         }
     }
 
-    public boolean isFormatChar() {
+    public boolean isFormatChar(){
         return format;
     }
 
-    public static String stripColors(String input) {
+    public static String stripColors(String input){
         char[] ri = input.toCharArray();
         StringBuilder stripped = new StringBuilder();
-        for(int i = 0; i < ri.length; i++) {
-            if(ri[i] == ESCAPE)
-                i+=2;
+        for(int i = 0; i < ri.length; i++){
+            if(ri[i] == ESCAPE){
+                i += 2;
+            }
             stripped.append(ri[i]);
         }
         return stripped.toString();

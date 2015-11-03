@@ -26,32 +26,31 @@ import java.net.URLClassLoader;
  * Used to add plugin's and extra files to the system classpath making libraries
  * such as ProtocolLib (If it were to be ported to RedstoneLamp) accessible by
  * other plugins
- * 
+ *
  * @author RedstoneLamp Team
  */
-public class JavaClassPath {
-	private static final Class<?>[] parameters = new Class[] { URL.class };
+public class JavaClassPath{
+    private static final Class<?>[] parameters = new Class[]{URL.class};
 
-	public static void addFile(ClassLoader loader, String path) throws IOException {
-		File file = new File(path);
-		addFile(loader, file);
-	}
+    public static void addFile(ClassLoader loader, String path) throws IOException{
+        File file = new File(path);
+        addFile(loader, file);
+    }
 
-	public static void addFile(ClassLoader loader, File file) throws IOException {
-		addURL(loader, file.toURI().toURL());
-	}
+    public static void addFile(ClassLoader loader, File file) throws IOException{
+        addURL(loader, file.toURI().toURL());
+    }
 
-	public static void addURL(ClassLoader loader, URL url) throws IOException {
-		Class<URLClassLoader> sysclass = URLClassLoader.class;
+    public static void addURL(ClassLoader loader, URL url) throws IOException{
+        Class<URLClassLoader> sysclass = URLClassLoader.class;
 
-		try {
-			Method method = sysclass.getDeclaredMethod("addURL", parameters);
-			method.setAccessible(true);
-			method.invoke(loader, url);
-		} catch (Throwable t) {
-			t.printStackTrace();
-			throw new IOException("Error, could not add URL to system classloader");
-		}
-
-	}
+        try{
+            Method method = sysclass.getDeclaredMethod("addURL", parameters);
+            method.setAccessible(true);
+            method.invoke(loader, url);
+        }catch(Throwable t){
+            t.printStackTrace();
+            throw new IOException("Error, could not add URL to system classloader");
+        }
+    }
 }

@@ -24,20 +24,20 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class WoodPlanks extends Block {
+public class WoodPlanks extends Block{
     public static final int ID = Items.WOODEN_PLANKS;
     @Getter private PlankType type;
 
-    public WoodPlanks(int id, short meta, int count) {
+    public WoodPlanks(int id, short meta, int count){
         super(id, meta, count);
-        this.type = PlankType.OAK;
+        type = PlankType.OAK;
     }
 
-    public WoodPlanks(PlankType type, int count) {
+    public WoodPlanks(PlankType type, int count){
         super(ID, (short) type.getMetaId(), count);
     }
 
-    public static enum PlankType {
+    public enum PlankType{
         OAK(0),
         SPRUCE(1),
         BIRCH(2),
@@ -47,7 +47,7 @@ public class WoodPlanks extends Block {
 
         @Getter private int metaId;
 
-        PlankType(int metaId) {
+        PlankType(int metaId){
             this.metaId = metaId;
         }
     }

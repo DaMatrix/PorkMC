@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class BedBlock extends Block {
+public class BedBlock extends Block{
     public static final int ID = Items.BED_BLOCK;
 
-    public BedBlock(int id, short meta, int count) {
+    public BedBlock(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public BedBlock(int count) {
+    public BedBlock(int count){
         super(ID, (short) 0, count);
     }
 }

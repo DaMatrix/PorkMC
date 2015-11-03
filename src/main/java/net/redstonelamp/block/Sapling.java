@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class Sapling extends Transparent {
+public class Sapling extends Transparent{
     public static final int ID = Items.SAPLING;
 
-    public Sapling(int id, short meta, int count) {
+    public Sapling(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public Sapling(int count) {
+    public Sapling(int count){
         super(ID, (short) 0, count);
     }
 }

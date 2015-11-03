@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class Log extends Block {
+public class Log extends Block{
     public static final int ID = Items.LOG;
 
-    public Log(int id, short meta, int count) {
+    public Log(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public Log(int count) {
+    public Log(int count){
         super(ID, (short) 0, count);
     }
 }

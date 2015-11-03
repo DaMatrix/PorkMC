@@ -276,14 +276,12 @@ public class SubprotocolV27 extends Subprotocol implements ProtocolConst27{
             bb.putInt(flags);
             packets.add(new UniversalPacket(bb.toArray(), ByteOrder.BIG_ENDIAN, address));
 
-
             byte[] metadata = player.getMetadata().toBytes();
             bb = BinaryBuffer.newInstance(9 + metadata.length, ByteOrder.BIG_ENDIAN);
             bb.putByte(SET_ENTITY_DATA_PACKET);
             bb.putLong(0); //Player Entity ID is always zero to themselves
             bb.put(metadata);
             packets.add(new UniversalPacket(bb.toArray(), ByteOrder.BIG_ENDIAN, address));
-
 
             bb = BinaryBuffer.newInstance(6, ByteOrder.BIG_ENDIAN);
             bb.putByte(SET_TIME_PACKET);
@@ -293,9 +291,9 @@ public class SubprotocolV27 extends Subprotocol implements ProtocolConst27{
 
             bb = BinaryBuffer.newInstance(13, ByteOrder.BIG_ENDIAN);
             bb.putByte(RESPAWN_PACKET);
-            bb.putFloat((float) sr.spawnPosition.getX());
-            bb.putFloat((float) sr.spawnPosition.getY());
-            bb.putFloat((float) sr.spawnPosition.getZ());
+            bb.putFloat(sr.spawnPosition.getX());
+            bb.putFloat(sr.spawnPosition.getY());
+            bb.putFloat(sr.spawnPosition.getZ());
             packets.add(new UniversalPacket(bb.toArray(), ByteOrder.BIG_ENDIAN, address));
 
             bb = BinaryBuffer.newInstance(5, ByteOrder.BIG_ENDIAN);
@@ -307,9 +305,9 @@ public class SubprotocolV27 extends Subprotocol implements ProtocolConst27{
             bb = BinaryBuffer.newInstance(35, ByteOrder.BIG_ENDIAN);
             bb.putByte(MOVE_PLAYER_PACKET);
             bb.putLong(player.getEntityID());
-            bb.putFloat((float) tr.pos.getX());
-            bb.putFloat((float) tr.pos.getY());
-            bb.putFloat((float) tr.pos.getZ());
+            bb.putFloat(tr.pos.getX());
+            bb.putFloat(tr.pos.getY());
+            bb.putFloat(tr.pos.getZ());
             bb.putFloat(tr.pos.getYaw());
             bb.putFloat(tr.bodyYaw);
             bb.putFloat(tr.pos.getPitch());
@@ -345,9 +343,9 @@ public class SubprotocolV27 extends Subprotocol implements ProtocolConst27{
             bb.putLong(p.getEntityID()); //Prevent client from knowing the real clientID
             bb.putString(p.getName());
             bb.putLong(p.getEntityID());
-            bb.putFloat((float) p.getPosition().getX());
-            bb.putFloat((float) p.getPosition().getY());
-            bb.putFloat((float) p.getPosition().getZ());
+            bb.putFloat(p.getPosition().getX());
+            bb.putFloat(p.getPosition().getY());
+            bb.putFloat(p.getPosition().getZ());
             bb.putFloat(0f); //Speed X
             bb.putFloat(0f); //Speed y
             bb.putFloat(0f); //speed z
@@ -380,9 +378,9 @@ public class SubprotocolV27 extends Subprotocol implements ProtocolConst27{
             bb = BinaryBuffer.newInstance(35, ByteOrder.BIG_ENDIAN);
             bb.putByte(MOVE_PLAYER_PACKET);
             bb.putLong(pmr.entityID);
-            bb.putFloat((float) pmr.pos.getX());
-            bb.putFloat((float) pmr.pos.getY());
-            bb.putFloat((float) pmr.pos.getZ());
+            bb.putFloat(pmr.pos.getX());
+            bb.putFloat(pmr.pos.getY());
+            bb.putFloat(pmr.pos.getZ());
             bb.putFloat(pmr.pos.getYaw());
             bb.putFloat(pmr.bodyYaw);
             bb.putFloat(pmr.pos.getPitch());
@@ -422,7 +420,7 @@ public class SubprotocolV27 extends Subprotocol implements ProtocolConst27{
             bb.putInt(bpr.position.getZ());
             bb.putByte((byte) bpr.position.getY());
             bb.putByte((byte) bpr.block.getId());
-            bb.putByte((byte) ((UpdateBlockPacketFlagsV27.FLAG_ALL_PRIORITY << 4) | (byte) bpr.block.getMeta()));
+            bb.putByte((byte) (UpdateBlockPacketFlagsV27.FLAG_ALL_PRIORITY << 4 | (byte) bpr.block.getMeta()));
             packets.add(new UniversalPacket(bb.toArray(), ByteOrder.BIG_ENDIAN, address));
         }else if(response instanceof RemoveBlockResponse){
             RemoveBlockResponse rbr = (RemoveBlockResponse) response;
@@ -433,7 +431,7 @@ public class SubprotocolV27 extends Subprotocol implements ProtocolConst27{
             bb.putInt(rbr.position.getZ());
             bb.putByte((byte) rbr.position.getY());
             bb.putByte((byte) 0); //AIR
-            bb.putByte((byte) ((UpdateBlockPacketFlagsV27.FLAG_ALL_PRIORITY << 4) | (byte) 0));
+            bb.putByte((byte) (UpdateBlockPacketFlagsV27.FLAG_ALL_PRIORITY << 4));
             packets.add(new UniversalPacket(bb.toArray(), ByteOrder.BIG_ENDIAN, address));
         }
 
@@ -461,7 +459,7 @@ public class SubprotocolV27 extends Subprotocol implements ProtocolConst27{
                 BlockPlaceResponse bpr = (BlockPlaceResponse) r;
                 records.add(new UpdateBlockPacketRecordV27(bpr.position.getX(), bpr.position.getY(), bpr.position.getZ(), (byte) bpr.block.getId(), (byte) bpr.block.getMeta(), UpdateBlockPacketFlagsV27.FLAG_ALL_PRIORITY));
             }
-            bb = BinaryBuffer.newInstance(5 + (11 * records.size()), ByteOrder.BIG_ENDIAN);
+            bb = BinaryBuffer.newInstance(5 + 11 * records.size(), ByteOrder.BIG_ENDIAN);
             bb.putByte(UPDATE_BLOCK_PACKET);
             bb.putInt(records.size());
             for(UpdateBlockPacketRecordV27 record : records){
@@ -469,7 +467,7 @@ public class SubprotocolV27 extends Subprotocol implements ProtocolConst27{
                 bb.putInt(record.z);
                 bb.putByte((byte) record.y);
                 bb.putByte(record.id);
-                bb.putByte((byte) ((record.flags << 4) | (byte) record.meta));
+                bb.putByte((byte) (record.flags << 4 | record.meta));
             }
             packets.add(new UniversalPacket(bb.toArray(), ByteOrder.BIG_ENDIAN, player.getAddress()));
         }else if(responses[0] instanceof RemoveBlockResponse){
@@ -478,7 +476,7 @@ public class SubprotocolV27 extends Subprotocol implements ProtocolConst27{
                 RemoveBlockResponse rbr = (RemoveBlockResponse) r;
                 records.add(new UpdateBlockPacketRecordV27(rbr.position.getX(), rbr.position.getY(), rbr.position.getZ(), (byte) 0, (byte) 0, UpdateBlockPacketFlagsV27.FLAG_ALL_PRIORITY));
             }
-            bb = BinaryBuffer.newInstance(5 + (11 * records.size()), ByteOrder.BIG_ENDIAN);
+            bb = BinaryBuffer.newInstance(5 + 11 * records.size(), ByteOrder.BIG_ENDIAN);
             bb.putByte(UPDATE_BLOCK_PACKET);
             bb.putInt(records.size());
             for(UpdateBlockPacketRecordV27 record : records){
@@ -486,7 +484,7 @@ public class SubprotocolV27 extends Subprotocol implements ProtocolConst27{
                 bb.putInt(record.z);
                 bb.putByte((byte) record.y);
                 bb.putByte(record.id);
-                bb.putByte((byte) ((record.flags << 4) | (byte) record.meta));
+                bb.putByte((byte) (record.flags << 4 | record.meta));
             }
             packets.add(new UniversalPacket(bb.toArray(), ByteOrder.BIG_ENDIAN, player.getAddress()));
         }

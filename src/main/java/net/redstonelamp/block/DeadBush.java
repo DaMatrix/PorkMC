@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class DeadBush extends Transparent {
+public class DeadBush extends Transparent{
     public static final int ID = Items.DEAD_BUSH;
 
-    public DeadBush(int id, short meta, int count) {
+    public DeadBush(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public DeadBush(int count) {
+    public DeadBush(int count){
         super(ID, (short) 0, count);
     }
 }

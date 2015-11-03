@@ -16,12 +16,12 @@
  */
 package net.redstonelamp.level.generator;
 
-import java.nio.ByteBuffer;
-
 import net.redstonelamp.item.Items;
 import net.redstonelamp.level.Chunk;
 import net.redstonelamp.level.ChunkPosition;
 import net.redstonelamp.level.Level;
+
+import java.nio.ByteBuffer;
 
 /**
  * This Simple FlatGenerator generates an infinite world of grass.

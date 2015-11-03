@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class Quartz extends Block {
+public class Quartz extends Block{
     public static final int ID = Items.QUARTZ_BLOCK;
 
-    public Quartz(int id, short meta, int count) {
+    public Quartz(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public Quartz(int count) {
+    public Quartz(int count){
         super(ID, (short) 0, count);
     }
 }

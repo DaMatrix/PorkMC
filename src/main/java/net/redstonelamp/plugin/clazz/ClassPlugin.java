@@ -22,63 +22,63 @@ import net.redstonelamp.plugin.Plugin;
 import net.redstonelamp.ui.Log4j2ConsoleOut;
 import net.redstonelamp.ui.Logger;
 
-public abstract class ClassPlugin extends Plugin {
-	
-	private Logger logger;
-	
-	abstract String name();
-	abstract String version();
-	abstract String[] authors();
-	String url() {
-		return null;
-	}
-	String[] dependencies() {
-		return null;
-	}
-	String[] softDependencies() {
-		return null;
-	}
-	
-	@Override
-	public final Server getServer() {
-		return RedstoneLamp.SERVER;
-	}
-	
-	@Override
-	public String getName() {
-		return name();
-	}
-	
-	@Override
-	public final String getVersion() {
-		return version();
-	}
-	
-	@Override
-	public final String[] getAuthors() {
-		return authors();
-	}
-	
-	@Override
-	public final String getUrl() {
-		return url();
-	}
-	
-	@Override
-	public final String[] getDependencies() {
-		return dependencies();
-	}
+public abstract class ClassPlugin extends Plugin{
 
-	@Override
-	public final String[] getSoftDependencies() {
-		return softDependencies();
-	}
+    private Logger logger;
 
-	@Override
-	public final Logger getLogger() {
-		if(logger == null)
-			logger = new Logger(new Log4j2ConsoleOut(getName()));
-		return logger;
-	}
-	
+    abstract String name();
+    abstract String version();
+    abstract String[] authors();
+    String url(){
+        return null;
+    }
+    String[] dependencies(){
+        return null;
+    }
+    String[] softDependencies(){
+        return null;
+    }
+
+    @Override
+    public final Server getServer(){
+        return RedstoneLamp.SERVER;
+    }
+
+    @Override
+    public String getName(){
+        return name();
+    }
+
+    @Override
+    public final String getVersion(){
+        return version();
+    }
+
+    @Override
+    public final String[] getAuthors(){
+        return authors();
+    }
+
+    @Override
+    public final String getUrl(){
+        return url();
+    }
+
+    @Override
+    public final String[] getDependencies(){
+        return dependencies();
+    }
+
+    @Override
+    public final String[] getSoftDependencies(){
+        return softDependencies();
+    }
+
+    @Override
+    public final Logger getLogger(){
+        if(logger == null){
+            logger = new Logger(new Log4j2ConsoleOut(getName()));
+        }
+        return logger;
+    }
 }

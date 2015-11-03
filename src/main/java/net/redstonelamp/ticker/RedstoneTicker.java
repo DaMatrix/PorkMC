@@ -16,15 +16,15 @@
  */
 package net.redstonelamp.ticker;
 
+import net.redstonelamp.Server;
+import net.redstonelamp.cmd.exception.CommandException;
+import net.redstonelamp.utils.AntiSpam;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-
-import net.redstonelamp.Server;
-import net.redstonelamp.cmd.exception.CommandException;
-import net.redstonelamp.utils.AntiSpam;
 
 /**
  * The ticker used by RedstoneLamp.
@@ -108,9 +108,7 @@ public class RedstoneTicker{
                 task.getTask().onFinalize();
             }
         }
-        
-        
-        
+
         lastTickDone = true;
     }
 
@@ -130,18 +128,20 @@ public class RedstoneTicker{
             }
             */
         }
-        
-        String line = null;
-        try {
-            if (cli.ready()) {
+
+        String line;
+        try{
+            if(cli.ready()){
                 line = cli.readLine();
-                if (line != null)
+                if(line != null){
                     server.getCommandManager().executeCommand(line, server);
+                }
             }
-        } catch (CommandException e) {
+        }catch(CommandException e){
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } catch (IOException e) {}
+        }catch(IOException e){
+        }
     }
 
     /**

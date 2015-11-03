@@ -21,9 +21,9 @@ package net.redstonelamp.block;
  *
  * @author RedstoneLamp Team
  */
-public abstract class Falling extends Block {
+public abstract class Falling extends Block{
 
-    public Falling(int id, short meta, int count) {
+    public Falling(int id, short meta, int count){
         super(id, meta, count);
     }
 }

@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class Gravel extends Falling {
+public class Gravel extends Falling{
     public static final int ID = Items.GRAVEL;
 
-    public Gravel(int id, short meta, int count) {
+    public Gravel(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public Gravel(int count) {
+    public Gravel(int count){
         super(ID, (short) 0, count);
     }
 }

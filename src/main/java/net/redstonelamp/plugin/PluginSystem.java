@@ -16,11 +16,6 @@
  */
 package net.redstonelamp.plugin;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import lombok.Getter;
 import net.redstonelamp.Server;
 import net.redstonelamp.plugin.exception.PluginException;
@@ -29,97 +24,105 @@ import net.redstonelamp.plugin.java.JavaPluginManager;
 import net.redstonelamp.ui.Log4j2ConsoleOut;
 import net.redstonelamp.ui.Logger;
 
-public final class PluginSystem {
-	
-	@Getter
-	private final Server server;
-	private final Logger logger;
-	private final ArrayList<String> exempt;
-	private final HashMap<String, PluginManager> managers;
-	
-	public PluginSystem(Server server) {
-		this.server = server;
-		this.logger = new Logger(new Log4j2ConsoleOut("PluginSystem"));
-		this.exempt = new ArrayList<String>();
-		this.managers = new HashMap<String, PluginManager>();
-	}
-	
-	public void init() throws IOException {
-		File plugins = new File("plugins");
-		JavaPluginLoader javaLoader = new JavaPluginLoader(plugins);
-		JavaPluginManager javaManager = new JavaPluginManager(javaLoader);
-		this.addPluginManager(javaManager);
-		logger.info("Loaded PluginSystem and registered default PluginManagers!");
-	}
-	
-	public void addPluginManager(PluginManager manager) throws IOException {
-		if(managers.get(manager.getFileType()) != null)
-			throw new IOException("A manager that handles that filetype already exists!");
-		managers.put(manager.getFileType(), manager);
-	}
-	
-	public final void removePluginManager(PluginManager manager) throws IOException {
-		if(exempt.contains(manager.getFileType()))
-			throw new IOException("This type of manager can not be tampered with!");
-		managers.remove(manager.getFileType(), manager);
-	}
-	
-	public PluginManager[] getPluginManagers() {
-		return managers.values().toArray(new PluginManager[managers.size()]);
-	}
-	
-	public PluginManager getPluginManager(String filetype) {
-		if(!filetype.startsWith("."))
-			filetype = ("." + filetype);
-		return managers.get(filetype);
-	}
-	
-	/**
-	 * Used to tell all PluginManagers to load their plugins
-	 * 
-	 * @throws PluginException
-	 * @throws IOException
-	 */
-	public final void loadPlugins() throws PluginException, IOException {
-		for(PluginManager manager : managers.values())
-			manager.loadPlugins();
-	}
-	
-	/**
-	 * Used to tell all PluginManagers to unload their plugins
-	 */
-	public final void unloadPlugins() {
-		for(PluginManager manager : managers.values())
-			manager.unloadPlugins();
-	}
-	
-	
-	/**
-	 * Used to enable all plugins no matter their PluginManager
-	 * 
-	 * @throws PluginException
-	 * @throws IOException
-	 */
-	public final void enablePlugins() throws PluginException, IOException {
-		for(PluginManager manager : managers.values()) {
-			for(Plugin plugin : manager.getPlugins())
-				plugin.onEnable();
-		}
-	}
-	
-	/**
-	 * Used to disable all plugins no matter their PluginManager
-	 * 
-	 * @throws PluginException
-	 * @throws IOException
-	 */
-	public final void disablePlugins() {
-		for(String key : managers.keySet()) {
-			PluginManager manager = managers.get(key);
-			for(Plugin plugin : manager.getPlugins())
-				plugin.onDisable();
-			managers.remove(key);
-		}
-	}
-	
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public final class PluginSystem{
+
+    @Getter
+    private final Server server;
+    private final Logger logger;
+    private final ArrayList<String> exempt;
+    private final HashMap<String, PluginManager> managers;
+
+    public PluginSystem(Server server){
+        this.server = server;
+        logger = new Logger(new Log4j2ConsoleOut("PluginSystem"));
+        exempt = new ArrayList<>();
+        managers = new HashMap<>();
+    }
+
+    public void init() throws IOException{
+        File plugins = new File("plugins");
+        JavaPluginLoader javaLoader = new JavaPluginLoader(plugins);
+        JavaPluginManager javaManager = new JavaPluginManager(javaLoader);
+        addPluginManager(javaManager);
+        logger.info("Loaded PluginSystem and registered default PluginManagers!");
+    }
+
+    public void addPluginManager(PluginManager manager) throws IOException{
+        if(managers.get(manager.getFileType()) != null){
+            throw new IOException("A manager that handles that filetype already exists!");
+        }
+        managers.put(manager.getFileType(), manager);
+    }
+
+    public final void removePluginManager(PluginManager manager) throws IOException{
+        if(exempt.contains(manager.getFileType())){
+            throw new IOException("This type of manager can not be tampered with!");
+        }
+        managers.remove(manager.getFileType(), manager);
+    }
+
+    public PluginManager[] getPluginManagers(){
+        return managers.values().toArray(new PluginManager[managers.size()]);
+    }
+
+    public PluginManager getPluginManager(String filetype){
+        if(!filetype.startsWith(".")){
+            filetype = "." + filetype;
+        }
+        return managers.get(filetype);
+    }
+
+    /**
+     * Used to tell all PluginManagers to load their plugins
+     *
+     * @throws PluginException
+     * @throws IOException
+     */
+    public final void loadPlugins() throws PluginException, IOException{
+        for(PluginManager manager : managers.values()){
+            manager.loadPlugins();
+        }
+    }
+
+    /**
+     * Used to tell all PluginManagers to unload their plugins
+     */
+    public final void unloadPlugins(){
+        managers.values().forEach(PluginManager::unloadPlugins);
+    }
+
+    /**
+     * Used to enable all plugins no matter their PluginManager
+     *
+     * @throws PluginException
+     * @throws IOException
+     */
+    public final void enablePlugins() throws PluginException, IOException{
+        for(PluginManager manager : managers.values()){
+            for(Plugin plugin : manager.getPlugins()){
+                plugin.onEnable();
+            }
+        }
+    }
+
+    /**
+     * Used to disable all plugins no matter their PluginManager
+     *
+     * @throws PluginException
+     * @throws IOException
+     */
+    public final void disablePlugins(){
+        for(String key : managers.keySet()){
+            PluginManager manager = managers.get(key);
+            for(Plugin plugin : manager.getPlugins()){
+                plugin.onDisable();
+            }
+            managers.remove(key);
+        }
+    }
 }

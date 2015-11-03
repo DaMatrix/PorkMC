@@ -23,18 +23,18 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class Bedrock extends Block {
+public class Bedrock extends Block{
     public static final int ID = Items.BEDROCK;
 
-    public Bedrock(int id, short meta, int count) {
+    public Bedrock(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public Bedrock(int count) {
+    public Bedrock(int count){
         super(ID, (short) 0, count);
     }
 
-    public Bedrock() {
+    public Bedrock(){
         super(ID, (short) 0, 1);
     }
 }

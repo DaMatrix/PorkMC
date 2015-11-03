@@ -30,27 +30,27 @@ import java.io.IOException;
  *
  * @author RedstoneLamp Team
  */
-public class BinaryUtils {
+public class BinaryUtils{
 
-    public static byte[] writeNBT(CompoundTag tag) {
+    public static byte[] writeNBT(CompoundTag tag){
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        try {
+        try{
             NBTOutputStream out = new NBTOutputStream(bytes);
             out.writeTag(tag);
             out.close();
             return bytes.toByteArray();
-        } catch (IOException e) {
+        }catch(IOException e){
             throw new RuntimeException(e);
         }
     }
 
-    public static Tag readNBTTag(byte[] bytes) {
-        try {
+    public static Tag readNBTTag(byte[] bytes){
+        try{
             NBTInputStream in = new NBTInputStream(new ByteArrayInputStream(bytes));
             Tag t = in.readTag();
             in.close();
             return t;
-        } catch (IOException e) {
+        }catch(IOException e){
             throw new RuntimeException(e);
         }
     }

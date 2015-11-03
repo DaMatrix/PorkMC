@@ -23,19 +23,19 @@ import net.redstonelamp.item.Item;
  *
  * @author RedstoneLamp Team
  */
-public class SetHeldItemRequest extends Request {
+public class SetHeldItemRequest extends Request{
     public Item item;
     public int inventorySlot;
     public int hotbarSlot;
 
-    public SetHeldItemRequest(Item item, int inventorySlot, int hotbarSlot) {
+    public SetHeldItemRequest(Item item, int inventorySlot, int hotbarSlot){
         this.item = item;
         this.inventorySlot = inventorySlot;
         this.hotbarSlot = hotbarSlot;
     }
 
     @Override
-    public void execute() {
+    public void execute(){
         //TODO: ?
     }
 }

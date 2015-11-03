@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class Lava extends Liquid {
+public class Lava extends Liquid{
     public static final int ID = Items.LAVA;
 
-    public Lava(int id, short meta, int count) {
+    public Lava(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public Lava(int count) {
+    public Lava(int count){
         super(ID, (short) 0, count);
     }
 }

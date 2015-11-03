@@ -23,10 +23,10 @@ import net.redstonelamp.entity.Mob;
  *
  * @author RedstoneLamp Team
  */
-public class AddMobResponse extends Response {
+public class AddMobResponse extends Response{
     public Mob mob;
 
-    public AddMobResponse(Mob mob) {
+    public AddMobResponse(Mob mob){
         this.mob = mob;
     }
 }

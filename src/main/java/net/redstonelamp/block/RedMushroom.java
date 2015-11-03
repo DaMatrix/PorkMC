@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class RedMushroom extends Transparent {
+public class RedMushroom extends Transparent{
     public static final int ID = Items.RED_MUSHROOM;
 
-    public RedMushroom(int id, short meta, int count) {
+    public RedMushroom(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public RedMushroom(int count) {
+    public RedMushroom(int count){
         super(ID, (short) 0, count);
     }
 }

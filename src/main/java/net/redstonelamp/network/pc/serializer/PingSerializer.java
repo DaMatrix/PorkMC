@@ -16,48 +16,47 @@
  */
 package net.redstonelamp.network.pc.serializer;
 
-import java.util.UUID;
-
+import net.redstonelamp.Server;
+import net.redstonelamp.network.pc.PCNetworkConst;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import net.redstonelamp.Server;
-import net.redstonelamp.network.pc.PCNetworkConst;
+import java.util.UUID;
 
-public abstract class PingSerializer {
-	
-	@SuppressWarnings("unchecked")
-	public static String getStatusResponse(Server server, String name) {
-		JSONObject root = new JSONObject();
+public abstract class PingSerializer{
 
-		JSONObject version = new JSONObject();
-		version.put("name", PCNetworkConst.MC_VERSION);
-		version.put("protocol", PCNetworkConst.MC_PROTOCOL);
+    @SuppressWarnings("unchecked")
+    public static String getStatusResponse(Server server, String name){
+        JSONObject root = new JSONObject();
 
-		JSONObject players = new JSONObject();
-		players.put("max", server.getMaxPlayers());
-		players.put("online", server.getPlayers().size());
-		// TODO: throw Event
+        JSONObject version = new JSONObject();
+        version.put("name", PCNetworkConst.MC_VERSION);
+        version.put("protocol", PCNetworkConst.MC_PROTOCOL);
 
-		JSONArray sample = new JSONArray();
-		for (int i = 0; i < server.getPlayers().size(); i++) {
-			JSONObject player = new JSONObject();
-			player.put("name", server.getPlayers().get(i));
-			player.put("id", UUID.randomUUID());
-			sample.add(i, player);
-		}
-		players.put("sample", sample);
+        JSONObject players = new JSONObject();
+        players.put("max", server.getMaxPlayers());
+        players.put("online", server.getPlayers().size());
+        // TODO: throw Event
 
-		JSONObject description = new JSONObject();
-		description.put("text", name);
+        JSONArray sample = new JSONArray();
+        for(int i = 0; i < server.getPlayers().size(); i++){
+            JSONObject player = new JSONObject();
+            player.put("name", server.getPlayers().get(i));
+            player.put("id", UUID.randomUUID());
+            sample.add(i, player);
+        }
+        players.put("sample", sample);
 
-		root.put("version", version);
-		root.put("players", players);
-		root.put("description", description);
-		if (server.getServerIcon() != null)
-			root.put("favicon", server.getServerIcon());
+        JSONObject description = new JSONObject();
+        description.put("text", name);
 
-		return root.toJSONString();
-	}
-	
+        root.put("version", version);
+        root.put("players", players);
+        root.put("description", description);
+        if(server.getServerIcon() != null){
+            root.put("favicon", server.getServerIcon());
+        }
+
+        return root.toJSONString();
+    }
 }

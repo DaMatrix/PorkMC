@@ -21,9 +21,9 @@ package net.redstonelamp.block;
  *
  * @author RedstoneLamp Team
  */
-public abstract class Transparent extends Block {
+public abstract class Transparent extends Block{
 
-    public Transparent(int id, short meta, int count) {
+    public Transparent(int id, short meta, int count){
         super(id, meta, count);
     }
 }

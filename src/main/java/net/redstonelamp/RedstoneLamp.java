@@ -16,16 +16,18 @@
  */
 package net.redstonelamp;
 
-import java.io.*;
-import java.net.URL;
-import java.util.Properties;
-
-import net.redstonelamp.ui.*;
+import net.redstonelamp.config.PropertiesConfig;
+import net.redstonelamp.config.YamlConfig;
+import net.redstonelamp.ui.Log4j2ConsoleOut;
+import net.redstonelamp.ui.Logger;
+import net.redstonelamp.ui.SilentConsoleOut;
+import net.redstonelamp.ui.SystemConsoleOut;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 
-import net.redstonelamp.config.PropertiesConfig;
-import net.redstonelamp.config.YamlConfig;
+import java.io.*;
+import java.net.URL;
+import java.util.Properties;
 
 /**
  * Main Startup file for RedstoneLamp.
@@ -62,11 +64,11 @@ public class RedstoneLamp{
         return SOFTWARE + " build #" + SOFTWARE_BUILD + ", commit: " + SOFTWARE_COMMIT + ", built on: " + SOFTWARE_BUILD_DATE;
     }
 
-    public static Logger getLogger(String[] args) throws IOException {
-        if(args.length > 0) {
+    public static Logger getLogger(String[] args) throws IOException{
+        if(args.length > 0){
             String option = args[0];
-            if(option.startsWith("-")) {
-                if(option.equalsIgnoreCase("--silent") || option.equalsIgnoreCase("-s")) {
+            if(option.startsWith("-")){
+                if(option.equalsIgnoreCase("--silent") || option.equalsIgnoreCase("-s")){
                     Logger logger = new Logger(new SilentConsoleOut("RedstoneLamp-Silent"));
                     System.setOut(new SystemConsoleOut(logger));
                     new File("exceptionDump.txt").createNewFile();
@@ -78,14 +80,14 @@ public class RedstoneLamp{
         return new Logger(new Log4j2ConsoleOut("RedstoneLamp"));
     }
 
-    private void getDefaultResources() throws IOException {
+    private void getDefaultResources() throws IOException{
         if(!new File("server.properties").isFile()){
             copyProperties();
-        } else {
+        }else{
             BufferedReader r = new BufferedReader(new FileReader("server.properties"));
-            String header =r.readLine();
+            String header = r.readLine();
             r.close();
-            if(!header.startsWith("#RedstoneLamp Properties")) {
+            if(!header.startsWith("#RedstoneLamp Properties")){
                 LogManager.getRootLogger().warn("server.properties is not valid, regenerating...");
                 new File("server.properties").delete();
                 copyProperties();
@@ -129,7 +131,7 @@ public class RedstoneLamp{
         System.setProperty("log4j.configurationFile", "log4j2.xml");
     }
 
-    private void copyProperties() {
+    private void copyProperties(){
         URL url = getClass().getResource("/conf/server.properties");
         File dest = new File("./server.properties");
         try{
@@ -147,5 +149,4 @@ public class RedstoneLamp{
     public static String getSoftwareVersionString(){
         return SOFTWARE + " " + SOFTWARE_VERSION + "-" + SOFTWARE_STATE;
     }
-
 }

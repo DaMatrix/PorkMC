@@ -29,7 +29,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.nio.BufferUnderflowException;
 import java.nio.ByteOrder;
 import java.util.Map;
 import java.util.UUID;
@@ -40,18 +39,18 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author RedstoneLamp Team
  */
-public class LevelDBPlayerDatabase implements PlayerDatabase {
+public class LevelDBPlayerDatabase implements PlayerDatabase{
 
     private final Server server;
     private final Map<String, PlayerData> entries = new ConcurrentHashMap<>();
     private DB database;
 
-    public LevelDBPlayerDatabase(Server server) {
+    public LevelDBPlayerDatabase(Server server){
         this.server = server;
     }
 
     @Override
-    public void loadFrom(File location) throws IOException {
+    public void loadFrom(File location) throws IOException{
         if(!location.isDirectory()){
             server.getLogger().warning("Could not locate PlayerDatabase, creating new...");
             location.mkdirs();
@@ -69,11 +68,11 @@ public class LevelDBPlayerDatabase implements PlayerDatabase {
     }
 
     @Override
-    public void saveTo(File location) throws IOException {
-        if(database == null) {
+    public void saveTo(File location) throws IOException{
+        if(database == null){
             throw new UnsupportedOperationException("Database is closed!");
         }
-        for(PlayerData data : entries.values()) {
+        for(PlayerData data : entries.values()){
             BinaryBuffer bb = BinaryBuffer.newInstance(0, ByteOrder.LITTLE_ENDIAN);
             bb.putUUID(data.getUuid());
             bb.putInt(data.getGamemode());
@@ -95,20 +94,20 @@ public class LevelDBPlayerDatabase implements PlayerDatabase {
     }
 
     @Override
-    public void updateData(PlayerData data) {
+    public void updateData(PlayerData data){
         entries.put(data.getUuid().toString(), data);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public PlayerData getData(UUID uuid) {
-        if(entries.containsKey(uuid.toString())) {
+    public PlayerData getData(UUID uuid){
+        if(entries.containsKey(uuid.toString())){
             return entries.get(uuid.toString());
         }
         BinaryBuffer key = BinaryBuffer.newInstance(16, ByteOrder.LITTLE_ENDIAN);
         key.putUUID(uuid);
         byte[] data = database.get(key.toArray());
-        if(data != null) {
+        if(data != null){
             BinaryBuffer bb = BinaryBuffer.wrapBytes(data, ByteOrder.LITTLE_ENDIAN);
             PlayerData entry = new PlayerData();
             entry.setUuid(bb.getUUID());
@@ -117,8 +116,8 @@ public class LevelDBPlayerDatabase implements PlayerDatabase {
 
             String lName = bb.getVarString();
             Level level = server.getLevelManager().getLevelByName(lName);
-            if(level == null) {
-                server.getLogger().warning("Could not find level \""+lName+"\", player will spawn in main level (malformed database?)");
+            if(level == null){
+                server.getLogger().warning("Could not find level \"" + lName + "\", player will spawn in main level (malformed database?)");
                 level = server.getLevelManager().getMainLevel();
             }
 
@@ -162,7 +161,7 @@ public class LevelDBPlayerDatabase implements PlayerDatabase {
     }
 
     @Override
-    public void release() throws IOException {
+    public void release() throws IOException{
         database.close();
         database = null;
     }
