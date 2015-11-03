@@ -30,7 +30,7 @@ import net.redstonelamp.response.RemovePlayerResponse;
  */
 public abstract class PlayerEntity extends Entity{
 
-    public PlayerEntity(EntityManager manager, Position position) {
+    public PlayerEntity(EntityManager manager, Position position){
         super(manager, position);
     }
 
@@ -85,5 +85,4 @@ public abstract class PlayerEntity extends Entity{
             }
         }
     }
-    
 }

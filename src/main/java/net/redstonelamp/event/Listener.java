@@ -16,5 +16,5 @@
  */
 package net.redstonelamp.event;
 
-public interface Listener {
+public interface Listener{
 }

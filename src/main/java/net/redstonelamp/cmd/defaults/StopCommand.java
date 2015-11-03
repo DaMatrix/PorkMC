@@ -21,12 +21,12 @@ import net.redstonelamp.cmd.Command;
 import net.redstonelamp.cmd.CommandExecutor;
 import net.redstonelamp.cmd.CommandSender;
 
-public class StopCommand implements CommandExecutor {
+public class StopCommand implements CommandExecutor{
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if(label.equalsIgnoreCase("stop")) {
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
+        if(label.equalsIgnoreCase("stop")){
             RedstoneLamp.SERVER.stop();
-        	return true;
+            return true;
         }
         return false;
     }

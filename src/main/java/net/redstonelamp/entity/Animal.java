@@ -23,14 +23,14 @@ import net.redstonelamp.level.position.Position;
  *
  * @author RedstoneLamp Team
  */
-public abstract class Animal extends Mob {
+public abstract class Animal extends Mob{
 
-    public Animal(EntityManager manager, Position position) {
+    public Animal(EntityManager manager, Position position){
         super(manager, position);
     }
 
     @Override
-    public int getViewRange() {
+    public int getViewRange(){
         return 0; //Passive mobs have view range of zero
     }
 }

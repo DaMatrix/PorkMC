@@ -23,9 +23,10 @@ import net.redstonelamp.response.ChatResponse;
  *
  * @author RedstoneLamp Team
  */
-public interface MessageTranslator {
+public interface MessageTranslator{
     /**
      * Translates a RedstoneLamp constant to a message for a specific protocol.
+     *
      * @param translation The original RedstoneLamp constant translation.
      * @return The protocol-specific translation.
      */

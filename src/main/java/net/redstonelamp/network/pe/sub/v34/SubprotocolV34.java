@@ -34,7 +34,6 @@ import net.redstonelamp.nio.BinaryBuffer;
 import net.redstonelamp.request.*;
 import net.redstonelamp.response.*;
 import net.redstonelamp.utils.CompressionUtils;
-import net.redstonelamp.utils.TextFormat;
 
 import java.net.SocketAddress;
 import java.nio.ByteOrder;
@@ -86,7 +85,7 @@ public class SubprotocolV34 extends Subprotocol implements ProtocolConst34{
 
             case TEXT_PACKET:
                 ChatRequest cr = new ChatRequest("");
-                switch (up.bb().getByte()) {
+                switch(up.bb().getByte()){
                     case TEXT_POPUP:
                     case TEXT_CHAT:
                         cr.source = up.bb().getString();
@@ -149,9 +148,9 @@ public class SubprotocolV34 extends Subprotocol implements ProtocolConst34{
                     //System.out.print("Attempting to place: "+target+" block is: "+getProtocol().getServer().getLevelManager().getMainLevel().getBlock(BlockPosition.fromVector3(target, getProtocol().getServer().getLevelManager().getMainLevel())).getId());
                     //System.out.print(" Face: "+face+"\n");
                     Level l = getProtocol().getServer().getPlayer(up.getAddress()).getPosition().getLevel();
-                    if(l.getBlock(BlockPosition.fromVector3(target, l)) instanceof Transparent) {
+                    if(l.getBlock(BlockPosition.fromVector3(target, l)) instanceof Transparent){
                         requests.add(new BlockPlaceRequest(block, target));
-                    } else {
+                    }else{
                         requests.add(new BlockPlaceRequest(block, target.getSide(face, 1)));
                     }
                 }
@@ -174,7 +173,7 @@ public class SubprotocolV34 extends Subprotocol implements ProtocolConst34{
             case PLAYER_ACTION_PACKET:
                 up.bb().skip(8); //entity ID
                 int action = up.bb().getInt();
-                switch (action) {
+                switch(action){
                     case PlayerActionsV34.ACTION_START_SPRINT:
                         requests.add(new SprintRequest(true));
                         break;
@@ -201,11 +200,11 @@ public class SubprotocolV34 extends Subprotocol implements ProtocolConst34{
         List<UniversalPacket> packets = new CopyOnWriteArrayList<>();
         SocketAddress address = player.getAddress();
         BinaryBuffer bb;
-        if(response instanceof LoginResponse) {
+        if(response instanceof LoginResponse){
             LoginResponse lr = (LoginResponse) response;
-            if (!lr.loginAllowed) {
+            if(!lr.loginAllowed){
                 String message;
-                switch (lr.loginNotAllowedReason) {
+                switch(lr.loginNotAllowedReason){
                     case LoginResponse.DEFAULT_loginNotAllowedReason:
                         message = "disconnectionScreen.noReason";
                         break;
@@ -220,7 +219,7 @@ public class SubprotocolV34 extends Subprotocol implements ProtocolConst34{
                 bb.putByte(DISCONNECT_PACKET);
                 bb.putString(message);
                 packets.add(new UniversalPacket(bb.toArray(), ByteOrder.BIG_ENDIAN, address));
-            } else {
+            }else{
                 bb = BinaryBuffer.newInstance(5, ByteOrder.BIG_ENDIAN);
                 bb.putByte(PLAY_STATUS_PACKET);
                 bb.putInt(0); //LOGIN_SUCCESS
@@ -265,7 +264,7 @@ public class SubprotocolV34 extends Subprotocol implements ProtocolConst34{
                 bb.putInt(1); //TODO: Correct difficulty
                 packets.add(new UniversalPacket(bb.toArray(), ByteOrder.BIG_ENDIAN, address));
 
-                if(lr.gamemode == 1) {
+                if(lr.gamemode == 1){
                     bb = BinaryBuffer.newInstance(0, ByteOrder.BIG_ENDIAN);
                     bb.putByte(CONTAINER_SET_CONTENT_PACKET);
                     bb.putByte((byte) 0x79); //SPECIAL_CREATIVE
@@ -277,14 +276,14 @@ public class SubprotocolV34 extends Subprotocol implements ProtocolConst34{
 
                 getProtocol().getChunkSender().registerChunkRequests(getProtocol().getServer().getPlayer(address), 96);
             }
-        } else if(response instanceof DisconnectResponse) {
+        }else if(response instanceof DisconnectResponse){
             DisconnectResponse dr = (DisconnectResponse) response;
-            if(dr.notifyClient) {
+            if(dr.notifyClient){
                 bb = BinaryBuffer.newInstance(3 + dr.reason.getBytes().length, ByteOrder.BIG_ENDIAN);
                 bb.putByte(DISCONNECT_PACKET);
-                if(dr.reason.startsWith("!")) {
+                if(dr.reason.startsWith("!")){
                     bb.putString(translateTranslationToPE(new ChatResponse.ChatTranslation(dr.reason.replaceAll(Pattern.quote("!"), ""), new String[0])).message);
-                } else {
+                }else{
                     bb.putString(dr.reason);
                 }
                 packets.add(new UniversalPacket(bb.toArray(), ByteOrder.BIG_ENDIAN, address));
@@ -343,9 +342,9 @@ public class SubprotocolV34 extends Subprotocol implements ProtocolConst34{
 
             bb = BinaryBuffer.newInstance(13, ByteOrder.BIG_ENDIAN);
             bb.putByte(RESPAWN_PACKET);
-            bb.putFloat((float) sr.spawnPosition.getX());
-            bb.putFloat((float) sr.spawnPosition.getY());
-            bb.putFloat((float) sr.spawnPosition.getZ());
+            bb.putFloat(sr.spawnPosition.getX());
+            bb.putFloat(sr.spawnPosition.getY());
+            bb.putFloat(sr.spawnPosition.getZ());
             packets.add(new UniversalPacket(bb.toArray(), ByteOrder.BIG_ENDIAN, address));
 
             bb = BinaryBuffer.newInstance(5, ByteOrder.BIG_ENDIAN);
@@ -366,35 +365,35 @@ public class SubprotocolV34 extends Subprotocol implements ProtocolConst34{
             }
             bb.putLong(ar.entityID);
             packets.add(new UniversalPacket(bb.toArray(), ByteOrder.BIG_ENDIAN, address));
-        } else if(response instanceof ChatResponse) {
+        }else if(response instanceof ChatResponse){
             ChatResponse cr = (ChatResponse) response;
             bb = BinaryBuffer.newInstance(0, ByteOrder.BIG_ENDIAN);
             bb.putByte(TEXT_PACKET);
-            if(cr.translation != null) {
+            if(cr.translation != null){
                 ChatResponse.ChatTranslation translation = translateTranslationToPE(cr.translation);
                 bb.putByte(TEXT_TRANSLATION);
                 bb.putString(translation.message);
                 bb.putByte((byte) translation.params.length);
-                for(String param : translation.params) {
+                for(String param : translation.params){
                     bb.putString(param);
                 }
-            } else if(cr.source != null){
+            }else if(cr.source != null){
                 bb.putByte(TEXT_CHAT);
                 bb.putString(cr.source);
                 bb.putString(cr.message);
-            } else {
+            }else{
                 bb.putByte(TEXT_RAW);
                 bb.putString(cr.message);
             }
             packets.add(new UniversalPacket(bb.toArray(), ByteOrder.BIG_ENDIAN, address));
-        } else if(response instanceof PopupResponse) {
+        }else if(response instanceof PopupResponse){
             PopupResponse pr = (PopupResponse) response;
             bb = BinaryBuffer.newInstance(0, ByteOrder.BIG_ENDIAN);
             bb.putByte(TEXT_PACKET);
             bb.putByte(TEXT_POPUP);
             bb.putString(pr.message);
             packets.add(new UniversalPacket(bb.toArray(), ByteOrder.BIG_ENDIAN, address));
-        } else if(response instanceof AddPlayerResponse) {
+        }else if(response instanceof AddPlayerResponse){
             Player p = ((AddPlayerResponse) response).player;
             bb = BinaryBuffer.newInstance(0, ByteOrder.BIG_ENDIAN);
             bb.putByte(ADD_PLAYER_PACKET);
@@ -426,8 +425,7 @@ public class SubprotocolV34 extends Subprotocol implements ProtocolConst34{
             bb.putShort((short) p.getSkin().length);
             bb.put(p.getSkin());
             packets.add(new UniversalPacket(bb.toArray(), ByteOrder.BIG_ENDIAN, address));
-
-        } else if(response instanceof RemovePlayerResponse) {
+        }else if(response instanceof RemovePlayerResponse){
             Player p = ((RemovePlayerResponse) response).player;
             bb = BinaryBuffer.newInstance(25, ByteOrder.BIG_ENDIAN);
             bb.putByte(REMOVE_PLAYER_PACKET);
@@ -442,14 +440,14 @@ public class SubprotocolV34 extends Subprotocol implements ProtocolConst34{
             bb.putInt(1);
             bb.putUUID(p.getUuid());
             packets.add(new UniversalPacket(bb.toArray(), ByteOrder.BIG_ENDIAN, address));
-        } else if(response instanceof PlayerMoveResponse) {
+        }else if(response instanceof PlayerMoveResponse){
             PlayerMoveResponse pmr = (PlayerMoveResponse) response;
             bb = BinaryBuffer.newInstance(35, ByteOrder.BIG_ENDIAN);
             bb.putByte(MOVE_PLAYER_PACKET);
             bb.putLong(pmr.entityID);
-            bb.putFloat((float) pmr.pos.getX());
-            bb.putFloat((float) pmr.pos.getY());
-            bb.putFloat((float) pmr.pos.getZ());
+            bb.putFloat(pmr.pos.getX());
+            bb.putFloat(pmr.pos.getY());
+            bb.putFloat(pmr.pos.getZ());
             bb.putFloat(pmr.pos.getYaw());
             bb.putFloat(pmr.bodyYaw);
             bb.putFloat(pmr.pos.getPitch());
@@ -457,7 +455,7 @@ public class SubprotocolV34 extends Subprotocol implements ProtocolConst34{
             bb.putByte((byte) (pmr.onGround ? 1 : 0));
 
             packets.add(new UniversalPacket(bb.toArray(), ByteOrder.BIG_ENDIAN, address));
-        } else if(response instanceof BlockPlaceResponse) {
+        }else if(response instanceof BlockPlaceResponse){
             BlockPlaceResponse bpr = (BlockPlaceResponse) response;
             bb = BinaryBuffer.newInstance(16, ByteOrder.BIG_ENDIAN);
             bb.putByte(UPDATE_BLOCK_PACKET);
@@ -466,10 +464,10 @@ public class SubprotocolV34 extends Subprotocol implements ProtocolConst34{
             bb.putInt(bpr.position.getZ());
             bb.putByte((byte) bpr.position.getY());
             bb.putByte((byte) bpr.block.getId());
-            bb.putByte((byte) ((UpdateBlockPacketFlagsV27.FLAG_ALL_PRIORITY << 4) | (byte) bpr.block.getMeta()));
+            bb.putByte((byte) (UpdateBlockPacketFlagsV27.FLAG_ALL_PRIORITY << 4 | (byte) bpr.block.getMeta()));
 
             packets.add(new UniversalPacket(bb.toArray(), ByteOrder.BIG_ENDIAN, address));
-        } else if(response instanceof RemoveBlockResponse) {
+        }else if(response instanceof RemoveBlockResponse){
             RemoveBlockResponse rbr = (RemoveBlockResponse) response;
             bb = BinaryBuffer.newInstance(16, ByteOrder.BIG_ENDIAN);
             bb.putByte(UPDATE_BLOCK_PACKET);
@@ -478,9 +476,9 @@ public class SubprotocolV34 extends Subprotocol implements ProtocolConst34{
             bb.putInt(rbr.position.getZ());
             bb.putByte((byte) rbr.position.getY());
             bb.putByte((byte) 0); //AIR
-            bb.putByte((byte) ((UpdateBlockPacketFlagsV27.FLAG_ALL_PRIORITY << 4) | (byte) 0));
+            bb.putByte((byte) (UpdateBlockPacketFlagsV27.FLAG_ALL_PRIORITY << 4));
             packets.add(new UniversalPacket(bb.toArray(), ByteOrder.BIG_ENDIAN, address));
-        } else if(response instanceof SetHeldItemResponse) {
+        }else if(response instanceof SetHeldItemResponse){
             SetHeldItemResponse shir = (SetHeldItemResponse) response;
             bb = BinaryBuffer.newInstance(0, ByteOrder.BIG_ENDIAN);
             bb.putByte(MOB_EQUIPMENT_PACKET);
@@ -489,7 +487,7 @@ public class SubprotocolV34 extends Subprotocol implements ProtocolConst34{
             bb.putByte((byte) shir.inventorySlot);
             bb.putByte((byte) shir.hotbarSlot);
             packets.add(new UniversalPacket(bb.toArray(), ByteOrder.BIG_ENDIAN, address));
-        } else if(response instanceof SprintResponse) {
+        }else if(response instanceof SprintResponse){
             SprintResponse sr = (SprintResponse) response;
             bb = BinaryBuffer.newInstance(29, ByteOrder.BIG_ENDIAN);
             bb.putByte(PLAYER_ACTION_PACKET);
@@ -500,7 +498,7 @@ public class SubprotocolV34 extends Subprotocol implements ProtocolConst34{
             bb.putInt(Math.round(sr.player.getPosition().getZ()));
             bb.putInt(Side.UP);
             packets.add(new UniversalPacket(bb.toArray(), ByteOrder.BIG_ENDIAN, address));
-        } else if(response instanceof SneakResponse) {
+        }else if(response instanceof SneakResponse){
             SneakResponse sr = (SneakResponse) response;
             bb = BinaryBuffer.newInstance(29, ByteOrder.BIG_ENDIAN);
             bb.putByte(PLAYER_ACTION_PACKET);
@@ -538,7 +536,7 @@ public class SubprotocolV34 extends Subprotocol implements ProtocolConst34{
         return packets.toArray(new UniversalPacket[packets.size()]);
     }
 
-    private ChatResponse.ChatTranslation translateTranslationToPE(ChatResponse.ChatTranslation translation) {
+    private ChatResponse.ChatTranslation translateTranslationToPE(ChatResponse.ChatTranslation translation){
         return getManager().getProtocol().getServer().getTranslationManager().translate(getProtocol(), translation);
     }
 
@@ -552,7 +550,7 @@ public class SubprotocolV34 extends Subprotocol implements ProtocolConst34{
                 BlockPlaceResponse bpr = (BlockPlaceResponse) r;
                 records.add(new UpdateBlockPacketRecordV27(bpr.position.getX(), bpr.position.getY(), bpr.position.getZ(), (byte) bpr.block.getId(), (byte) bpr.block.getMeta(), UpdateBlockPacketFlagsV27.FLAG_ALL_PRIORITY));
             }
-            bb = BinaryBuffer.newInstance(5 + (11 * records.size()), ByteOrder.BIG_ENDIAN);
+            bb = BinaryBuffer.newInstance(5 + 11 * records.size(), ByteOrder.BIG_ENDIAN);
             bb.putByte(UPDATE_BLOCK_PACKET);
             bb.putInt(records.size());
             for(UpdateBlockPacketRecordV27 record : records){
@@ -560,24 +558,24 @@ public class SubprotocolV34 extends Subprotocol implements ProtocolConst34{
                 bb.putInt(record.z);
                 bb.putByte((byte) record.y);
                 bb.putByte(record.id);
-                bb.putByte((byte) ((record.flags << 4) | (byte) record.meta));
+                bb.putByte((byte) (record.flags << 4 | record.meta));
             }
             packets.add(new UniversalPacket(bb.toArray(), ByteOrder.BIG_ENDIAN, player.getAddress()));
-        }else if(responses[0] instanceof RemoveBlockResponse) {
+        }else if(responses[0] instanceof RemoveBlockResponse){
             List<UpdateBlockPacketRecordV27> records = new ArrayList<>();
-            for (Response r : responses) {
+            for(Response r : responses){
                 RemoveBlockResponse rbr = (RemoveBlockResponse) r;
                 records.add(new UpdateBlockPacketRecordV27(rbr.position.getX(), rbr.position.getY(), rbr.position.getZ(), (byte) 0, (byte) 0, UpdateBlockPacketFlagsV27.FLAG_ALL_PRIORITY));
             }
-            bb = BinaryBuffer.newInstance(5 + (11 * records.size()), ByteOrder.BIG_ENDIAN);
+            bb = BinaryBuffer.newInstance(5 + 11 * records.size(), ByteOrder.BIG_ENDIAN);
             bb.putByte(UPDATE_BLOCK_PACKET);
             bb.putInt(records.size());
-            for (UpdateBlockPacketRecordV27 record : records) {
+            for(UpdateBlockPacketRecordV27 record : records){
                 bb.putInt(record.x);
                 bb.putInt(record.z);
                 bb.putByte((byte) record.y);
                 bb.putByte(record.id);
-                bb.putByte((byte) ((record.flags << 4) | (byte) record.meta));
+                bb.putByte((byte) (record.flags << 4 | record.meta));
             }
             packets.add(new UniversalPacket(bb.toArray(), ByteOrder.BIG_ENDIAN, player.getAddress()));
         }
@@ -605,7 +603,6 @@ public class SubprotocolV34 extends Subprotocol implements ProtocolConst34{
         }
         return packets.toArray(new UniversalPacket[packets.size()]);
     }
-
 
     private Request[] processBatch(UniversalPacket up){
         List<Request> requests = new ArrayList<>();

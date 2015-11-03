@@ -23,10 +23,10 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class Air extends Block {
+public class Air extends Block{
     public static final int ID = Items.AIR;
 
-    public Air() {
+    public Air(){
         super(ID, (short) 0, 1);
     }
 }

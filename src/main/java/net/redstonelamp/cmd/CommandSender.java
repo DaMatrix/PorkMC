@@ -19,22 +19,21 @@ package net.redstonelamp.cmd;
 import net.redstonelamp.permission.Permission;
 import net.redstonelamp.response.ChatResponse;
 
-public interface CommandSender {
-	
-	public String getName();
-	
-	public boolean hasOp();
-	
-	public default boolean hasPermission(String permission) {
-		return this.hasOp();
-	}
-	
-	public default boolean hasPermission(Permission permission) {
-		return this.hasPermission(permission.toString());
-	}
-	
-	public void sendMessage(String message);
-	
-	public void sendMessage(ChatResponse.ChatTranslation translation);
-	
+public interface CommandSender{
+
+    public String getName();
+
+    public boolean hasOp();
+
+    public default boolean hasPermission(String permission){
+        return hasOp();
+    }
+
+    public default boolean hasPermission(Permission permission){
+        return hasPermission(permission.toString());
+    }
+
+    public void sendMessage(String message);
+
+    public void sendMessage(ChatResponse.ChatTranslation translation);
 }

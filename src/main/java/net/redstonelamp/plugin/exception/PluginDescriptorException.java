@@ -16,12 +16,11 @@
  */
 package net.redstonelamp.plugin.exception;
 
-public class PluginDescriptorException extends PluginException {
-	
-	private static final long serialVersionUID = -9070105992227008158L;
-	
-	public PluginDescriptorException(String descriptor) {
-		super("Invalid plugin desciptor \"" + descriptor + "\"");
-	}
-	
+public class PluginDescriptorException extends PluginException{
+
+    private static final long serialVersionUID = -9070105992227008158L;
+
+    public PluginDescriptorException(String descriptor){
+        super("Invalid plugin desciptor \"" + descriptor + "\"");
+    }
 }

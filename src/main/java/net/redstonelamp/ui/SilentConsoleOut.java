@@ -21,44 +21,44 @@ package net.redstonelamp.ui;
  *
  * @author RedstoneLamp Team
  */
-public class SilentConsoleOut extends ConsoleOut {
+public class SilentConsoleOut extends ConsoleOut{
 
     /**
      * Create a new ConsoleOut with the specified <code>name</code>
      *
      * @param name The name of this ConsoleOut
      */
-    public SilentConsoleOut(String name) {
+    public SilentConsoleOut(String name){
         super(name);
     }
 
     @Override
-    public void trace(String msg) {
+    public void trace(String msg){
 
     }
 
     @Override
-    public void debug(String msg) {
+    public void debug(String msg){
 
     }
 
     @Override
-    public void info(String msg) {
+    public void info(String msg){
 
     }
 
     @Override
-    public void warning(String msg) {
+    public void warning(String msg){
 
     }
 
     @Override
-    public void error(String msg) {
+    public void error(String msg){
 
     }
 
     @Override
-    public void fatal(String msg) {
+    public void fatal(String msg){
 
     }
 }

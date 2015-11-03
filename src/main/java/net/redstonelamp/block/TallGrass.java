@@ -23,14 +23,14 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class TallGrass extends Transparent {
+public class TallGrass extends Transparent{
     public static final int ID = Items.TALL_GRASS;
 
-    public TallGrass(int id, short meta, int count) {
+    public TallGrass(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public TallGrass(int count) {
+    public TallGrass(int count){
         super(ID, (short) 0, count);
     }
 }

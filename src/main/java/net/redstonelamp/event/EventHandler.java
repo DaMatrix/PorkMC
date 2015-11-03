@@ -23,10 +23,9 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface EventHandler {
-	
-	boolean ignoreCancelled() default true;
-	EventPlatform platform() default EventPlatform.BOTH;
-	EventPriority priority() default EventPriority.NORMAL;
-	
+public @interface EventHandler{
+
+    boolean ignoreCancelled() default true;
+    EventPlatform platform() default EventPlatform.BOTH;
+    EventPriority priority() default EventPriority.NORMAL;
 }

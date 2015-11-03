@@ -180,7 +180,7 @@ public class SimplePlayerDatabase implements PlayerDatabase{
     }
 
     @Override
-    public void release() {
+    public void release(){
 
     }
 }

@@ -24,7 +24,6 @@ import net.redstonelamp.network.pc.PCNetworkConst;
 import net.redstonelamp.network.pe.PENetworkConst;
 import net.redstonelamp.response.ChatResponse;
 import net.redstonelamp.utils.TextFormat;
-import org.apache.logging.log4j.core.pattern.AbstractStyleNameConverter;
 
 /**
  * /version command implementation. Shows the current version of RedstoneLamp,
@@ -32,19 +31,19 @@ import org.apache.logging.log4j.core.pattern.AbstractStyleNameConverter;
  *
  * @author RedstoneLamp Team
  */
-public class VersionCommand implements CommandExecutor {
+public class VersionCommand implements CommandExecutor{
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if(label.equalsIgnoreCase("version")) {
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
+        if(label.equalsIgnoreCase("version")){
             String pcVersion = PCNetworkConst.MC_VERSION;
             String peVersion = PENetworkConst.MCPE_VERSION;
-            sender.sendMessage(new ChatResponse.ChatTranslation(TextFormat.GOLD + "redstonelamp.translation.command.version.line1", new String[] {
+            sender.sendMessage(new ChatResponse.ChatTranslation(TextFormat.GOLD + "redstonelamp.translation.command.version.line1", new String[]{
                     RedstoneLamp.SOFTWARE.equals("RedstoneLamp") ? TextFormat.RED + "RedstoneLamp" + TextFormat.RESET : RedstoneLamp.SOFTWARE,
                     RedstoneLamp.SOFTWARE_VERSION,
                     RedstoneLamp.SOFTWARE_STATE,
             }));
-            sender.sendMessage(new ChatResponse.ChatTranslation(TextFormat.GOLD + "redstonelamp.translation.command.version.line2", new String[] {
+            sender.sendMessage(new ChatResponse.ChatTranslation(TextFormat.GOLD + "redstonelamp.translation.command.version.line2", new String[]{
                     peVersion,
                     pcVersion
             }));

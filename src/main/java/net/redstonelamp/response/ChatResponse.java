@@ -36,10 +36,10 @@ public class ChatResponse extends Response{
             this.message = message;
             this.params = params;
         }
-        
+
         @Override
-        public String toString() {
-        	return String.format(message, (Object[]) params);
+        public String toString(){
+            return String.format(message, (Object[]) params);
         }
     }
 }

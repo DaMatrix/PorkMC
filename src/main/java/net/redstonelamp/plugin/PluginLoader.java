@@ -16,35 +16,34 @@
  */
 package net.redstonelamp.plugin;
 
+import net.redstonelamp.plugin.exception.PluginException;
+
 import java.io.IOException;
 import java.util.HashMap;
 
-import net.redstonelamp.plugin.exception.PluginException;
+public abstract class PluginLoader{
 
-public abstract class PluginLoader {
-	
-	/**
-	 * Used to load all of the plugins
-	 * 
-	 * @return
-	 * @throws PluginException
-	 * @throws IOException
-	 */
-	public abstract HashMap<String, Plugin> loadPlugins() throws PluginException, IOException;
-	
-	/**
-	 * Used to unload all of the plugins, run this only at shutdown!
-	 */
-	public abstract void unloadPlugins();
-	
-	/**
-	 * Used to enable all of the plugins
-	 */
-	public abstract void enablePlugins();
-	
-	/**
-	 * Used to disable all of the plugins
-	 */
-	public abstract void disablePlugins();
-	
+    /**
+     * Used to load all of the plugins
+     *
+     * @return
+     * @throws PluginException
+     * @throws IOException
+     */
+    public abstract HashMap<String, Plugin> loadPlugins() throws PluginException, IOException;
+
+    /**
+     * Used to unload all of the plugins, run this only at shutdown!
+     */
+    public abstract void unloadPlugins();
+
+    /**
+     * Used to enable all of the plugins
+     */
+    public abstract void enablePlugins();
+
+    /**
+     * Used to disable all of the plugins
+     */
+    public abstract void disablePlugins();
 }

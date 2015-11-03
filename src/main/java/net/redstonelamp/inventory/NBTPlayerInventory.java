@@ -65,22 +65,22 @@ public class NBTPlayerInventory implements PlayerInventory{
     }
 
     @Override
-    public int getSelectedSlot() {
+    public int getSelectedSlot(){
         return inventorySlot;
     }
 
     @Override
-    public void setSelectedSlot(int slot) {
+    public void setSelectedSlot(int slot){
         inventorySlot = slot;
     }
 
     @Override
-    public int getItemInHandSlot() {
+    public int getItemInHandSlot(){
         return inHandSlot;
     }
 
     @Override
-    public void setItemInHandSlot(int index) {
+    public void setItemInHandSlot(int index){
         inHandSlot = index;
     }
 

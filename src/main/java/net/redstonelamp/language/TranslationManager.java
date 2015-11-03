@@ -21,8 +21,6 @@ import net.redstonelamp.network.Protocol;
 import net.redstonelamp.response.ChatResponse;
 import org.ini4j.Ini;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
@@ -33,7 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author RedstoneLamp Team
  */
-public class TranslationManager {
+public class TranslationManager{
     private final Server server;
     private boolean forceTranslations;
     private Map<String, MessageTranslator> translators = new ConcurrentHashMap<>();
@@ -41,34 +39,35 @@ public class TranslationManager {
 
     /**
      * Creates a new TranslationManager belonging to a specified <code>server</code>
+     *
      * @param server The server this manager belongs to.
      */
-    public TranslationManager(Server server) {
+    public TranslationManager(Server server){
         this.server = server;
         translators.put("server", new ServerMessageTranslator(this));
-        try {
+        try{
             loadLanguageFile();
-        } catch (IOException e) {
+        }catch(IOException e){
             throw new RuntimeException(e);
         }
 
         forceTranslations = server.getYamlConfig().getBoolean("language.force-server-translations");
     }
 
-    private void loadLanguageFile() throws IOException {
+    private void loadLanguageFile() throws IOException{
         Ini ini = new Ini();
         InputStream stream = ClassLoader.getSystemResourceAsStream("lang/" + convertLanguageCode(server.getYamlConfig().getString("language.server-language")) + ".lang");
-        if(stream == null) {
-            server.getLogger().error("Could not find language file: "+convertLanguageCode(server.getYamlConfig().getString("language.server-language")) + ".lang, using default: \"en-US\"");
+        if(stream == null){
+            server.getLogger().error("Could not find language file: " + convertLanguageCode(server.getYamlConfig().getString("language.server-language")) + ".lang, using default: \"en-US\"");
             stream = ClassLoader.getSystemResourceAsStream("lang/en-US.lang");
         }
         ini.load(stream);
         serverTranslations = ini.get("Translations");
     }
 
-    public String convertLanguageCode(String code) {
-    	code = (code == null ? "eng" : code);
-        switch (code) {
+    public String convertLanguageCode(String code){
+        code = code == null ? "eng" : code;
+        switch(code){
             case "eng":
                 return "en-US";
             case "rus":
@@ -82,44 +81,50 @@ public class TranslationManager {
         }
     }
 
-    public void registerTranslator(Class<? extends Protocol> protocol, MessageTranslator translator) {
+    public void registerTranslator(Class<? extends Protocol> protocol, MessageTranslator translator){
         translators.put(protocol.getName(), translator);
     }
 
     /**
      * Translates a RedstoneLamp constant translation to a protocol specific one.
-     * @param protocol The protocol this translation will be translated to.
-     *                 If no translator for that protocol is found or the protocol has no
-     *                 translation available, the default
-     *                 server-side translator will be used.
+     *
+     * @param protocol    The protocol this translation will be translated to.
+     *                    If no translator for that protocol is found or the protocol has no
+     *                    translation available, the default
+     *                    server-side translator will be used.
      * @param translation The original RedstoneLamp constant translation.
      * @return A protocol specific translation or the server-side translation if
-     *         force translations are enabled.
+     * force translations are enabled.
      */
-    public ChatResponse.ChatTranslation translate(Protocol protocol, ChatResponse.ChatTranslation translation) {
-        if(forceTranslations) {
+    public ChatResponse.ChatTranslation translate(Protocol protocol, ChatResponse.ChatTranslation translation){
+        if(forceTranslations){
             return translateServerSide(translation);
         }
-        if(translators.containsKey(protocol.getClass().getName())) {
+        if(translators.containsKey(protocol.getClass().getName())){
             MessageTranslator translator = translators.get(protocol.getClass().getName());
             ChatResponse.ChatTranslation t = translator.translate(translation);
-            if(t != null) return t;
-            else {
+            if(t != null){
+                return t;
+            }else{
                 return translateServerSide(translation);
             }
-        } else {
-           return translateServerSide(translation);
+        }else{
+            return translateServerSide(translation);
         }
     }
 
     /**
      * Translates a RedstoneLamp constant translation to a protocol specific one.
+     *
      * @param translation The original RedstoneLamp constant translation.
      * @return A server-side translation for the constant.
      */
-    public ChatResponse.ChatTranslation translateServerSide(ChatResponse.ChatTranslation translation) {
+    public ChatResponse.ChatTranslation translateServerSide(ChatResponse.ChatTranslation translation){
         ChatResponse.ChatTranslation t = translators.get("server").translate(translation);
-        if(t != null) return t;
-        else return translation;
+        if(t != null){
+            return t;
+        }else{
+            return translation;
+        }
     }
 }

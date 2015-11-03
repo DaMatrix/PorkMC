@@ -30,25 +30,27 @@ import java.util.regex.Pattern;
 public class ServerMessageTranslator implements MessageTranslator{
     private final TranslationManager mgr;
 
-    public ServerMessageTranslator(TranslationManager mgr) {
+    public ServerMessageTranslator(TranslationManager mgr){
         this.mgr = mgr;
     }
 
     @Override
-    public ChatResponse.ChatTranslation translate(ChatResponse.ChatTranslation translation) {
+    public ChatResponse.ChatTranslation translate(ChatResponse.ChatTranslation translation){
         ChatResponse.ChatTranslation cr = new ChatResponse.ChatTranslation(translation.message, translation.params);
         TextFormat color;
-        if(cr.message.startsWith(String.valueOf(TextFormat.ESCAPE))) {
+        if(cr.message.startsWith(String.valueOf(TextFormat.ESCAPE))){
             char colorChar = cr.message.toCharArray()[1];
             color = TextFormat.getByChar(colorChar);
-        } else {
+        }else{
             color = TextFormat.WHITE;
         }
         String message = TextFormat.stripColors(cr.message);
         String trans = mgr.serverTranslations.get(message);
-        if(trans == null) trans = message;
-        for(int i = 0; i < cr.params.length; i++) {
-            trans = trans.replaceAll(Pattern.quote("%param-"+i), cr.params[i]);
+        if(trans == null){
+            trans = message;
+        }
+        for(int i = 0; i < cr.params.length; i++){
+            trans = trans.replaceAll(Pattern.quote("%param-" + i), cr.params[i]);
         }
         cr.message = color + trans;
         return cr;

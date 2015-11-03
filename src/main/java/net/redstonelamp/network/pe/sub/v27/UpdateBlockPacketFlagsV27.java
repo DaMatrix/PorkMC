@@ -29,6 +29,6 @@ public final class UpdateBlockPacketFlagsV27{
     public static final byte FLAG_NETWORK = 0b0010;
     public static final byte FLAG_NOGRAPHIC = 0b0100;
     public static final byte FLAG_PRIORITY = 0b1000;
-    public static final byte FLAG_ALL = (FLAG_NEIGHBORS | FLAG_NETWORK);
-    public static final byte FLAG_ALL_PRIORITY = (FLAG_ALL | FLAG_PRIORITY);
+    public static final byte FLAG_ALL = FLAG_NEIGHBORS | FLAG_NETWORK;
+    public static final byte FLAG_ALL_PRIORITY = FLAG_ALL | FLAG_PRIORITY;
 }

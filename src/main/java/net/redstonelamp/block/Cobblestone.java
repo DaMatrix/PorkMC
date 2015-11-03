@@ -23,18 +23,18 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class Cobblestone extends Block {
+public class Cobblestone extends Block{
     public static final int ID = Items.COBBLESTONE;
 
-    public Cobblestone(int id, short meta, int count) {
+    public Cobblestone(int id, short meta, int count){
         super(id, meta, count);
     }
 
-    public Cobblestone(int count) {
+    public Cobblestone(int count){
         super(ID, (short) 0, count);
     }
 
-    public Cobblestone() {
+    public Cobblestone(){
         super(ID, (short) 0, 1);
     }
 }

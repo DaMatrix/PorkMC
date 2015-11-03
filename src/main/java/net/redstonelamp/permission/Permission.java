@@ -16,17 +16,16 @@
  */
 package net.redstonelamp.permission;
 
-public class Permission {
-	
-	private final String permission;
-	
-	public Permission(String permission) {
-		this.permission = permission;
-	}
-	
-	@Override
-	public String toString() {
-		return this.permission;
-	}
-	
+public class Permission{
+
+    private final String permission;
+
+    public Permission(String permission){
+        this.permission = permission;
+    }
+
+    @Override
+    public String toString(){
+        return permission;
+    }
 }

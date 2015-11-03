@@ -21,19 +21,19 @@ package net.redstonelamp.request;
  *
  * @author RedstoneLamp Team
  */
-public class SprintRequest extends Request {
+public class SprintRequest extends Request{
     /**
      * If true: the player has began to sprint. If false: the player
      * has stopped sprinting.
      */
     public boolean starting;
 
-    public SprintRequest(boolean starting) {
+    public SprintRequest(boolean starting){
         this.starting = starting;
     }
 
     @Override
-    public void execute() {
+    public void execute(){
         //TODO: ?
     }
 }

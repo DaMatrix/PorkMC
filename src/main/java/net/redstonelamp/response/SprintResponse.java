@@ -23,14 +23,14 @@ import net.redstonelamp.Player;
  *
  * @author RedstoneLamp Team
  */
-public class SprintResponse extends Response {
+public class SprintResponse extends Response{
     public boolean starting;
     /**
      * The player that is starting to/ending sprinting.
      */
     public Player player;
 
-    public SprintResponse(boolean starting, Player player) {
+    public SprintResponse(boolean starting, Player player){
         this.starting = starting;
         this.player = player;
     }

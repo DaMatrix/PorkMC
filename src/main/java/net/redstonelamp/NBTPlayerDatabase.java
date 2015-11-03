@@ -40,19 +40,19 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author jython234
  */
-public class NBTPlayerDatabase implements PlayerDatabase {
+public class NBTPlayerDatabase implements PlayerDatabase{
 
     private final Server server;
     private final Map<String, PlayerData> entries = new ConcurrentHashMap<>();
 
-    public NBTPlayerDatabase(Server server) {
+    public NBTPlayerDatabase(Server server){
         this.server = server;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public void loadFrom(File location) throws IOException {
-        if(!location.isFile()) {
+    public void loadFrom(File location) throws IOException{
+        if(!location.isFile()){
             server.getLogger().warning("Could not locate PlayerDatabase, creating new...");
             location.createNewFile();
             saveTo(location);
@@ -61,10 +61,14 @@ public class NBTPlayerDatabase implements PlayerDatabase {
         NBTInputStream in = new NBTInputStream(new FileInputStream(location), true);
         Tag t = in.readTag();
         in.close();
-        if(!(t instanceof CompoundTag)) throw new RuntimeException("Invalid Database! First tag must be Compound!");
+        if(!(t instanceof CompoundTag)){
+            throw new RuntimeException("Invalid Database! First tag must be Compound!");
+        }
         CompoundTag c = (CompoundTag) t;
-        for(Tag tag : c.getValue()) {
-            if(!(tag instanceof CompoundTag)) throw new RuntimeException("Tag must be compound.");
+        for(Tag tag : c.getValue()){
+            if(!(tag instanceof CompoundTag)){
+                throw new RuntimeException("Tag must be compound.");
+            }
             CompoundTag entry = (CompoundTag) tag;
             StringTag uuid = (StringTag) entry.getValue().get(0);
             IntTag gamemode = (IntTag) entry.getValue().get(1);
@@ -83,7 +87,7 @@ public class NBTPlayerDatabase implements PlayerDatabase {
             data.setGamemode(gamemode.getValue());
             data.setHealth(health.getValue());
             Level l = server.getLevelManager().getLevelByName(levelName.getValue());
-            if(l == null) {
+            if(l == null){
                 server.getLogger().warning("(Malformed Database?) Could not find correct level, player will spawn in main level.");
                 l = server.getLevelManager().getMainLevel();
             }
@@ -117,10 +121,10 @@ public class NBTPlayerDatabase implements PlayerDatabase {
     }
 
     @Override
-    public void saveTo(File location) throws IOException {
+    public void saveTo(File location) throws IOException{
         NBTOutputStream out = new NBTOutputStream(new FileOutputStream(location), true);
         List<Tag> compounds = new ArrayList<>();
-        for(PlayerData entry : entries.values()) {
+        for(PlayerData entry : entries.values()){
             List<Tag> tags = new ArrayList<>();
             tags.add(new StringTag("uuid", entry.getUuid().toString()));
             tags.add(new IntTag("gamemode", entry.getGamemode()));
@@ -133,27 +137,27 @@ public class NBTPlayerDatabase implements PlayerDatabase {
             tags.add(new FloatTag("positionPitch", entry.getPosition().getPitch()));
             tags.add(new StringTag("inventoryProvider", entry.getInventory().getClass().getName()));
             tags.add(new ByteArrayTag("inventory", entry.getInventory().saveToBytes()));
-            compounds.add(new CompoundTag("entry-"+entry.getUuid().toString(), tags));
+            compounds.add(new CompoundTag("entry-" + entry.getUuid().toString(), tags));
         }
         out.writeTag(new CompoundTag("playerData", compounds));
         out.close();
     }
 
     @Override
-    public void updateData(PlayerData data) {
+    public void updateData(PlayerData data){
         entries.put(data.getUuid().toString(), data);
     }
 
     @Override
-    public PlayerData getData(UUID uuid) {
-        if(entries.containsKey(uuid.toString())) {
+    public PlayerData getData(UUID uuid){
+        if(entries.containsKey(uuid.toString())){
             return entries.get(uuid.toString());
         }
         return null;
     }
 
     @Override
-    public void release() throws IOException {
+    public void release() throws IOException{
 
     }
 }

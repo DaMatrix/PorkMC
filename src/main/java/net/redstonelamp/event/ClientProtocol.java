@@ -16,15 +16,15 @@
  */
 package net.redstonelamp.event;
 
-public enum ClientProtocol {
+public enum ClientProtocol{
     ALL;
-    
-    public enum PE {
+
+    public enum PE{
         v27,
-        v34;
+        v34
     }
-    
-    public enum PC {
-        v66;
+
+    public enum PC{
+        v66
     }
 }

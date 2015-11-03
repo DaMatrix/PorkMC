@@ -23,7 +23,7 @@ package net.redstonelamp.network.pe.sub.v34;
  *
  * @author PocketMine Team and RedstoneLamp Team
  */
-public class PlayerActionsV34 {
+public class PlayerActionsV34{
     public static final int ACTION_START_BREAK = 0;
     public static final int ACTION_ABORT_BREAK = 1;
     public static final int ACTION_STOP_BREAK = 2;

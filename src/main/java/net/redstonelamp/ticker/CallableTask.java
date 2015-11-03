@@ -48,7 +48,7 @@ public class CallableTask implements Task{
     }
 
     @Override
-    public String toString() {
-        return "CallableTask{instance: "+instance.getClass()+", method: "+method+"}";
+    public String toString(){
+        return "CallableTask{instance: " + instance.getClass() + ", method: " + method + "}";
     }
 }

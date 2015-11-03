@@ -98,22 +98,22 @@ public class NetworkManager{
         return server;
     }
 
-    public ExecutorService getActionPool() {
+    public ExecutorService getActionPool(){
         return actionPool;
     }
 
-    public void shutdown() {
+    public void shutdown(){
         protocols.forEach(Protocol::onShutdown);
         actionPool.shutdown();
     }
 
-    private static class PoolThreadFactory implements ThreadFactory {
+    private static class PoolThreadFactory implements ThreadFactory{
         private int currentThread = 0;
 
         @Override
-        public Thread newThread(Runnable r) {
+        public Thread newThread(Runnable r){
             Thread t = new Thread(r);
-            t.setName("NetworkProcessor-"+currentThread++);
+            t.setName("NetworkProcessor-" + currentThread++);
             return t;
         }
     }

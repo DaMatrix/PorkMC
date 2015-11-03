@@ -27,33 +27,33 @@ import net.redstonelamp.response.AddMobResponse;
  *
  * @author RedstoneLamp Team
  */
-public abstract class Mob extends Entity {
+public abstract class Mob extends Entity{
     private AI ai;
 
-    public Mob(EntityManager manager, Position position) {
+    public Mob(EntityManager manager, Position position){
         super(manager, position);
         initEntity();
     }
 
     @Override
-    protected void initEntity() {
+    protected void initEntity(){
         ai = new SimpleMobAI(this, getViewRange(), getPosition());
         super.initEntity();
     }
 
     @Override
-    public void doTick(long tick) {
+    public void doTick(long tick){
         super.doTick(tick);
     }
 
     @Override
-    public void spawnTo(Player player) {
+    public void spawnTo(Player player){
         player.sendResponse(new AddMobResponse(this));
     }
 
     public abstract int getViewRange();
 
-    public AI getAi() {
+    public AI getAi(){
         return ai;
     }
 }

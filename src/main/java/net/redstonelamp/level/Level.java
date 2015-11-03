@@ -16,18 +16,14 @@
  */
 package net.redstonelamp.level;
 
-import net.redstonelamp.Player;
 import net.redstonelamp.block.Block;
 import net.redstonelamp.entity.EntityManager;
-import net.redstonelamp.item.Item;
-import net.redstonelamp.item.Items;
 import net.redstonelamp.level.generator.FlatGenerator;
 import net.redstonelamp.level.generator.Generator;
 import net.redstonelamp.level.position.BlockPosition;
 import net.redstonelamp.level.position.Position;
 import net.redstonelamp.level.provider.LevelLoadException;
 import net.redstonelamp.level.provider.LevelProvider;
-import net.redstonelamp.math.Vector3;
 import net.redstonelamp.response.BlockPlaceResponse;
 import net.redstonelamp.response.RemoveBlockResponse;
 import org.apache.commons.io.FileUtils;
@@ -71,7 +67,9 @@ public class Level{
         if(generatorName.equalsIgnoreCase("default") && !new File(params.levelDir + "/" + "db").isDirectory()){
             manager.getServer().getLogger().info("Default worlds have no generator yet, using packaged world.");
             int num = new Random().nextInt(2);
-            if(num == 0) num = 2;
+            if(num == 0){
+                num = 2;
+            }
             manager.getServer().getLogger().debug("Using world " + num);
             try{
                 setupDefaultWorld(num);
@@ -92,8 +90,9 @@ public class Level{
         try{
             if(!generatorName.equalsIgnoreCase("default")){
                 generator = manager.getGenerator(generatorName).newInstance(this, params);
-            }else
+            }else{
                 generator = new FlatGenerator(this, params);
+            }
         }catch(NullPointerException e){
             throw new LevelLoadException("Unknown level generator " + generatorName);
         }catch(InvocationTargetException e){

@@ -28,8 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Chunk Sender for MCPE clients. It works by feeding the Player class fake ChunkRequests, which
@@ -37,7 +35,7 @@ import java.util.concurrent.Executors;
  *
  * @author RedstoneLamp Team
  */
-public class PeChunkSender {
+public class PeChunkSender{
     public static final int REQUESTS_PER_TICK = 4; //TODO: correct this
 
     private PEProtocol protocol;
@@ -50,34 +48,36 @@ public class PeChunkSender {
         protocol.getServer().getTicker().addRepeatingTask(new CallableTask("tick", this), 1);
     }
 
-    public void tick(long tick) {
+    public void tick(long tick){
         int sent = 0;
-        for(Player player : lastSent.keySet()) {
-            if(System.currentTimeMillis() - lastSent.get(player) >= 3500) {
-                checkChunks(player);
-                lastSent.put(player, System.currentTimeMillis());
-            }
-        }
+        lastSent.keySet().stream().filter(player -> System.currentTimeMillis() - lastSent.get(player) >= 3500).forEach(player -> {
+            checkChunks(player);
+            lastSent.put(player, System.currentTimeMillis());
+        });
 
-        if (requestChunks.keySet().isEmpty()) {
+        if(requestChunks.keySet().isEmpty()){
             return;
         }
 
         int pLimit = REQUESTS_PER_TICK;
-        if (requestChunks.keySet().size() > 1) {
+        if(requestChunks.keySet().size() > 1){
             pLimit = REQUESTS_PER_TICK / requestChunks.keySet().size();
-            if (pLimit == 0) {
+            if(pLimit == 0){
                 pLimit = 1;
             }
         }
 
-        for (Player player : requestChunks.keySet()) {
-            if (sent >= REQUESTS_PER_TICK) break;
+        for(Player player : requestChunks.keySet()){
+            if(sent >= REQUESTS_PER_TICK){
+                break;
+            }
 
             int pSent = 0;
             List<ChunkPosition> chunks = requestChunks.get(player);
-            for (ChunkPosition location : chunks) {
-                if (pSent >= pLimit) break;
+            for(ChunkPosition location : chunks){
+                if(pSent >= pLimit){
+                    break;
+                }
 
                 ChunkRequest r = new ChunkRequest(location);
                 protocol.getManager().getActionPool().execute(() -> player.handleRequest(r));
@@ -85,41 +85,39 @@ public class PeChunkSender {
                 sent++;
                 pSent++;
             }
-            if (!chunks.isEmpty()) {
+            if(!chunks.isEmpty()){
                 requestChunks.put(player, chunks);
-            } else if (!player.isSpawned()) {
+            }else if(!player.isSpawned()){
                 System.out.println("ready!");
                 protocol.getManager().getActionPool().execute(() -> player.handleRequest(new SpawnRequest()));
                 requestChunks.remove(player);
-            } else {
+            }else{
                 requestChunks.remove(player);
             }
         }
     }
 
-    private boolean checkChunk(Player player, ChunkPosition pos) {
-        for(ChunkPosition loaded : this.loaded.get(player)) {
-            if(loaded.equals(pos)) {
+    private boolean checkChunk(Player player, ChunkPosition pos){
+        for(ChunkPosition loaded : this.loaded.get(player)){
+            if(loaded.equals(pos)){
                 return true;
             }
         }
         return false;
     }
 
-    private synchronized void unloadChunk(Player player, ChunkPosition pos) {
+    private synchronized void unloadChunk(Player player, ChunkPosition pos){
         List<ChunkPosition> l = loaded.get(player);
-        for(ChunkPosition loaded : this.loaded.get(player)) {
-            if(loaded.equals(pos)) {
-                l.remove(loaded);
-                player.getPosition().getLevel().unloadChunk(pos);
-            }
-        }
-        this.loaded.put(player, l);
+        loaded.get(player).stream().filter(loaded -> loaded.equals(pos)).forEach(loaded -> {
+            l.remove(loaded);
+            player.getPosition().getLevel().unloadChunk(pos);
+        });
+        loaded.put(player, l);
     }
 
-    private synchronized void checkChunks(Player player) {
-        synchronized (loaded) {
-            if (!loaded.containsKey(player)) {
+    private synchronized void checkChunks(Player player){
+        synchronized(loaded){
+            if(!loaded.containsKey(player)){
                 loaded.put(player, new ArrayList<>());
             }
             List<ChunkPosition> oldPositions = new ArrayList<>(loaded.get(player));
@@ -128,14 +126,14 @@ public class PeChunkSender {
             int chunkX = (int) player.getPosition().getX() / 16;
             int chunkZ = (int) player.getPosition().getZ() / 16;
             int sent = 0;
-            for (int distance = 6; distance >= 0; distance--) {
-                for (int x = chunkX - distance; x < chunkX + distance; x++) {
-                    for (int z = chunkZ - distance; z < chunkZ + distance; z++) {
-                        if (Math.sqrt((chunkX - x) * (chunkX - x) + (chunkZ - z) * (chunkZ - z)) < 8) {
-                            if (!checkChunk(player, new ChunkPosition(x, z))) {
+            for(int distance = 6; distance >= 0; distance--){
+                for(int x = chunkX - distance; x < chunkX + distance; x++){
+                    for(int z = chunkZ - distance; z < chunkZ + distance; z++){
+                        if(Math.sqrt((chunkX - x) * (chunkX - x) + (chunkZ - z) * (chunkZ - z)) < 8){
+                            if(!checkChunk(player, new ChunkPosition(x, z))){
                                 chunks.add(new ChunkPosition(x, z));
                                 sent++;
-                            } else {
+                            }else{
                                 positions.add(new ChunkPosition(x, z));
                             }
                         }
@@ -150,7 +148,7 @@ public class PeChunkSender {
         }
     }
 
-    public void clearData(Player player) {
+    public void clearData(Player player){
         loaded.get(player).forEach(chunk -> unloadChunk(player, chunk));
         loaded.remove(player);
         lastSent.remove(player);
@@ -158,7 +156,7 @@ public class PeChunkSender {
         //System.out.println("data cleared.");
     }
 
-    public void onShutdown() {
+    public void onShutdown(){
 
     }
 
@@ -208,10 +206,10 @@ public class PeChunkSender {
         List<ChunkPosition> chunks = new CopyOnWriteArrayList<>();
         int chunkX = (int) player.getPosition().getX() / 16;
         int chunkZ = (int) player.getPosition().getZ() / 16;
-        for (int distance = 5; distance >= 0; distance--) {
-            for (int x = chunkX - distance; x < chunkX + distance; x++) {
-                for (int z = chunkZ - distance; z < chunkZ + distance; z++) {
-                    if (Math.sqrt((chunkX - x) * (chunkX - x) + (chunkZ - z) * (chunkZ - z)) < 5) {
+        for(int distance = 5; distance >= 0; distance--){
+            for(int x = chunkX - distance; x < chunkX + distance; x++){
+                for(int z = chunkZ - distance; z < chunkZ + distance; z++){
+                    if(Math.sqrt((chunkX - x) * (chunkX - x) + (chunkZ - z) * (chunkZ - z)) < 5){
                         chunks.add(new ChunkPosition(x, z));
                     }
                 }

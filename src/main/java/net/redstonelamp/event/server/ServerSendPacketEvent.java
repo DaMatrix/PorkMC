@@ -16,40 +16,40 @@
  */
 package net.redstonelamp.event.server;
 
-import java.net.SocketAddress;
-
 import net.redstonelamp.event.Cancellable;
 import net.redstonelamp.event.Event;
 import net.redstonelamp.network.UniversalPacket;
 
-public class ServerSendPacketEvent extends Event implements Cancellable {
-	
-	private boolean cancelled = false;
-	private UniversalPacket packet;
-	
-	public ServerSendPacketEvent(UniversalPacket packet) {
-		this.packet = packet;
-	}
+import java.net.SocketAddress;
 
-	@Override
-	public void setCancelled(boolean cancelled) {
-		this.cancelled = cancelled;
-	}
+public class ServerSendPacketEvent extends Event implements Cancellable{
 
-	@Override
-	public boolean isCancelled() {
-		return cancelled;
-	}
+    private boolean cancelled = false;
+    private UniversalPacket packet;
 
-	public UniversalPacket getPacket() {
-		return packet;
-	}
+    public ServerSendPacketEvent(UniversalPacket packet){
+        this.packet = packet;
+    }
 
-	public void setPacket(UniversalPacket packet) {
-		this.packet = packet;
-	}
+    @Override
+    public void setCancelled(boolean cancelled){
+        this.cancelled = cancelled;
+    }
 
-	public SocketAddress getDestination() {
-		return packet.getAddress();
-	}
+    @Override
+    public boolean isCancelled(){
+        return cancelled;
+    }
+
+    public UniversalPacket getPacket(){
+        return packet;
+    }
+
+    public void setPacket(UniversalPacket packet){
+        this.packet = packet;
+    }
+
+    public SocketAddress getDestination(){
+        return packet.getAddress();
+    }
 }

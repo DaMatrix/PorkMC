@@ -42,7 +42,7 @@ public class EntityManager{
         level.getManager().getServer().getTicker().addRepeatingTask(new CallableTask("tickEntities", this), 5); //TODO: tick time
     }
 
-    public void tickEntities(long tick) {
+    public void tickEntities(long tick){
         entities.forEach(entity -> entity.doTick(tick));
     }
 
@@ -86,7 +86,7 @@ public class EntityManager{
         return null;
     }
 
-    protected int getNextEntityID() {
+    protected int getNextEntityID(){
         return nextEntityId++;
     }
 }

@@ -21,19 +21,19 @@ package net.redstonelamp.request;
  *
  * @author RedstoneLamp Team
  */
-public class SneakRequest extends Request {
+public class SneakRequest extends Request{
     /**
      * If true: the player has began to sneak. If false: the player
      * has stopped sneaking.
      */
     public boolean starting;
 
-    public SneakRequest(boolean starting) {
+    public SneakRequest(boolean starting){
         this.starting = starting;
     }
 
     @Override
-    public void execute() {
+    public void execute(){
         //TODO: ?
     }
 }

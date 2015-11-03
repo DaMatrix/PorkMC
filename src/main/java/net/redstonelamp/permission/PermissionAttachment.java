@@ -32,69 +32,67 @@
  */
 package net.redstonelamp.permission;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import lombok.Getter;
 import net.redstonelamp.Player;
 import net.redstonelamp.plugin.Plugin;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 /**
  * Represents a permission attachment hooked by a plugin
- * 
+ *
  * @author RedstoneLamp team
  */
-public class PermissionAttachment {
-	
-	private final HashMap<String, Boolean> permissions = new HashMap<String, Boolean>();
-	@Getter private final Player player;
-	@Getter private final Plugin plugin;
-	
-	public PermissionAttachment(Player player, Plugin plugin) {
-		this.player = player;
-		this.plugin = plugin;
-	}
-	
-	public void setPermission(String permission, boolean value) {
-		this.setPermission(permission, value);
-	}
-	
-	public void setPermission(Permission permission, boolean value) {
-		this.setPermission(permission.toString(), value);
-	}
-	
-	public void unsetPermission(String permission) {
-		permissions.remove(permission);
-	}
-	
-	public void unsetPermission(Permission permission) {
-		permissions.remove(permission.toString());
-	}
-	
-	public Permission[] getPermissions() {
-		ArrayList<Permission> perms = new ArrayList<Permission>();
-		for(String perm : permissions.keySet())
-			perms.add(new Permission(perm));
-		return perms.toArray(new Permission[permissions.size()]);
-	}
-	
-	public boolean registeredPermission(String permission) {
-		return permissions.values().contains(permission);
-	}
-	
-	public boolean registeredPermission(Permission permission) {
-		return this.registeredPermission(permission.toString());
-	}
-	
-	public boolean hasPermission(String permission) {
-		if(permissions.get(permission) == null)
-			return false;
-		System.out.println(permissions.get(permission).booleanValue());
-		return permissions.get(permission).booleanValue();
-	}
-	
-	public boolean hasPermission(Permission permission) {
-		return this.hasPermission(permission.toString());
-	}
-	
+public class PermissionAttachment{
+
+    private final HashMap<String, Boolean> permissions = new HashMap<>();
+    @Getter private final Player player;
+    @Getter private final Plugin plugin;
+
+    public PermissionAttachment(Player player, Plugin plugin){
+        this.player = player;
+        this.plugin = plugin;
+    }
+
+    public void setPermission(String permission, boolean value){
+        // setPermission(permission, value); // TODO Infinite recursion! Who added this? Fix this!
+    }
+
+    public void setPermission(Permission permission, boolean value){
+        setPermission(permission.toString(), value);
+    }
+
+    public void unsetPermission(String permission){
+        permissions.remove(permission);
+    }
+
+    public void unsetPermission(Permission permission){
+        permissions.remove(permission.toString());
+    }
+
+    public Permission[] getPermissions(){
+        ArrayList<Permission> perms = new ArrayList<>();
+        return (Permission[]) permissions.keySet().toArray();
+    }
+
+    public boolean isPermissionRegistered(String permission){
+        return permissions.containsKey(permission);
+    }
+
+    public boolean isPermissionRegistered(Permission permission){
+        return isPermissionRegistered(permission.toString());
+    }
+
+    public boolean hasPermission(String permission){
+        if(permissions.get(permission) == null){
+            return false;
+        }
+        System.out.println(permissions.get(permission).booleanValue());
+        return permissions.get(permission);
+    }
+
+    public boolean hasPermission(Permission permission){
+        return hasPermission(permission.toString());
+    }
 }

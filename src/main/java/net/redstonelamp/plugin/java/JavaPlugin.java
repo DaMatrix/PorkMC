@@ -16,81 +16,79 @@
  */
 package net.redstonelamp.plugin.java;
 
-import java.io.IOException;
-import java.util.HashMap;
-
-import org.apache.commons.io.IOUtils;
-
 import com.esotericsoftware.yamlbeans.YamlReader;
-
 import net.redstonelamp.RedstoneLamp;
 import net.redstonelamp.Server;
 import net.redstonelamp.plugin.Plugin;
 import net.redstonelamp.ui.Log4j2ConsoleOut;
 import net.redstonelamp.ui.Logger;
+import org.apache.commons.io.IOUtils;
 
-public class JavaPlugin extends Plugin {
-	
-	private Logger logger;
-	HashMap<String, Object> map;
-	
-	@SuppressWarnings("unchecked")
-	private final HashMap<String, Object> yaml() {
-		if(map == null) {
-			try {
-				YamlReader reader = new YamlReader(IOUtils.toString(this.getClass().getResource("/plugin.yml").openStream()));
-				this.map = (HashMap<String, Object>) reader.read();
-			} catch(IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return map;
-	}
+import java.io.IOException;
+import java.util.HashMap;
 
-	@Override
-	public Server getServer() {
-		return RedstoneLamp.SERVER;
-	}
+public class JavaPlugin extends Plugin{
 
-	@Override
-	public String getName() {
-		return (String) yaml().get("name");
-	}
+    private Logger logger;
+    HashMap<String, Object> map;
 
-	@Override
-	public String getVersion() {
-		return (String) yaml().get("name");
-	}
+    @SuppressWarnings("unchecked")
+    private HashMap<String, Object> yaml(){
+        if(map == null){
+            try{
+                YamlReader reader = new YamlReader(IOUtils.toString(getClass().getResource("/plugin.yml").openStream()));
+                map = (HashMap<String, Object>) reader.read();
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+        }
+        return map;
+    }
 
-	@Override
-	public String[] getAuthors() {
-		return this.yamlArray((String) yaml().get("author"));
-	}
+    @Override
+    public Server getServer(){
+        return RedstoneLamp.SERVER;
+    }
 
-	@Override
-	public String getUrl() {
-		return (String) map.get("url");
-	}
+    @Override
+    public String getName(){
+        return (String) yaml().get("name");
+    }
 
-	@Override
-	public String[] getDependencies() {
-		return this.yamlArray((String) yaml().get("dependency"));
-	}
+    @Override
+    public String getVersion(){
+        return (String) yaml().get("name");
+    }
 
-	@Override
-	public String[] getSoftDependencies() {
-		return this.yamlArray((String) yaml().get("softdepdency"));
-	}
+    @Override
+    public String[] getAuthors(){
+        return yamlArray((String) yaml().get("author"));
+    }
 
-	@Override
-	public Logger getLogger() {
-		if(logger == null)
-			logger = new Logger(new Log4j2ConsoleOut(getName()));
-		return logger;
-	}
-	
-	public String getMain() {
-		return (String) yaml().get("main");
-	}
-	
+    @Override
+    public String getUrl(){
+        return (String) map.get("url");
+    }
+
+    @Override
+    public String[] getDependencies(){
+        return yamlArray((String) yaml().get("dependency"));
+    }
+
+    @Override
+    public String[] getSoftDependencies(){
+        return yamlArray((String) yaml().get("softdepdency"));
+    }
+
+    @Override
+    public Logger getLogger(){
+        if(logger == null){
+            logger = new Logger(new Log4j2ConsoleOut(getName()));
+        }
+        return logger;
+    }
+
+    public String getMain(){
+        return (String) yaml().get("main");
+    }
 }

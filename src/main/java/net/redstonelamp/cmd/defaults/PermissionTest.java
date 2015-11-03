@@ -24,24 +24,24 @@ import net.redstonelamp.cmd.CommandExecutor;
 import net.redstonelamp.cmd.CommandSender;
 import net.redstonelamp.utils.TextFormat;
 
-public class PermissionTest implements CommandExecutor {
+public class PermissionTest implements CommandExecutor{
 
-	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if(args.length >= 1) {
-			if(sender instanceof Server) {
-				sender.sendMessage("You are the server, you have all of the permissions!");
-				return true;
-			}
-			Player toCheck = (Player) sender;
-			if(args.length >= 2)
-				toCheck = RedstoneLamp.SERVER.getPlayer(args[1]);
-			boolean has = toCheck.hasPermission(args[0]);
-			sender.sendMessage("You do? : " + has);
-			sender.sendMessage((has ? TextFormat.GREEN + (toCheck.equals(sender) ? "You" : toCheck.getName()) + " do": TextFormat.RED + (toCheck.equals(sender) ? "You" : toCheck.getName()) + " " + (toCheck.equals(sender) ? "do" : "does") + " not") + " have the permission \"" + args[0] + "\"");
-			return true;
-		}
-		return false;
-	}
-	
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
+        if(args.length >= 1){
+            if(sender instanceof Server){
+                sender.sendMessage("You are the server, you have all of the permissions!");
+                return true;
+            }
+            Player toCheck = (Player) sender;
+            if(args.length >= 2){
+                toCheck = RedstoneLamp.SERVER.getPlayer(args[1]);
+            }
+            boolean has = toCheck.hasPermission(args[0]);
+            sender.sendMessage("You do? : " + has);
+            sender.sendMessage((has ? TextFormat.GREEN + (toCheck.equals(sender) ? "You" : toCheck.getName()) + " do" : TextFormat.RED + (toCheck.equals(sender) ? "You" : toCheck.getName()) + " " + (toCheck.equals(sender) ? "do" : "does") + " not") + " have the permission \"" + args[0] + "\"");
+            return true;
+        }
+        return false;
+    }
 }
