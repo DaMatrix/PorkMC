@@ -20,86 +20,82 @@ import lombok.Getter;
 import net.redstonelamp.cmd.defaults.*;
 import net.redstonelamp.cmd.exception.CommandException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-public class Command{
-
-    private static HashMap<String, Command> cmds = new HashMap<>();
-    private static boolean registeredDefaults = false;
-
-    @Getter private final String label;
-    @Getter private final String usage;
-    @Getter private final String description;
-    @Getter private final boolean overridable;
-    @Getter private CommandExecutor executor;
-
-    public static void init() throws CommandException{
-        if(registeredDefaults){
-            throw new CommandException("The defaults have already been registered!");
-        }
-        registerCommand(new Command("say", "/say (message)", "Broadcasts a message to the server", new SayCommand(), true));
-        registerCommand(new Command("list", "/list", "Shows all of the online players to the sender", new ListCommand(), true));
-        registerCommand(new Command("kick", "/kick (player) [reason]", "Kicks a player with the specified reason", new KickCommand(), true));
-        registerCommand(new Command("permission", "/permission (permission) [player]", "See's if a player has a permission", new PermissionTest(), true));
-        registerCommand(new Command("help", "/help", "View a list of all commands", new HelpCommand(), false));
-        registerCommand(new Command("version", "/version", "Shows the version of this server", new VersionCommand(), false));
-        registerCommand(new Command("reload", "/reload", "Reloads all the server data and plugins", new ReloadCommand(), false));
-        registerCommand(new Command("stop", "/stop", "Stops the server", new StopCommand(), false));
-        registeredDefaults = true;
-    }
-
-    private Command(String label, String usage, String description, CommandExecutor executor, boolean overridable){
-        this.label = label;
-        if(usage == null){
-            this.usage = "/" + label;
-        }else{
-            this.usage = (!usage.startsWith("/") ? "/" : "") + usage;
-        }
-        this.description = description;
-        this.overridable = overridable;
-        this.executor = executor;
-    }
-
-    public Command(String label, String usage, String description) throws CommandException{
-        this(label, usage, description, null, false);
-    }
-
-    public Command(String label, String usage, String description, CommandExecutor executor) throws CommandException{
-        this(label, usage, description, executor, true);
-    }
-
-    public static void registerCommand(Command command) throws CommandException{
-        String label = command.getLabel().toLowerCase();
-        if(cmds.containsKey(label)){
-            throw new CommandException("A command with that label already exists!");
-        }
-        cmds.put(label, command);
-    }
-
-    public static void unregisterCommand(Command command) throws CommandException{
-        String label = command.getLabel().toLowerCase();
-        if(cmds.get(label) != null){
-            if(!cmds.get(label).isOverridable()){
-                throw new CommandException("Cannot remove a un-overridable command!");
-            }
-        }
-        cmds.remove(label);
-    }
-
-    public static Command[] getCommands(){
-        ArrayList<Command> list = new ArrayList<>();
-        return (Command[]) cmds.keySet().toArray();
-    }
-
-    public static Command getByLabel(String label){
-        return cmds.get(label.toLowerCase());
-    }
-
-    public void setExecutor(CommandExecutor executor) throws CommandException{
-        if(!isOverridable()){
-            throw new CommandException("The command \"" + getLabel() + "\" can not be overriden!");
-        }
-        this.executor = executor;
-    }
+public class Command {
+	
+	private static HashMap<String, Command> cmds = new HashMap<String, Command>();
+	private static boolean registeredDefaults = false;
+	
+	@Getter private final String label;
+	@Getter private final String usage;
+	@Getter private final String description;
+	@Getter private final boolean overridable;
+	@Getter private CommandExecutor executor;
+	
+	public static void init() throws CommandException {
+		if(registeredDefaults)
+			throw new CommandException("The defaults have already been registered!");
+		registerCommand(new Command("say", "/say (message)", "!redstonelamp.translation.command.say.description", new SayCommand(), true));
+		registerCommand(new Command("list", "/list", "!redstonelamp.translation.command.list.description", new ListCommand(), true));
+		registerCommand(new Command("kick", "/kick (player) [reason]", "!redstonelamp.translation.command.kick.description", new KickCommand(), true));
+		registerCommand(new Command("permission", "/permission (permission) [player]", "!redstonelamp.translation.command.permission.description", new PermissionTest(), true));
+		registerCommand(new Command("help", "/help", "!redstonelamp.translation.command.help.description", new HelpCommand(), false));
+	    registerCommand(new Command("version", "/version", "!redstonelamp.translation.command.version.description", new VersionCommand(), false));
+		registerCommand(new Command("reload", "/reload", "!redstonelamp.translation.command.reload.description", new ReloadCommand(), false));
+	    registerCommand(new Command("stop", "/stop", "!redstonelamp.translation.command.stop.description", new StopCommand(), false));
+	    registeredDefaults = true;
+	}
+	
+	private Command(String label, String usage, String description, CommandExecutor executor, boolean overridable) {
+		this.label = label;
+		if(usage == null)
+			this.usage = ("/" + label);
+		else
+			this.usage = ((!usage.startsWith("/") ? "/" : "") + usage);
+		this.description = description;
+		this.overridable = overridable;
+		this.executor = executor;
+	}
+	
+	public Command(String label, String usage, String description) throws CommandException {
+		this(label, usage, description, null, false);
+	}
+	
+	public Command(String label, String usage, String description, CommandExecutor executor) throws CommandException {
+		this(label, usage, description, executor, true);
+	}
+	
+	public static void registerCommand(Command command) throws CommandException {
+		String label = command.getLabel().toLowerCase();
+		if(cmds.containsKey(label))
+			throw new CommandException("A command with that label already exists!");
+		cmds.put(label, command);
+	}
+	
+	public static void unregisterCommand(Command command) throws CommandException {
+		String label = command.getLabel().toLowerCase();
+		if(cmds.get(label) != null) {
+			if(!cmds.get(label).isOverridable())
+				throw new CommandException("Cannot remove a un-overridable command!");
+		}
+		cmds.remove(label);
+	}
+	
+	public static Command[] getCommands() {
+		ArrayList<Command> list = new ArrayList<Command>();
+		Iterator<String> labels = cmds.keySet().iterator();
+		while(labels.hasNext())
+			list.add(cmds.get(labels.next()));
+		return list.toArray(new Command[list.size()]);
+	}
+	
+	public static Command getByLabel(String label) {
+		return cmds.get(label.toLowerCase());
+	}
+	
+	public void setExecutor(CommandExecutor executor) throws CommandException {
+		if(!this.isOverridable())
+			throw new CommandException("The command \"" + this.getLabel() + "\" can not be overriden!");
+		this.executor = executor;
+	}
+	
 }
