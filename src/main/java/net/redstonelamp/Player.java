@@ -56,7 +56,7 @@ public class Player extends PlayerEntity implements CommandSender{
     @Getter private final String userAgent;
     private final Server server;
     @Getter private final SocketAddress address;
-    private final String identifier;
+    @Getter(onMethod = @__({@Deprecated})) private final String identifier;
 
     private long startLogin;
 
@@ -392,11 +392,6 @@ public class Player extends PlayerEntity implements CommandSender{
     @Override
     public boolean hasOp(){
         return true; // TODO: Get operators working
-    }
-
-    @Deprecated
-    public String getIdentifier(){
-        return identifier;
     }
 
     public void addAttachment(Plugin plugin){

@@ -38,16 +38,16 @@ public abstract class Entity{
     //private EntityMetadata metadata;
     @Getter private boolean initialized = false;
     private EntityMotion motion;
-    @Getter @Setter(AccessLevel.PROTECTED) private EntityManager manager;
+    @Getter @Setter(AccessLevel.PROTECTED) private EntityManager entityManager;
 
-    public Entity(EntityManager manager, Position position){
+    public Entity(EntityManager entityManager, Position position){
         this.position = position;
-        this.manager = manager;
+        this.entityManager = entityManager;
     }
 
     protected void initEntity(){
         initialized = true;
-        setEntityID(manager.getNextEntityID());
+        setEntityID(entityManager.getNextEntityID());
         if(position != null && position.getLevel() != null){
             position.getLevel().getEntityManager().addEntity(this);
         }
