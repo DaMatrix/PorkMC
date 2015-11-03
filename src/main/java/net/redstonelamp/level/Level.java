@@ -196,9 +196,33 @@ public class Level{
             sendBlockQueues();
             blockPlaceQueue.add(new BlockPlaceResponse(block, position));
         }
+        update(position);
+    }
+
+    public void setBlockNoUpdate(BlockPosition position, Block block){
+        Chunk c = getChunkAt(new ChunkPosition(position.getX() >> 4, position.getZ() >> 4));
+        c.setBlockId((byte) block.getId(), position.getX() & 0x0f, position.getY() & 0x7f, position.getZ() & 0x0f);
+        c.setBlockMeta((byte) block.getMeta(), position.getX() & 0x0f, position.getY() & 0x7f, position.getZ() & 0x0f);
+        if(!blockPlaceQueue.offer(new BlockPlaceResponse(block, position))){
+            //Queue is full, send immediately then
+            sendBlockQueues();
+            blockPlaceQueue.add(new BlockPlaceResponse(block, position));
+        }
     }
 
     public void removeBlock(BlockPosition position){
+        Chunk c = getChunkAt(new ChunkPosition(position.getX() >> 4, position.getZ() >> 4));
+        c.setBlockId((byte) 0, position.getX() & 0x0f, position.getY() & 0x7f, position.getZ() & 0x0f); //Set block to AIR
+        c.setBlockMeta((byte) 0, position.getX() & 0x0f, position.getY() & 0x7f, position.getZ() & 0x0f);
+        if(!removeBlockQueue.offer(new RemoveBlockResponse(position))){
+            //Queue is full, send immediately then
+            sendBlockQueues();
+            removeBlockQueue.add(new RemoveBlockResponse(position));
+        }
+        update(position);
+    }
+
+    public void removeBlockNoUpdate(BlockPosition position){
         Chunk c = getChunkAt(new ChunkPosition(position.getX() >> 4, position.getZ() >> 4));
         c.setBlockId((byte) 0, position.getX() & 0x0f, position.getY() & 0x7f, position.getZ() & 0x0f); //Set block to AIR
         c.setBlockMeta((byte) 0, position.getX() & 0x0f, position.getY() & 0x7f, position.getZ() & 0x0f);
@@ -215,6 +239,26 @@ public class Level{
         byte meta = c.getBlockMeta(position.getX() & 0x0f, position.getY() & 0x7f, position.getZ() & 0x0f);
         //return new Block(id, meta, 1);
         return (Block) Block.get(id, meta, 1);
+    }
+
+    private void update(BlockPosition position) {
+        BlockPosition[] adj = new BlockPosition[6];
+
+        //Get the surrounding block's positions.
+        adj[0] = new BlockPosition(position.getX() - 1, position.getY(), position.getZ(), position.getLevel());
+        adj[1] = new BlockPosition(position.getX() + 1, position.getY(), position.getZ(), position.getLevel());
+        adj[2] = new BlockPosition(position.getX(), position.getY() - 1, position.getZ(), position.getLevel());
+        adj[3] = new BlockPosition(position.getX(), position.getY() + 1, position.getZ(), position.getLevel());
+        adj[4] = new BlockPosition(position.getX(), position.getY(), position.getZ() - 1, position.getLevel());
+        adj[5] = new BlockPosition(position.getX(), position.getY(), position.getZ() + 1, position.getLevel());
+
+		//Update our block first
+        getBlock(position).update(position);
+
+        //Update surrounding blocks
+        for(int i = 0; i < 6; i++) {
+            getBlock(adj[i]).update(adj[i]);
+        }
     }
 
     public LevelManager getManager(){
