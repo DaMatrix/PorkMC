@@ -19,10 +19,7 @@ package net.redstonelamp.network.npd;
 
 import lombok.Getter;
 import net.redstonelamp.RedstoneLamp;
-import net.redstonelamp.network.npd.instruction.Instruction;
-import net.redstonelamp.network.npd.instruction.ProtocolDescriptionInstruction;
-import net.redstonelamp.network.npd.instruction.ProtocolNameInstruction;
-import net.redstonelamp.network.npd.instruction.VersionInstruction;
+import net.redstonelamp.network.npd.instruction.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -40,6 +37,8 @@ public class NPDParser{
                 new VersionInstruction(),
                 new ProtocolNameInstruction(),
                 new ProtocolDescriptionInstruction(),
+                new DeclarePacketInstruction(),
+                new CommitPacketInstruction(),
         }){
             for(String name : instr.getNames()){
                 instrs.put(name, instr);
@@ -47,8 +46,7 @@ public class NPDParser{
         }
     }
 
-    @Getter
-    private String source;
+    @Getter private String source;
     private final BufferedReader reader;
     private Pattern splitSpace = Pattern.compile(" (?=([^\"]*\"[^\"]*\")*[^\"]*$)"); // TODO validate this regex
     private int currentLine = 0;
@@ -56,8 +54,9 @@ public class NPDParser{
     private String haltReason = null;
 
     private final NPDProtocol.Builder protocolBuilder;
-    @Getter
-    private final List<PacketDeclaration> packetTypes;
+    @Getter private final List<PacketDeclaration> packetTypes;
+
+    private PacketDeclaration currentPacketDeclaration;
 
     public NPDParser(String source, BufferedReader reader){
         this.source = source;
@@ -123,12 +122,24 @@ public class NPDParser{
         }
     }
 
-    public NPDProtocol.Builder protocol(){
-        return protocolBuilder;
-    }
-
     public void halt(String reason){
         halted = true;
         haltReason = reason;
+    }
+
+    public NPDProtocol.Builder protocol(){
+        return protocolBuilder;
+    }
+    public PacketDeclaration packet(){
+        return currentPacketDeclaration;
+    }
+
+    public void commitPacket(){
+        packetTypes.add(currentPacketDeclaration);
+        currentPacketDeclaration = null;
+    }
+
+    public void declarePacket(String name, int id){
+        currentPacketDeclaration = new PacketDeclaration(name, id);
     }
 }

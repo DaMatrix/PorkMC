@@ -20,8 +20,8 @@ ProtocolDescription this is an example protocol.\
 
 # Here we declare a packet with the packet ID 0x01...
 
-# syntax: DeclarePacket <packet ID>
-DeclarePacket 0x01              # here are some accepted expressions of integers:
+# syntax: DeclarePacket <packet name> <packet ID>
+DeclarePacket "Handshake Packet" 0x01              # here are some accepted expressions of integers:
                                 # expression    expressed value
                                 # 0xAB          AB (base 16)
                                 # 0b10          10 (base  2)
@@ -29,8 +29,6 @@ DeclarePacket 0x01              # here are some accepted expressions of integers
                                 # 1DZ_36        1DZ (base 36)
                                 # note #1: for <num>_<radix> expressions, 2 <= radix <= 36
                                 # note #2: for <num>_<radix> expressions, num must not begin with 0
-  # syntax: PacketName <packet name>
-  PacketName "Login Packet"
 
   # syntax: PacketField <type> <field name/skip size>
   # to specify type as an array, add a [] suffix without spaces.
