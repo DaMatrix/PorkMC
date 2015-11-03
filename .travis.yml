@@ -10,7 +10,7 @@ before_install:
   #- echo "buildCommit=$TRAVIS_COMMIT" >> src/main/resources/buildInformation.properties
   #- echo "buildDate=$DATE" >> src/main/resources/buildInformation.properties
 
-install: echo "Dummy thing to prevent travis from doing strange maven thing."
+install: mvn license:check package > /dev/null
 
 #script: 'mvn license:check package | egrep "\\[(INFO|WARNING)\\]"' # this always exits with 0, even if the maven build fails.
 script: mvn license:check package
