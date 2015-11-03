@@ -16,6 +16,8 @@
  */
 package net.redstonelamp;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.redstonelamp.block.Block;
 import net.redstonelamp.cmd.CommandSender;
 import net.redstonelamp.cmd.exception.CommandException;
@@ -50,28 +52,28 @@ import java.util.UUID;
  * @author RedstoneLamp Team
  */
 public class Player extends PlayerEntity implements CommandSender{
-    private final Protocol protocol;
-    private final String userAgent;
+    @Getter private final Protocol protocol;
+    @Getter private final String userAgent;
     private final Server server;
-    private final SocketAddress address;
+    @Getter private final SocketAddress address;
     private final String identifier;
 
     private long startLogin;
 
-    private String username;
-    private String displayName;
-    private UUID uuid;
+    @Getter private String username;
+    @Getter @Setter private String displayName;
+    @Getter private UUID uuid;
     private int clientID;
-    private byte[] skin;
-    private boolean slim;
+    @Getter private byte[] skin;
+    @Getter private boolean slim;
 
-    private boolean connected = true;
-    private boolean spawned = false;
-    private boolean sprinting = false;
-    private boolean sneaking = false;
+    @Getter private boolean connected = true;
+    @Getter private boolean spawned = false;
+    @Getter private boolean sprinting = false;
+    @Getter private boolean sneaking = false;
 
-    private int gamemode;
-    private PlayerInventory inventory;
+    @Getter private int gamemode;
+    @Getter private PlayerInventory inventory;
 
     private HashMap<Plugin, PermissionAttachment> permissionAttachments = new HashMap<>();
 
@@ -392,57 +394,9 @@ public class Player extends PlayerEntity implements CommandSender{
         return true; // TODO: Get operators working
     }
 
-    public String getDisplayName(){
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName){
-        this.displayName = displayName;
-    }
-
-    public String getUsername(){
-        return username;
-    }
-
-    public Protocol getProtocol(){
-        return protocol;
-    }
-
     @Deprecated
     public String getIdentifier(){
         return identifier;
-    }
-
-    public SocketAddress getAddress(){
-        return address;
-    }
-
-    public boolean isSpawned(){
-        return spawned;
-    }
-
-    public int getGamemode(){
-        return gamemode;
-    }
-
-    public byte[] getSkin(){
-        return skin;
-    }
-
-    public boolean isSlim(){
-        return slim;
-    }
-
-    public UUID getUuid(){
-        return uuid;
-    }
-
-    public boolean isConnected(){
-        return connected;
-    }
-
-    public PlayerInventory getInventory(){
-        return inventory;
     }
 
     public void addAttachment(Plugin plugin){
@@ -473,17 +427,5 @@ public class Player extends PlayerEntity implements CommandSender{
             }
         }
         return permissions.contains(permission);
-    }
-
-    public boolean isSprinting(){
-        return sprinting;
-    }
-
-    public boolean isSneaking(){
-        return sneaking;
-    }
-
-    public String getUserAgent(){
-        return userAgent;
     }
 }

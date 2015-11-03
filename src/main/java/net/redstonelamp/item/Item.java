@@ -16,6 +16,8 @@
  */
 package net.redstonelamp.item;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.redstonelamp.block.*;
 import org.spout.nbt.CompoundTag;
 
@@ -33,11 +35,12 @@ import java.util.Map;
  */
 public class Item implements Items{
     private static final Map<Integer, Class<? extends Item>> items = new HashMap<>();
-    private static final List<Item> creativeItems = new ArrayList<>();
-    private final int id;
-    private final short meta;
-    private final int count;
-    private CompoundTag compoundTag;
+    @Getter private static final List<Item> creativeItems = new ArrayList<>();
+
+    @Getter private final int id;
+    @Getter private final short meta;
+    @Getter private final int count;
+    @Getter @Setter private CompoundTag compoundTag;
 
     public Item(int id, short meta, int count){
         this.id = id;
@@ -208,29 +211,5 @@ public class Item implements Items{
         }else{
             return new Item(id, meta, count);
         }
-    }
-
-    public static List<Item> getCreativeItems(){
-        return creativeItems;
-    }
-
-    public int getId(){
-        return id;
-    }
-
-    public short getMeta(){
-        return meta;
-    }
-
-    public int getCount(){
-        return count;
-    }
-
-    public CompoundTag getCompoundTag(){
-        return compoundTag;
-    }
-
-    public void setCompoundTag(CompoundTag compoundTag){
-        this.compoundTag = compoundTag;
     }
 }

@@ -16,6 +16,9 @@
  */
 package net.redstonelamp.entity;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import net.redstonelamp.Player;
 import net.redstonelamp.level.position.Position;
 import net.redstonelamp.metadata.MetadataDictionary;
@@ -26,16 +29,16 @@ import net.redstonelamp.metadata.MetadataDictionary;
  * @author RedstoneLamp Team
  */
 public abstract class Entity{
-    private int entityID;
-    private int maxHealth;
-    private int health;
-    private Position position;
-    private String name;
-    private MetadataDictionary metadata;
+    @Getter @Setter(AccessLevel.PROTECTED) private int entityID;
+    @Getter @Setter private int maxHealth;
+    @Getter @Setter private int health;
+    @Getter @Setter private Position position;
+    @Getter @Setter private String name;
+    @Getter @Setter(AccessLevel.PROTECTED) private MetadataDictionary metadata;
     //private EntityMetadata metadata;
-    private boolean initialized = false;
+    @Getter private boolean initialized = false;
     private EntityMotion motion;
-    private EntityManager manager;
+    @Getter @Setter(AccessLevel.PROTECTED) private EntityManager manager;
 
     public Entity(EntityManager manager, Position position){
         this.position = position;
@@ -85,73 +88,5 @@ public abstract class Entity{
      */
     public void despawnFrom(Player player){
         //TODO: Send RemoveEntityResponse or Request?
-    }
-
-    public int getEntityID(){
-        return entityID;
-    }
-
-    /**
-     * Sets this entity's ID. WARNING: ONLY FOR USE IN initEntity()!!!
-     *
-     * @param id The EntityID of the player
-     */
-    protected void setEntityID(int id){
-        entityID = id;
-    }
-
-    protected void setEntityManager(EntityManager manager){
-        this.manager = manager;
-    }
-
-    public MetadataDictionary getMetadata(){
-        return metadata;
-    }
-
-    protected void setMetadata(MetadataDictionary metadata){
-        this.metadata = metadata;
-    }
-
-    public boolean isInitialized(){
-        return initialized;
-    }
-
-    public Position getPosition(){
-        return position;
-    }
-
-    public void setPosition(Position position){
-        this.position = position;
-    }
-
-    public String getName(){
-        return name;
-    }
-
-    public void setName(String name){
-        this.name = name;
-    }
-
-    public int getHealth(){
-        return health;
-    }
-
-    /**
-     * Sets the health of this entity.
-     * <br>
-     * NOTE: This sets the health to an absolute value, it does not increase the health.
-     *
-     * @param health The amount of health points to set this entity to.
-     */
-    public void setHealth(int health){
-        this.health = health;
-    }
-
-    public int getMaxHealth(){
-        return maxHealth;
-    }
-
-    public void setMaxHealth(int maxHealth){
-        this.maxHealth = maxHealth;
     }
 }

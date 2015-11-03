@@ -20,9 +20,11 @@ import lombok.Getter;
 import net.redstonelamp.cmd.defaults.*;
 import net.redstonelamp.cmd.exception.CommandException;
 
+import java.util.HashMap;
+
 public class Command{
 
-	private static HashMap<String, Command> cmds = new HashMap<String, Command>();
+	private static HashMap<String, Command> cmds = new HashMap<>();
 	private static boolean registeredDefaults = false;
 
 	@Getter private final String label;
@@ -85,12 +87,7 @@ public class Command{
 	}
 
 	public static Command[] getCommands(){
-		ArrayList<Command> list = new ArrayList<Command>();
-		Iterator<String> labels = cmds.keySet().iterator();
-		while(labels.hasNext()){
-			list.add(cmds.get(labels.next()));
-		}
-		return list.toArray(new Command[list.size()]);
+		return (Command[]) cmds.values().toArray();
 	}
 
 	public static Command getByLabel(String label){

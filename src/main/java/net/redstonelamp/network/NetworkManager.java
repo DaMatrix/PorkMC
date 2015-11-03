@@ -16,6 +16,7 @@
  */
 package net.redstonelamp.network;
 
+import lombok.Getter;
 import net.redstonelamp.Server;
 import net.redstonelamp.network.netInterface.AdvancedNetworkInterface;
 import net.redstonelamp.ticker.CallableTask;
@@ -32,8 +33,8 @@ import java.util.concurrent.ThreadFactory;
  * @author RedstoneLamp Team
  */
 public class NetworkManager{
-    private final Server server;
-    private final ExecutorService actionPool;
+    @Getter private final Server server;
+    @Getter private final ExecutorService actionPool = Executors.newFixedThreadPool(4, new PoolThreadFactory());
     private final List<Protocol> protocols = new ArrayList<>();
 
     /**
@@ -43,7 +44,6 @@ public class NetworkManager{
      */
     public NetworkManager(Server server){
         this.server = server;
-        actionPool = Executors.newFixedThreadPool(4, new PoolThreadFactory());
         server.getTicker().addRepeatingTask(new CallableTask("tick", this), 1);
     }
 
@@ -87,19 +87,6 @@ public class NetworkManager{
             }
         }
         return null;
-    }
-
-    /**
-     * Get the <code>Server</code> the NetworkManager belongs to.
-     *
-     * @return The <code>Server</code> this NetworkManager belongs to.
-     */
-    public Server getServer(){
-        return server;
-    }
-
-    public ExecutorService getActionPool(){
-        return actionPool;
     }
 
     public void shutdown(){

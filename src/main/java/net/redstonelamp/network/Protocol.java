@@ -16,6 +16,7 @@
  */
 package net.redstonelamp.network;
 
+import lombok.Getter;
 import net.redstonelamp.Player;
 import net.redstonelamp.Server;
 import net.redstonelamp.network.netInterface.NetworkInterface;
@@ -32,7 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author RedstoneLamp Team
  */
 public abstract class Protocol{
-    private NetworkManager manager;
+    @Getter private NetworkManager manager;
     private final Queue<Request> requestQueue = new ArrayDeque<>();
     private final Map<String, Player> players = new ConcurrentHashMap<>();
     protected NetworkInterface _interface;
@@ -254,15 +255,6 @@ public abstract class Protocol{
             manager.getServer().getLogger().trace(e);
             return false;
         }
-    }
-
-    /**
-     * Get the <code>NetworkManager</code> that this protocol belongs to.
-     *
-     * @return The <code>NetworkManager</code> the protocol belongs to.
-     */
-    public NetworkManager getManager(){
-        return manager;
     }
 
     /**
