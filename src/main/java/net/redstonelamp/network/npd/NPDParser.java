@@ -18,6 +18,11 @@ package net.redstonelamp.network.npd;
  */
 
 import lombok.Getter;
+import net.redstonelamp.RedstoneLamp;
+import net.redstonelamp.network.npd.instruction.Instruction;
+import net.redstonelamp.network.npd.instruction.ProtocolDescriptionInstruction;
+import net.redstonelamp.network.npd.instruction.ProtocolNameInstruction;
+import net.redstonelamp.network.npd.instruction.VersionInstruction;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,11 +31,15 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public class NPDParser{
+    public final static int NPD_VERSION = 2;
+
     private static Map<String, Instruction> instrs = new HashMap<>();
 
     static{
         for(Instruction instr : new Instruction[]{
+                new VersionInstruction(),
                 new ProtocolNameInstruction(),
+                new ProtocolDescriptionInstruction(),
         }){
             for(String name : instr.getNames()){
                 instrs.put(name, instr);
@@ -43,8 +52,9 @@ public class NPDParser{
     private final BufferedReader reader;
     private Pattern splitSpace = Pattern.compile(" (?=([^\"]*\"[^\"]*\")*[^\"]*$)"); // TODO validate this regex
     private int currentLine = 0;
+    private boolean halted = false;
+    private String haltReason = null;
 
-    @Getter
     private final NPDProtocol.Builder protocolBuilder;
     @Getter
     private final List<PacketDeclaration> packetTypes;
@@ -61,7 +71,7 @@ public class NPDParser{
     public void run(){
         String lastLine = null, line;
         try{
-            while((line = reader.readLine()) != null){
+            while((line = reader.readLine()) != null && !halted){
                 currentLine++;
                 line = line.replaceAll("[ \r\n]+", " ").trim();
                 int pt = line.indexOf('#');
@@ -80,6 +90,9 @@ public class NPDParser{
                     continue;
                 }
                 dispatchInstruction(line);
+            }
+            if(halted){
+                RedstoneLamp.SERVER.getLogger().error("NPDParser halted! Reason: " + haltReason);
             }
             if(lastLine != null){
                 dispatchInstruction(lastLine.substring(0, lastLine.length() - 1));
@@ -105,6 +118,17 @@ public class NPDParser{
                 e.setSource(source);
                 e.setLine(currentLine);
             }
+        }else{
+            RedstoneLamp.SERVER.getLogger().warning("Unknown instruction \\" + instrName);
         }
+    }
+
+    public NPDProtocol.Builder protocol(){
+        return protocolBuilder;
+    }
+
+    public void halt(String reason){
+        halted = true;
+        haltReason = reason;
     }
 }

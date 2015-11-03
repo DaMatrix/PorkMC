@@ -1,4 +1,7 @@
-package net.redstonelamp.network.npd;
+package net.redstonelamp.network.npd.instruction;
+
+import net.redstonelamp.network.npd.NPDException;
+import net.redstonelamp.network.npd.NPDParser;
 
 import java.util.List;
 
@@ -30,5 +33,6 @@ public class ProtocolNameInstruction extends Instruction{
     @Override
     public void run(NPDParser parser, List<String> args) throws NPDException{
         checkArgs(args, 1);
+        parser.protocol().name(args.get(0));
     }
 }

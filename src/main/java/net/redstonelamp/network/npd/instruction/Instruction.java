@@ -1,4 +1,4 @@
-package net.redstonelamp.network.npd;
+package net.redstonelamp.network.npd.instruction;
 
 /*
  * This file is part of RedstoneLamp.
@@ -16,6 +16,9 @@ package net.redstonelamp.network.npd;
  * You should have received a copy of the GNU Lesser General Public License
  * along with RedstoneLamp.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import net.redstonelamp.network.npd.NPDException;
+import net.redstonelamp.network.npd.NPDParser;
 
 import java.util.List;
 
