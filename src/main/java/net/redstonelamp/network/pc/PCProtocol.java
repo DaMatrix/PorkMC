@@ -16,13 +16,6 @@
  */
 package net.redstonelamp.network.pc;
 
-import java.nio.ByteOrder;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
 import net.redstonelamp.Player;
 import net.redstonelamp.event.EventPlatform;
 import net.redstonelamp.event.server.ServerHandleRequestEvent;
@@ -37,6 +30,12 @@ import net.redstonelamp.request.HandshakeRequest;
 import net.redstonelamp.request.Request;
 import net.redstonelamp.response.HandshakeResponse;
 import net.redstonelamp.response.Response;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+import java.nio.ByteOrder;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * An implementation of the Minecraft: PC protocol.
@@ -65,9 +64,9 @@ public class PCProtocol extends Protocol implements PCNetworkConst {
     public Request[] handlePacket(UniversalPacket up) {
     	List<Request> requests = new ArrayList<>();
     	ServerReceivePacketEvent receiveEvent = new ServerReceivePacketEvent(up);
-    	this.getManager().getServer().callEvent(EventPlatform.DESKTOP, receiveEvent);
-    	if(receiveEvent.isCancelled()) {
-    		return new Request[0];
+		getManager().getServer().callEvent(EventPlatform.DESKTOP, receiveEvent);
+		if(receiveEvent.isCancelled()){
+			return new Request[0];
     	}
     	
         /*int length =*/ up.bb().getVarInt();
@@ -94,9 +93,9 @@ public class PCProtocol extends Protocol implements PCNetworkConst {
         // Throw ServerHandleRequestEvent
         for(Request request : requests) {
         	ServerHandleRequestEvent requestEvent = new ServerHandleRequestEvent(request);
-        	this.getManager().getServer().getPluginManager().callEvent(EventPlatform.DESKTOP, requestEvent);
-        	if(requestEvent.isCancelled()) {
-        		requests.remove(request);
+			getManager().getServer().getPluginManager().callEvent(EventPlatform.DESKTOP, requestEvent);
+			if(requestEvent.isCancelled()){
+				requests.remove(request);
         	}
         }
         
@@ -109,14 +108,13 @@ public class PCProtocol extends Protocol implements PCNetworkConst {
     	List<UniversalPacket> packets = new ArrayList<>();
     	BinaryBuffer bb = BinaryBuffer.newInstance(0, ByteOrder.BIG_ENDIAN);
     	ServerHandleResponseEvent handleEvent = new ServerHandleResponseEvent(response);
-    	this.getManager().getServer().getPluginManager().callEvent(EventPlatform.DESKTOP, handleEvent);
-    	if(handleEvent.isCancelled()) {
-    		return new UniversalPacket[0];
+		getManager().getServer().getPluginManager().callEvent(EventPlatform.DESKTOP, handleEvent);
+		if(handleEvent.isCancelled()){
+			return new UniversalPacket[0];
     	}
     	
     	if(response instanceof HandshakeResponse) {
     		HandshakeResponse handshake = (HandshakeResponse) response;
-    		bb = BinaryBuffer.newInstance(0, ByteOrder.BIG_ENDIAN);
     		if(handshake.state == 1) {
     			bb.putVarInt(PCProtocol.CB_STATUS_RESPONSE);
     			JSONObject motd = new JSONObject();
@@ -124,20 +122,20 @@ public class PCProtocol extends Protocol implements PCNetworkConst {
     			version.put("version", PCNetworkConst.MC_VERSION);
     			version.put("protocol", PCNetworkConst.MC_PROTOCOL);
     			JSONObject players = new JSONObject();
-    			players.put("max", this.getManager().getServer().getMaxPlayers());
-    			players.put("online", this.getManager().getServer().getPlayers().size());
-    			JSONArray sample = new JSONArray();
-    			List<Player> online = this.getManager().getServer().getPlayers();
-    			for(int i = 0; i < online.size(); i++) {
-    				JSONObject current = new JSONObject();
+				players.put("max", getManager().getServer().getMaxPlayers());
+				players.put("online", getManager().getServer().getPlayers().size());
+				JSONArray sample = new JSONArray();
+				List<Player> online = getManager().getServer().getPlayers();
+				for(int i = 0; i < online.size(); i++){
+					JSONObject current = new JSONObject();
     				current.put("name", online.get(i).getName());
     				current.put("uuid", online.get(i).getUuid());
     				sample.add(i, current);
     			}
     			players.put("sample", sample);
-    			motd.put("description", this.getManager().getServer().getConfig().getString("motd"));
-    			// TODO: Favicon
-    			bb.putVarString(motd.toString());
+				motd.put("description", getManager().getServer().getConfig().getString("motd"));
+				// TODO: Favicon
+				bb.putVarString(motd.toString());
     		}
     		System.out.println("RECEIVED HANDSHAKE RESPONSE");
     		packets.add(new DesktopPacket(bb.toArray(), player.getAddress()));
@@ -145,9 +143,9 @@ public class PCProtocol extends Protocol implements PCNetworkConst {
     	
     	for(UniversalPacket packet : packets) {
     		ServerSendPacketEvent sendEvent = new ServerSendPacketEvent(packet);
-    		this.getManager().getServer().getPluginManager().callEvent(EventPlatform.DESKTOP, sendEvent);
-    		if(sendEvent.isCancelled()) {
-    			packets.remove(packet);
+			getManager().getServer().getPluginManager().callEvent(EventPlatform.DESKTOP, sendEvent);
+			if(sendEvent.isCancelled()){
+				packets.remove(packet);
     		}
     	}
     	

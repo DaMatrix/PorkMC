@@ -14,7 +14,7 @@ public class ServerHandleResponseEvent extends Event implements Cancellable {
 	}
 	
 	public Response getResposne() {
-		return this.response;
+		return response;
 	}
 
 	@Override
@@ -24,7 +24,7 @@ public class ServerHandleResponseEvent extends Event implements Cancellable {
 
 	@Override
 	public boolean isCancelled() {
-		return this.cancelled;
+		return cancelled;
 	}
 	
 }

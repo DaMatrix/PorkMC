@@ -84,7 +84,7 @@ public class NettyInterface implements AdvancedNetworkInterface {
     private void setupLogger() {
         try{
             Constructor c = server.getLogger().getConsoleOutClass().getConstructor(String.class);
-            logger = new net.redstonelamp.ui.Logger((ConsoleOut) c.newInstance("NettyInterface"));
+            logger = new Logger((ConsoleOut) c.newInstance("NettyInterface"));
             logger.debug("Logger created.");
         }catch(NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e){
             e.printStackTrace();
