@@ -32,11 +32,12 @@ DeclarePacket "Handshake Packet" 0x01              # here are some accepted expr
 
   # syntax: PacketField <type> <field name/skip size>
   # to specify type as an array, add a [] suffix without spaces.
+  # to specify type as big-endian, add a ~ prefix without spaces.
   PacketField STRING username
   PacketField SKIP 4
 
   # syntax: BindRequest <Request class name, relative to net.redstonelamp.request>
-  # syntax: BindResponse <Request class name, relative to net.redstonelamp.response>
+  # syntax: BindResponse <Response class name, relative to net.redstonelamp.response>
 
 # CommitPacket accepts no parameters.
 # CommitPacket marks the current packet declaration as completed, and the parser is ready to declare another packet.

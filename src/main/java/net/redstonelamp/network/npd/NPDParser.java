@@ -39,6 +39,7 @@ public class NPDParser{
                 new ProtocolDescriptionInstruction(),
                 new DeclarePacketInstruction(),
                 new CommitPacketInstruction(),
+                new PacketFieldInstruction(),
         }){
             for(String name : instr.getNames()){
                 instrs.put(name, instr);

@@ -28,9 +28,10 @@ import java.nio.ByteOrder;
 @Builder
 public class PacketFieldType{
     private final PacketFieldTypeBase baseType;
-    private boolean array;
-    private ByteOrder endianness;
+    private boolean array = false;
+    private ByteOrder endianness = ByteOrder.LITTLE_ENDIAN;
     private int skipSize = -1; // only use this if baseType is SKIP
+
     public void setSkipSize(int size){
         if(baseType != PacketFieldTypeBase.SKIP){
             throw new IllegalStateException("Could not set skip size for packet fields that are not of type SKIP");

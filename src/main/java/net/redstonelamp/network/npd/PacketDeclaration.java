@@ -27,5 +27,5 @@ public class PacketDeclaration{
     private final String name;
     private final int identifier; // I know this is byte or short in different protocols, but let's have a common one
     private String comment = "";
-    private final List<PacketField> type = new ArrayList<>();
+    private final List<PacketField> fields = new ArrayList<>();
 }

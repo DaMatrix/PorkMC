@@ -21,9 +21,7 @@ import lombok.Data;
 
 @Data
 public class PacketField{
-    private PacketFieldType type;
-    private String name;
-    // TODO Request
-    // TODO Response
+    private final PacketFieldType type;
+    private final String name;
     // TODO support conditional fields, such as TextPacket in protocol #MCPE-34
 }
