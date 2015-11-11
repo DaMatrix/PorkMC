@@ -100,7 +100,7 @@ public class NBTPlayerDatabase implements PlayerDatabase{
                 }
                 try{
                     Method m = invClass.getDeclaredMethod("createFromBytes", byte[].class);
-                    data.setInventory((PlayerInventory) m.invoke(null, inventory.getValue()));
+                    data.setInventory((PlayerInventory) m.invoke(null, new Object[]{inventory.getValue()}));
                     entries.put(data.getUuid().toString(), data);
                 }catch(NoSuchMethodException e){
                     server.getLogger().error("Inventory Provider MUST have method \"static PlayerInventory createFromBytes(byte[] bytes)\"");

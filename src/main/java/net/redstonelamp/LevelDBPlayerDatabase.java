@@ -138,7 +138,7 @@ public class LevelDBPlayerDatabase implements PlayerDatabase{
                 }
                 try{
                     Method m = invClass.getDeclaredMethod("createFromBytes", byte[].class);
-                    entry.setInventory((PlayerInventory) m.invoke(null, bb.get(bb.getVarInt())));
+                    entry.setInventory((PlayerInventory) m.invoke(null, new Object[]{bb.get(bb.getVarInt())}));
                     entries.put(entry.getUuid().toString(), entry);
                     return entry;
                 }catch(NoSuchMethodException e){

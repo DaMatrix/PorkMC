@@ -14,7 +14,7 @@ public class ServerHandleRequestEvent extends Event implements Cancellable {
 	}
 	
 	public Request getRequest() {
-		return this.request;
+		return request;
 	}
 
 	@Override
@@ -24,7 +24,7 @@ public class ServerHandleRequestEvent extends Event implements Cancellable {
 	
 	@Override
 	public boolean isCancelled() {
-		return this.cancelled;
+		return cancelled;
 	}
 	
 	

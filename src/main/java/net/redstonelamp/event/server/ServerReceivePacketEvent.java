@@ -14,7 +14,7 @@ public class ServerReceivePacketEvent extends Event implements Cancellable {
 	}
 	
 	public UniversalPacket getPacket() {
-		return this.packet;
+		return packet;
 	}
 	
 	@Override
@@ -24,7 +24,7 @@ public class ServerReceivePacketEvent extends Event implements Cancellable {
 
 	@Override
 	public boolean isCancelled() {
-		return this.cancelled;
+		return cancelled;
 	}
 
 }

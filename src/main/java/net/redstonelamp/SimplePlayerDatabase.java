@@ -105,7 +105,7 @@ public class SimplePlayerDatabase implements PlayerDatabase{
             }
             try{
                 Method m = invClass.getDeclaredMethod("createFromBytes", byte[].class);
-                data.setInventory((PlayerInventory) m.invoke(null, bb.get(bb.getVarInt())));
+                data.setInventory((PlayerInventory) m.invoke(null, new Object[]{bb.get(bb.getVarInt())}));
                 entries.put(data.getUuid().toString(), data);
                 try{
                     if(bb.getByte() != 0x7F){
