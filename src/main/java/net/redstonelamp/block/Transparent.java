@@ -30,7 +30,7 @@ public abstract class Transparent extends Block{
     }
 
     @Override
-    public void update(BlockPosition position) {
-        
+    public void update(BlockPosition position){
+
     }
 }

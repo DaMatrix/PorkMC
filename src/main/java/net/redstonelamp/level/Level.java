@@ -241,7 +241,7 @@ public class Level{
         return (Block) Block.get(id, meta, 1);
     }
 
-    private void update(BlockPosition position) {
+    private void update(BlockPosition position){
         BlockPosition[] adj = new BlockPosition[6];
 
         //Get the surrounding block's positions.
@@ -252,11 +252,11 @@ public class Level{
         adj[4] = new BlockPosition(position.getX(), position.getY(), position.getZ() - 1, position.getLevel());
         adj[5] = new BlockPosition(position.getX(), position.getY(), position.getZ() + 1, position.getLevel());
 
-		//Update our block first
+        //Update our block first
         getBlock(position).update(position);
 
         //Update surrounding blocks
-        for(int i = 0; i < 6; i++) {
+        for(int i = 0; i < 6; i++){
             getBlock(adj[i]).update(adj[i]);
         }
     }

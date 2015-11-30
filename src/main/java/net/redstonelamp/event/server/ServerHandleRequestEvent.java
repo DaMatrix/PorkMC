@@ -20,28 +20,26 @@ import net.redstonelamp.event.Cancellable;
 import net.redstonelamp.event.Event;
 import net.redstonelamp.request.Request;
 
-public class ServerHandleRequestEvent extends Event implements Cancellable {
-	
-	private final Request request;
-	private boolean cancelled = false;
-	
-	public ServerHandleRequestEvent(Request request) {
-		this.request = request;
-	}
-	
-	public Request getRequest() {
-		return request;
-	}
+public class ServerHandleRequestEvent extends Event implements Cancellable{
 
-	@Override
-	public void setCancelled(boolean cancelled) {
-		this.cancelled = cancelled;
-	}
-	
-	@Override
-	public boolean isCancelled() {
-		return cancelled;
-	}
-	
-	
+    private final Request request;
+    private boolean cancelled = false;
+
+    public ServerHandleRequestEvent(Request request){
+        this.request = request;
+    }
+
+    public Request getRequest(){
+        return request;
+    }
+
+    @Override
+    public void setCancelled(boolean cancelled){
+        this.cancelled = cancelled;
+    }
+
+    @Override
+    public boolean isCancelled(){
+        return cancelled;
+    }
 }

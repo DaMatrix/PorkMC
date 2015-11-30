@@ -123,10 +123,9 @@ public class RedstoneTicker{
             task.check(tick);
             long elapsed = System.currentTimeMillis() - start;
 
-            if(elapsed > 20) {
-                server.getLogger().debug("Task "+task.getTask()+" took "+elapsed+"ms!");
+            if(elapsed > 20){
+                server.getLogger().debug("Task " + task.getTask() + " took " + elapsed + "ms!");
             }
-
         }
 
         String line;

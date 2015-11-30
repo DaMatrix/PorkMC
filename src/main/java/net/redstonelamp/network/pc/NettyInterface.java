@@ -41,7 +41,7 @@ import java.net.SocketAddress;
  *
  * @author RedstoneLamp Team
  */
-public class NettyInterface implements AdvancedNetworkInterface {
+public class NettyInterface implements AdvancedNetworkInterface{
     @Getter private final Server server;
     @Getter private Logger logger;
 
@@ -50,7 +50,7 @@ public class NettyInterface implements AdvancedNetworkInterface {
     private ServerBootstrap bootstrap;
     private ChannelFuture channelFuture;
 
-    public NettyInterface(Server server) {
+    public NettyInterface(Server server){
         this.server = server;
         setupLogger();
 
@@ -63,25 +63,24 @@ public class NettyInterface implements AdvancedNetworkInterface {
                 .channel(NioServerSocketChannel.class)
                 .option(ChannelOption.SO_BACKLOG, 100)
                 .handler(new LoggingHandler(LogLevel.INFO))
-                .childHandler(new ChannelInitializer<SocketChannel>() {
+                .childHandler(new ChannelInitializer<SocketChannel>(){
                     @Override
-                    protected void initChannel(SocketChannel socketChannel) throws Exception {
+                    protected void initChannel(SocketChannel socketChannel) throws Exception{
                         ChannelPipeline p = socketChannel.pipeline();
                         p.addLast(new LoggingHandler(LogLevel.INFO));
                         p.addLast(handler);
                     }
                 });
 
-        try {
+        try{
             channelFuture = bootstrap.bind(server.getConfig().getInt("mcpc-port")).sync();
-            logger.info("Bound to: 0.0.0.0:"+server.getConfig().getInt("mcpc-port"));
-        } catch (InterruptedException e) {
+            logger.info("Bound to: 0.0.0.0:" + server.getConfig().getInt("mcpc-port"));
+        }catch(InterruptedException e){
             e.printStackTrace();
         }
-
     }
 
-    private void setupLogger() {
+    private void setupLogger(){
         try{
             Constructor c = server.getLogger().getConsoleOutClass().getConstructor(String.class);
             logger = new Logger((ConsoleOut) c.newInstance("NettyInterface"));
@@ -92,30 +91,30 @@ public class NettyInterface implements AdvancedNetworkInterface {
     }
 
     @Override
-    public void setName(String name) {
+    public void setName(String name){
 
     }
 
     @Override
-    public UniversalPacket readPacket() throws LowLevelNetworkException {
+    public UniversalPacket readPacket() throws LowLevelNetworkException{
         return null;
     }
 
     @Override
-    public void sendPacket(UniversalPacket packet, boolean immediate) throws LowLevelNetworkException {
+    public void sendPacket(UniversalPacket packet, boolean immediate) throws LowLevelNetworkException{
 
     }
 
     @Override
-    public void shutdown() throws LowLevelNetworkException {
+    public void shutdown() throws LowLevelNetworkException{
         channelFuture.channel().close();
         bossGroup.shutdownGracefully();
         workerGroup.shutdownGracefully();
     }
 
-    protected void onClose(SocketAddress address, String reason) {
+    protected void onClose(SocketAddress address, String reason){
         Player player = server.getPlayer(address);
-        if(player != null) {
+        if(player != null){
             player.close(player.isSpawned() ? "redstonelamp.translation.player.left" : "", reason, false);
         }
     }

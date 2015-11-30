@@ -29,7 +29,7 @@ public class Block extends Item{
         super(id, meta, count);
     }
 
-    public void update(BlockPosition position) {
+    public void update(BlockPosition position){
         //Do something if we should be.
         //For most this is nothing, so just override where necessary.
     }

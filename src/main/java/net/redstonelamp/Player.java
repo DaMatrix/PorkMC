@@ -199,7 +199,7 @@ public class Player extends PlayerEntity implements CommandSender{
                 setEntityManager(getPosition().getLevel().getEntityManager());
                 initEntity();
                 server.getLogger().info(username + "[" + address + "] logged in with entity ID " + getEntityID() + " in level \"" + getPosition().getLevel().getName() + "\""
-                                + " at position [x: " + getPosition().getX() + ", y: " + getPosition().getY() + ", z: " + getPosition().getZ() + "]"
+                        + " at position [x: " + getPosition().getX() + ", y: " + getPosition().getY() + ", z: " + getPosition().getZ() + "]"
                 );
             }else{
                 close("", "Disconnected from server", false);

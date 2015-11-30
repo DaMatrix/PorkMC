@@ -30,7 +30,7 @@ public abstract class Liquid extends Transparent{
     }
 
     @Override
-    public void update(BlockPosition position) {
+    public void update(BlockPosition position){
         //Super Basic Liquid Spread Technique. Now in stores near you!
         BlockPosition[] adj = new BlockPosition[5]; //It is five because we don't need the block above us.
 
@@ -41,13 +41,13 @@ public abstract class Liquid extends Transparent{
         adj[3] = new BlockPosition(position.getX(), position.getY(), position.getZ() - 1, position.getLevel());
         adj[4] = new BlockPosition(position.getX(), position.getY(), position.getZ() + 1, position.getLevel());
 
-        for(int i = 0; i < 5; i++) {
+        for(int i = 0; i < 5; i++){
             //Check if the adjecent block is empty (air (0))
-            if(position.getLevel().getBlock(adj[i]).getId() == 0) {
+            if(position.getLevel().getBlock(adj[i]).getId() == 0){
                 //Block is air, fill with water.
                 position.getLevel().setBlockNoUpdate(adj[i], position.getLevel().getBlock(position));
             }
             //Block occupied, do nothing.
         }
-    }               
+    }
 }

@@ -16,8 +16,6 @@
  */
 package net.redstonelamp.network.pc;
 
-import java.nio.ByteOrder;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerAdapter;
@@ -26,40 +24,42 @@ import lombok.Getter;
 import net.redstonelamp.network.UniversalPacket;
 import net.redstonelamp.nio.BinaryBuffer;
 
+import java.nio.ByteOrder;
+
 /**
  * Handler that processes incoming data and encodes outgoing.
  *
  * @author RedstoneLamp Team
  */
 @ChannelHandler.Sharable
-public class NettyHandler extends ChannelHandlerAdapter {
+public class NettyHandler extends ChannelHandlerAdapter{
     @Getter private final NettyInterface nettyInterface;
     private ByteBuf queue;
 
-    public NettyHandler(NettyInterface nettyInterface) {
+    public NettyHandler(NettyInterface nettyInterface){
         this.nettyInterface = nettyInterface;
     }
 
     @Override
-    public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
+    public void handlerAdded(ChannelHandlerContext ctx) throws Exception{
         queue = ctx.alloc().heapBuffer();
     }
 
     @Override
-    public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+    public void handlerRemoved(ChannelHandlerContext ctx) throws Exception{
         queue.release();
         queue = null;
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception{
         ByteBuf m = (ByteBuf) msg;
         queue.writeBytes(m);
         m.release();
 
         int length = checkReadVarInt(ctx, queue);
-        if(length != -1) {
-            if(queue.array().length >= length) {
+        if(length != -1){
+            if(queue.array().length >= length){
                 byte[] data = new byte[length];
                 queue.readBytes(data);
                 UniversalPacket up = new UniversalPacket(data, ByteOrder.BIG_ENDIAN, ctx.channel().remoteAddress());
@@ -69,10 +69,10 @@ public class NettyHandler extends ChannelHandlerAdapter {
         }
     }
 
-    private int checkReadVarInt(ChannelHandlerContext ctx, ByteBuf buf) {
+    private int checkReadVarInt(ChannelHandlerContext ctx, ByteBuf buf){
         ByteBuf bb = ctx.alloc().heapBuffer();
         boolean readCorrect = false;
-        while(buf.isReadable()) {
+        while(buf.isReadable()){
             byte b = buf.readByte();
             if((b & 0xff) >> 7 > 0){ //Check if there is more
                 bb.writeByte(b);
@@ -88,14 +88,14 @@ public class NettyHandler extends ChannelHandlerAdapter {
     }
 
     @Override
-    public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
+    public void channelUnregistered(ChannelHandlerContext ctx) throws Exception{
         super.channelUnregistered(ctx);
         nettyInterface.onClose(ctx.channel().remoteAddress(), "Stream closed");
     }
 
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        nettyInterface.getLogger().warning("An exception has been caught: "+cause.getMessage());
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception{
+        nettyInterface.getLogger().warning("An exception has been caught: " + cause.getMessage());
         nettyInterface.getLogger().trace(cause);
 
         ctx.close();
