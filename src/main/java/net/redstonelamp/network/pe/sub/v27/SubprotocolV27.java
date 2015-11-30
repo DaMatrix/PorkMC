@@ -16,7 +16,6 @@
  */
 package net.redstonelamp.network.pe.sub.v27;
 
-import net.redstonelamp.Player;
 import net.redstonelamp.block.Block;
 import net.redstonelamp.item.Item;
 import net.redstonelamp.level.Level;
@@ -27,6 +26,7 @@ import net.redstonelamp.network.UniversalPacket;
 import net.redstonelamp.network.pe.sub.PESubprotocolManager;
 import net.redstonelamp.network.pe.sub.Subprotocol;
 import net.redstonelamp.nio.BinaryBuffer;
+import net.redstonelamp.player.Player;
 import net.redstonelamp.request.*;
 import net.redstonelamp.response.*;
 import net.redstonelamp.utils.CompressionUtils;

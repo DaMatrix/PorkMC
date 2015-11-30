@@ -17,9 +17,9 @@
 package net.redstonelamp.network;
 
 import lombok.Getter;
-import net.redstonelamp.Player;
 import net.redstonelamp.Server;
 import net.redstonelamp.network.netInterface.NetworkInterface;
+import net.redstonelamp.player.Player;
 import net.redstonelamp.request.LoginRequest;
 import net.redstonelamp.request.Request;
 import net.redstonelamp.response.Response;

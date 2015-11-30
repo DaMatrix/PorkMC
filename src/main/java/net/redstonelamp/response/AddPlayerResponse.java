@@ -16,7 +16,7 @@
  */
 package net.redstonelamp.response;
 
-import net.redstonelamp.Player;
+import net.redstonelamp.player.Player;
 
 /**
  * Adds a Player to another player (spawns them)

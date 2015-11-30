@@ -16,7 +16,7 @@
  */
 package net.redstonelamp.response;
 
-import net.redstonelamp.Player;
+import net.redstonelamp.player.Player;
 
 /**
  * Removes a Player from another Player (de-spawns)

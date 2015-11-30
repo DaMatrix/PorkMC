@@ -16,7 +16,7 @@
  */
 package net.redstonelamp.inventory;
 
-import net.redstonelamp.Player;
+import net.redstonelamp.player.Player;
 
 /**
  * Represents an Inventory used by a Player that can be saved.

@@ -14,10 +14,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with RedstoneLamp.  If not, see <http://www.gnu.org/licenses/>.
  */
-package net.redstonelamp;
+package net.redstonelamp.player;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.redstonelamp.RedstoneLamp;
+import net.redstonelamp.Server;
 import net.redstonelamp.block.Block;
 import net.redstonelamp.cmd.CommandSender;
 import net.redstonelamp.cmd.exception.CommandException;

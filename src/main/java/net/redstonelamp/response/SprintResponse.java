@@ -16,7 +16,7 @@
  */
 package net.redstonelamp.response;
 
-import net.redstonelamp.Player;
+import net.redstonelamp.player.Player;
 
 /**
  * A response to a request to sprint.

@@ -16,7 +16,6 @@
  */
 package net.redstonelamp.network.pc;
 
-import net.redstonelamp.Player;
 import net.redstonelamp.event.EventPlatform;
 import net.redstonelamp.event.server.ServerHandleRequestEvent;
 import net.redstonelamp.event.server.ServerHandleResponseEvent;
@@ -26,6 +25,7 @@ import net.redstonelamp.network.NetworkManager;
 import net.redstonelamp.network.Protocol;
 import net.redstonelamp.network.UniversalPacket;
 import net.redstonelamp.nio.BinaryBuffer;
+import net.redstonelamp.player.Player;
 import net.redstonelamp.request.HandshakeRequest;
 import net.redstonelamp.request.Request;
 import net.redstonelamp.response.HandshakeResponse;

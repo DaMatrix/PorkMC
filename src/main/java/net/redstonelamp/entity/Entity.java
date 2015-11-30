@@ -19,9 +19,9 @@ package net.redstonelamp.entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import net.redstonelamp.Player;
 import net.redstonelamp.level.position.Position;
 import net.redstonelamp.metadata.MetadataDictionary;
+import net.redstonelamp.player.Player;
 
 /**
  * Represents an Entity.

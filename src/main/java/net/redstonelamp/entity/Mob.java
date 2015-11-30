@@ -16,10 +16,10 @@
  */
 package net.redstonelamp.entity;
 
-import net.redstonelamp.Player;
 import net.redstonelamp.entity.ai.AI;
 import net.redstonelamp.entity.ai.SimpleMobAI;
 import net.redstonelamp.level.position.Position;
+import net.redstonelamp.player.Player;
 import net.redstonelamp.response.AddMobResponse;
 
 /**

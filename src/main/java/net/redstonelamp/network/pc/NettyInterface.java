@@ -24,11 +24,11 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import lombok.Getter;
-import net.redstonelamp.Player;
 import net.redstonelamp.Server;
 import net.redstonelamp.network.LowLevelNetworkException;
 import net.redstonelamp.network.UniversalPacket;
 import net.redstonelamp.network.netInterface.AdvancedNetworkInterface;
+import net.redstonelamp.player.Player;
 import net.redstonelamp.ui.ConsoleOut;
 import net.redstonelamp.ui.Logger;
 

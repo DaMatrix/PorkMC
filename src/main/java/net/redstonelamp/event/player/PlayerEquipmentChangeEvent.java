@@ -17,9 +17,9 @@
 package net.redstonelamp.event.player;
 
 import lombok.Getter;
-import net.redstonelamp.Player;
 import net.redstonelamp.event.Cancellable;
 import net.redstonelamp.event.Event;
+import net.redstonelamp.player.Player;
 
 public class PlayerEquipmentChangeEvent extends Event implements Cancellable{
     @Getter private Player player;

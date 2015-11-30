@@ -16,9 +16,9 @@
  */
 package net.redstonelamp.entity;
 
-import net.redstonelamp.Player;
 import net.redstonelamp.level.position.Position;
 import net.redstonelamp.metadata.*;
+import net.redstonelamp.player.Player;
 import net.redstonelamp.response.AddPlayerResponse;
 import net.redstonelamp.response.RemovePlayerResponse;
 

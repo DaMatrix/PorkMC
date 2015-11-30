@@ -16,9 +16,9 @@
  */
 package net.redstonelamp.network.pe.sub;
 
-import net.redstonelamp.Player;
 import net.redstonelamp.network.UniversalPacket;
 import net.redstonelamp.network.pe.PEProtocol;
+import net.redstonelamp.player.Player;
 import net.redstonelamp.request.Request;
 import net.redstonelamp.response.Response;
 

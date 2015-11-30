@@ -21,13 +21,13 @@ import net.beaconpe.jraklib.protocol.EncapsulatedPacket;
 import net.beaconpe.jraklib.server.JRakLibServer;
 import net.beaconpe.jraklib.server.ServerHandler;
 import net.beaconpe.jraklib.server.ServerInstance;
-import net.redstonelamp.Player;
 import net.redstonelamp.Server;
 import net.redstonelamp.event.EventPlatform;
 import net.redstonelamp.event.server.ServerReceivePacketEvent;
 import net.redstonelamp.event.server.ServerSendPacketEvent;
 import net.redstonelamp.network.LowLevelNetworkException;
 import net.redstonelamp.network.UniversalPacket;
+import net.redstonelamp.player.Player;
 import net.redstonelamp.ui.ConsoleOut;
 import net.redstonelamp.ui.Logger;
 

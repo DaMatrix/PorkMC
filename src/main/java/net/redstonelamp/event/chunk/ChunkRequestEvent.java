@@ -17,8 +17,8 @@
 package net.redstonelamp.event.chunk;
 
 import lombok.Getter;
-import net.redstonelamp.Player;
 import net.redstonelamp.event.Event;
+import net.redstonelamp.player.Player;
 
 public class ChunkRequestEvent extends Event{
     @Getter private Player player;

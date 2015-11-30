@@ -16,10 +16,10 @@
  */
 package net.redstonelamp.entity.ai;
 
-import net.redstonelamp.Player;
 import net.redstonelamp.RedstoneLamp;
 import net.redstonelamp.entity.Entity;
 import net.redstonelamp.level.position.Position;
+import net.redstonelamp.player.Player;
 
 /**
  * A Simple implementation of AI for mobs.

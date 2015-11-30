@@ -16,7 +16,6 @@
  */
 package net.redstonelamp.network.pe;
 
-import net.redstonelamp.Player;
 import net.redstonelamp.language.PEMessageTranslator;
 import net.redstonelamp.network.LowLevelNetworkException;
 import net.redstonelamp.network.NetworkManager;
@@ -27,6 +26,7 @@ import net.redstonelamp.network.pe.sub.Subprotocol;
 import net.redstonelamp.network.pe.sub.v27.SubprotocolV27;
 import net.redstonelamp.network.pe.sub.v34.SubprotocolV34;
 import net.redstonelamp.nio.BinaryBuffer;
+import net.redstonelamp.player.Player;
 import net.redstonelamp.request.Request;
 import net.redstonelamp.response.Response;
 

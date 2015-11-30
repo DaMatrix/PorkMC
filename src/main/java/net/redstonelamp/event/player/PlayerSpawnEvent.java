@@ -17,8 +17,8 @@
 package net.redstonelamp.event.player;
 
 import lombok.Getter;
-import net.redstonelamp.Player;
 import net.redstonelamp.event.Event;
+import net.redstonelamp.player.Player;
 
 public class PlayerSpawnEvent extends Event{
     @Getter private Player player;

@@ -16,8 +16,8 @@
  */
 package net.redstonelamp.inventory;
 
-import net.redstonelamp.Player;
 import net.redstonelamp.item.Item;
+import net.redstonelamp.player.Player;
 import org.spout.nbt.*;
 import org.spout.nbt.stream.NBTInputStream;
 import org.spout.nbt.stream.NBTOutputStream;

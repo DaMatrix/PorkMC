@@ -16,8 +16,8 @@
  */
 package net.redstonelamp.network.pe;
 
-import net.redstonelamp.Player;
 import net.redstonelamp.level.ChunkPosition;
+import net.redstonelamp.player.Player;
 import net.redstonelamp.request.ChunkRequest;
 import net.redstonelamp.request.SpawnRequest;
 import net.redstonelamp.ticker.CallableTask;

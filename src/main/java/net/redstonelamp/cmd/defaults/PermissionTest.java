@@ -16,12 +16,12 @@
  */
 package net.redstonelamp.cmd.defaults;
 
-import net.redstonelamp.Player;
 import net.redstonelamp.RedstoneLamp;
 import net.redstonelamp.Server;
 import net.redstonelamp.cmd.Command;
 import net.redstonelamp.cmd.CommandExecutor;
 import net.redstonelamp.cmd.CommandSender;
+import net.redstonelamp.player.Player;
 import net.redstonelamp.utils.TextFormat;
 
 public class PermissionTest implements CommandExecutor{

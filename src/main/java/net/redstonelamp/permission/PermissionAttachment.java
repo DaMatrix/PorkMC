@@ -33,7 +33,7 @@
 package net.redstonelamp.permission;
 
 import lombok.Getter;
-import net.redstonelamp.Player;
+import net.redstonelamp.player.Player;
 import net.redstonelamp.plugin.Plugin;
 
 import java.util.HashMap;
