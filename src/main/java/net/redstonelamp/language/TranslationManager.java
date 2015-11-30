@@ -20,6 +20,7 @@ import net.redstonelamp.Server;
 import net.redstonelamp.network.Protocol;
 import net.redstonelamp.response.ChatResponse;
 import net.redstonelamp.utils.TextFormat;
+import org.apache.commons.io.IOUtils;
 import org.ini4j.Ini;
 
 import java.io.IOException;
@@ -57,10 +58,14 @@ public class TranslationManager{
 
     private void loadLanguageFile() throws IOException{
         Ini ini = new Ini();
-        InputStream stream = ClassLoader.getSystemResourceAsStream("lang/" + convertLanguageCode(server.getYamlConfig().getString("language.server-language")) + ".lang");
+        InputStream stream = getClass().getClassLoader().getResourceAsStream("lang/" + convertLanguageCode(server.getYamlConfig().getString("language.server-language")) + ".lang");
         if(stream == null){
             server.getLogger().error("Could not find language file: " + convertLanguageCode(server.getYamlConfig().getString("language.server-language")) + ".lang, using default: \"en-US\"");
-            stream = ClassLoader.getSystemResourceAsStream("lang/en-US.lang");
+            stream = getClass().getClassLoader().getResourceAsStream("lang/en-US.lang");
+            if(stream == null){
+                System.err.println(IOUtils.readLines(getClass().getClassLoader().getResourceAsStream("lang")));
+                throw new RuntimeException("Missing language resource file in jar");
+            }
         }
         ini.load(stream);
         serverTranslations = ini.get("Translations");
