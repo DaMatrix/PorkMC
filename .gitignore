@@ -20,3 +20,4 @@
 /runtime/
 dependency-reduced-pom.xml
 
+/target/

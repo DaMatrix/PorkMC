@@ -23,7 +23,7 @@ import net.redstonelamp.item.Items;
  *
  * @author RedstoneLamp Team
  */
-public class Netherbick extends Block{
+public class Netherbrick extends Block{
     public static final int ID = Items.NETHER_BRICK_BLOCK;
 
     public Netherbrick(int id, short meta, int count){
